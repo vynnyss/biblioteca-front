@@ -1,0 +1,64 @@
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>
+                Veja nosso acervo de
+                <span class="highlight"> Livros</span>
+            </h2>
+            <p>
+                Sua próxima leitura inesquecível está a um clique de distância.
+            </p>
+            <!-- Search and Filter -->
+            <div class="search-section">
+                <div class="search-controls">
+                    <div class="search-input-wrapper">
+                        <svg class="search-icon icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        <input
+                            id="search-input"
+                            type="text"
+                            placeholder="Busque livros ou autores..."
+                            class="search-input"
+                        />
+                    </div>
+                    <div class="filter-controls">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z"/>
+                        </svg>
+                        <select id="genre-filter" class="genre-select">
+                            <option value="All">All Genres</option>
+                            <option value="Classic Literature">Classic Literature</option>
+                            <option value="Science Fiction">Science Fiction</option>
+                            <option value="Romance">Romance</option>
+                            <option value="Coming of Age">Coming of Age</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Books Grid -->
+    <section class="books-section">
+        <div class="container">
+            <div class="books-header">
+                <h3 id="books-count" class="books-count">Livros encontrados</h3>
+                <button id="clear-search" class="btn btn-outline hidden">
+                    Clear Search
+                </button>
+            </div>
+            <div id="books-grid" class="books-grid"></div>
+            <div id="no-books" class="no-books hidden">
+                <svg class="icon-xl" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                <h3>No books found</h3>
+                <p>Try adjusting your search terms or filters</p>
+            </div>
+        </div>
+    </section>
+</body>
+
+
