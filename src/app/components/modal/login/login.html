@@ -11,7 +11,7 @@
                 <input type="password" id="login-password" required class="form-input" #loginSenha>
             </div>
             <div class="form-buttons">
-                <button type="submit" class="btn btn-primary" (click)="enviarLogin(loginEmail.value, loginSenha.value)">Login</button>
+                <button type="button" class="btn btn-primary" (click)="enviarLogin(loginEmail.value, loginSenha.value)">Login</button>
                 <button type="button" id="close-login" class="btn btn-outline" (click)="closeModal()">Cancel</button>
             </div>
         </form>
