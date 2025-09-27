@@ -1,23 +1,30 @@
 <form>
   <label for="fname">Primeiro nome:</label><br>
   <input type="text" id="fname" name="fname"><br>
+  <br>
 
   <label for="Sobrenome">Sobrenome:</label><br>
-  <input type="text" id="Sobrenome" name= "Sobrenome">
+  <input type="text" id="Sobrenome" name= "Sobrenome"><br>
+  <br>
 
   <label for="cpf">CPF:</label><br>
-  <input type="text" id="cpf" name="cpf" maxlength="14" oninput="mascaraCPF(this)" placeholder="000.000.000-00"><br>>
+  <input type="text" id="cpf" name="cpf" maxlength="14" oninput="mascaraCPF(this)" placeholder="000.000.000-00"><br>
+
+  <br>
 
   <label for="Data de nascimento">Data de Nascimento:</label><br>
   <input type="date" id="Data de nascimento" name="Data de nascimento"><br>
 
-  <label for="Sexo"> Sexo:</label><br>
-  <input type="radio" id="sexo" name="Feminino"><br>
-  <input type="radio" id="sexo" name="Masculino"><br>
-  <input type="radio" id="sexo" name="Outro"><br>
-  <input type="radio" id="sexo" name="Prefiro ñão informar"><br>
+  <br>
 
-  <label for="e-mail"> e-mail</label><br>
+  <label for="Sexo"> Sexo:</label><br>
+  <input type="radio" id="sexofeminino" name="sexo" value="Feminino"><label for="sexofeminino">Feminino</label><br>
+  <input type="radio" id="sexomasculino" name="sexo" value="Masculino"><label for="Sexomasculino">Masculino</label><br>
+  <input type="radio" id="sexooutro" name="sexo" value="Outro"><label for="Outro">Outro</label><br>
+  <input type="radio" id="Prefironãoinformar" name="sexo" value="Prefironãoinformar"><label for="Prefironãoinformar">Prefiro não informar</label><br>
+  <br>
+
+  <label for="e-mail"> E-mail</label><br>
   <input type="email" id=e-mail name="e-mail"><br>
 
   <label for="Telefone">Telefone:</label><br>
@@ -30,16 +37,16 @@
   <input type="text" id="Numero" name="Número"><br>
 
   <label for="Bairro"> Bairro:</label><br>
-  <input type="text" name="bairro" maxlength="50" required />
+  <input type="text" name="bairro" maxlength="50" required /><br>
 
  <label for="Cidade"> Cidade:</label><br>
- <input type="text" name="cidade" maxlength="50" required />
+ <input type="text" name="cidade" maxlength="50" required /><br>
 
  <label for= "Estado"> Estado:</label><br>
- <input type="text" name="Estado" maxlength="50" required />
+ <input type="text" name="Estado" maxlength="50" required /><br>
 
  <label for="CEP">CEP:</label><br>
- <input type="text" name="cep" maxlength="9" placeholder="00000-000" required />
+ <input type="text" name="cep" maxlength="9" placeholder="00000-000" required /><br>
 
  <div style="margin-top: 20px;">
   <button type="button" onclick="cancelar()">Cancelar</button>
