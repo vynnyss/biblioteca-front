@@ -49,15 +49,13 @@
                     Clear Search
                 </button>
             </div>
-            <div id="books-grid" class="books-grid"></div>
-            <div id="no-books" class="no-books hidden">
-                <svg class="icon-xl" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                </svg>
-                <h3>No books found</h3>
-                <p>Try adjusting your search terms or filters</p>
+            <div id="books-grid" class="books-grid">
+                @for (book of mockBooks; track book.id) {
+                    <app-book [data]="book"></app-book>
+                }
             </div>
         </div>
+
     </section>
 </body>
 

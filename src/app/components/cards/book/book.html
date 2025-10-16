@@ -1,0 +1,17 @@
+<div class="book-card">
+    <div class="book-cover">
+        <img
+            src="{{data.cover || '/placeholder.svg?height=400&width=300'}}"
+            alt="{{data.title}} cover"
+        />
+    </div>
+    <div class="book-info">
+        <h3 class="book-title">{{data.title}}</h3>
+        <p class="book-author">by {{data.author}} • {{data.year}}</p>
+        <span class="book-genre">{{data.genre}}</span>
+        <p class="book-description">{{data.description}}</p>
+        <button class="book-btn">
+            View Details
+        </button>
+    </div>
+</div>
