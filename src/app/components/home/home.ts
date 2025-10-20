@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Header } from '../header/header';
+import { Funcionario } from '../cadastro/funcionario/funcionario';
 
 @Component({
   selector: 'app-home',

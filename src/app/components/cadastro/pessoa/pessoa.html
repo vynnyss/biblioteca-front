@@ -1,1 +1,128 @@
-<p>pessoa works!</p>
+<section class="cadastro-section">
+  <h2>Cadastro de Usuário</h2>
+
+  <form class="cadastro-form">
+    <label for="fname">Primeiro nome:</label><br>
+    <input type="text" id="fname" name="fname"><br>
+
+    <br>
+
+    <label for="Sobrenome">Sobrenome:</label><br>
+    <input type="text" id="Sobrenome" name="Sobrenome"><br>
+
+    <br>
+
+<label for="cpf">CPF</label><br>
+<input
+  type="text"
+  id="cpf"
+  name="cpf"
+  maxlength="14"
+  (input)="mascaraCPF($event)"
+  placeholder="000.000.000-00">
+
+
+
+    <br>
+
+    <label for="Data de nascimento">Data de Nascimento:</label><br>
+    <input type="date" id="Data de nascimento" name="Data de nascimento"><br>
+
+<label for="sexo">Sexo:</label><br>
+
+<label for="feminino">
+  <input type="radio" id="feminino" name="sexo" value="feminino">
+  Feminino
+</label><br>
+
+<label for="masculino">
+  <input type="radio" id="masculino" name="sexo" value="masculino">
+  Masculino
+</label><br>
+
+<label for="outro">
+  <input type="radio" id="outro" name="sexo" value="outro">
+  Outro
+</label><br>
+
+<label for="prefiro_nao_informar">
+  <input type="radio" id="prefiro_nao_informar" name="sexo" value="prefiro_nao_informar">
+  Prefiro não informar
+</label><br>
+
+
+    <label for="E-mail">E-mail:</label><br>
+    <input type="E-mail" id="e-mail" name="E-mail"><br>
+
+    <br>
+
+    <label for="Telefone">Telefone:</label><br>
+    <input type="tel" id="Telefone" name="Telefone"><br>
+
+    <br>
+
+    <label for="Endereço">Endereço:</label><br>
+    <input type="text" id="Endereço" name="Endereço"><br>
+
+    <br>
+
+    <label for="Número">Número:</label><br>
+    <input type="text" id="Numero" name="Número"><br>
+
+    <br>
+
+    <label for="Bairro">Bairro:</label><br>
+    <input type="text" name="bairro" maxlength="50" required><br>
+
+    <br>
+
+    <label for="Cidade">Cidade:</label><br>
+    <input type="text" name="cidade" maxlength="50" required><br>
+
+    <br>
+
+    <label for="Estado">Estado:</label><br>
+    <input type="text" name="Estado" maxlength="50" required><br>
+
+    <br>
+
+    <label for="CEP">CEP:</label><br>
+    <input type="text" name="cep" maxlength="9" placeholder="00000-000" required><br>
+
+    <br>
+
+
+
+    <div class="cadastro-buttons">
+      <button type="button" class="btn btn-cancelar" (click)="cancelar()">Cancelar</button>
+      <button type="submit" class="btn btn-salvar">Salvar</button>
+    </div>
+  </form>
+</section>
+
+<style>
+  .cadastro-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    gap: 10px; /* Espaço entre os botões */
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .btn-cancelar {
+    background-color: #ccc;
+    border: none;
+    color: #000;
+  }
+
+  .btn-salvar {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+  }
+</style>
