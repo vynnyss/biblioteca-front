@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Header } from '../header/header';
 import { Book } from '../cards/book/book';
 
 @Component({
