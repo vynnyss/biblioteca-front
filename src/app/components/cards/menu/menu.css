@@ -1,0 +1,17 @@
+a{
+    text-decoration: none;
+}
+
+.card-border{
+    color: black;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 20px;
+    padding: 10px 40px;
+}
+
+.card-border:hover {
+    background-color: rgb(99, 99, 236);
+    color: azure;
+    cursor: pointer;
+}
