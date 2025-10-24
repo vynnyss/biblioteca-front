@@ -2,10 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-livro',
-  imports: [],
   templateUrl: './livro.html',
-  styleUrl: './livro.css'
+  styleUrls: ['./livro.css']
 })
-export class Livro {
-
-}
+export class Livro {}
