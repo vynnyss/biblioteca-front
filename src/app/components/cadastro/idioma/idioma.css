@@ -1,0 +1,90 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #fde6b8 0%, #fed7aa 50%, #fecaca 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.form-container {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  padding: 2rem 2.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 700px;
+  position: relative;
+  top: -270px;
+  margin: 0 auto;
+}
+
+
+
+h2 {
+  text-align: center;
+  color: #1a1a1a;
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+textarea {
+  resize: none;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+button {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s ease;
+}
+
+.btn-cancelar {
+  background-color: #e74c3c;
+}
+
+.btn-cancelar:hover {
+  background-color: #c0392b;
+}
+
+.btn-salvar {
+  background-color: #27ae60;
+}
+
+.btn-salvar:hover {
+  background-color: #219150;
+}
