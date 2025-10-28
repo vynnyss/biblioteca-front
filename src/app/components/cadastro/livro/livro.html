@@ -1,6 +1,6 @@
 <div class="container">
   <h2>Cadastro de Livro</h2>
-  <form (ngSubmit)="onSubmit()" #livroForm="ngForm">
+  <form (ngSubmit)="onSubmit(livroForm)" #livroForm="ngForm">
     <div>
       <label for="titulo">Título:</label>
       <input type="text" id="titulo" name="titulo" ngModel required />
