@@ -1,6 +1,7 @@
 import { DialogRef } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
 import { PostService } from '../../../servicos/api/post-service';
+import { LoginResponse } from '../../../models/login-response';
 
 @Component({
   selector: 'app-login',
@@ -10,24 +11,19 @@ import { PostService } from '../../../servicos/api/post-service';
 })
 
 export class Login {
-  private dialogRef = inject(DialogRef, { optional: true });
+  private dialogRef = inject<DialogRef<LoginResponse>>(DialogRef);
   private servicoApi = inject(PostService);
 
-  closeModal(){
-    this.dialogRef?.close();
+  closeModal(res?:LoginResponse){
+    this.dialogRef?.close(res);
   }
 
   enviarLogin(email: string, senha: string){
     this.servicoApi.postLogin(email, senha).subscribe({
-      next: (res) => {
-        console.log(email)
-        console.log(senha)
-        console.log('Sucesso no Login', res);
-        this.closeModal();
+      next: (res: LoginResponse) => {
+        this.closeModal(res);
       },
         error: (err) => {
-        console.log(email)
-        console.log(senha)
         console.error('Erro no login', err);
         this.closeModal();
       }

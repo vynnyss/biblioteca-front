@@ -9,6 +9,7 @@ export class PostService {
   private apiUrlLogin = "http://localhost:8080/auth/login";
   private apiUrlRegistro = "http://localhost:8080/auth/registro";
 
+
   constructor(private http: HttpClient){}
 
   postLogin(email: string, senha: string): Observable<any> {
@@ -28,4 +29,5 @@ export class PostService {
     console.log(payload)
     return this.http.post<any>(`${this.apiUrlRegistro}`, payload)
   }
+  
 }
