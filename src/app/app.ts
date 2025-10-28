@@ -2,13 +2,15 @@ import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './components/header/header';
 import { LoginResponse } from './models/login-response';
-import { Carrinho } from './components/carrinho/carrinho';
-import { BookDetails } from "./components/livros/book-details";
-
+import { Autor } from './components/cadastro/autor/autor';
+import { Editora } from './components/cadastro/editora/editora';
+import { Genero } from './components/cadastro/genero/genero';
+import { Idioma } from './components/cadastro/idioma/idioma';
+import { Pais } from './components/cadastro/pais/pais';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Carrinho, BookDetails],
+  imports: [RouterOutlet, Header, Funcionario, Autor, Idioma, Editora, Genero, Pais],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
