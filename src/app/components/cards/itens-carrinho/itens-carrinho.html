@@ -1,0 +1,24 @@
+<div class="cart-items">
+    <svg style="display: none;">
+        <symbol id="icon-trash" viewBox="0 0 24 24">
+            <path d="M6 7h12v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7zm3 2v8h2V9H9zm4 0v8h2V9h-2zm-5-3h8V4H8v2zm-2 0h-1v2H5v1h14v-1h-1V6H8v-1z"/>
+        </symbol>
+    </svg>
+    <div class="cart-item">
+        <div class="book-cover">{{data.cover}}</div>
+        <div class="book-details">
+            <h2>{{data.title}}</h2>
+            <p>Autor: {{data.author}}</p>
+        </div>
+        <div class="item-actions">
+            <div class="quantity-control">
+                <button class="quantity-btn">-</button>
+                <span>1</span>
+                <button class="quantity-btn">+</button>
+            </div>
+            <button class="remove-btn" aria-label="Remover item">
+                <svg class="icon"><use xlink:href="#icon-trash"></use></svg>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { Book } from '../cards/book/book';
+import { ItensCarrinho } from '../cards/itens-carrinho/itens-carrinho';
 
 @Component({
-  selector: 'app-home',
-  imports: [Book],
-  templateUrl: './home.html',
-  styleUrl: './home.css'
+  selector: 'app-carrinho',
+  imports: [ItensCarrinho],
+  templateUrl: './carrinho.html',
+  styleUrl: './carrinho.css'
 })
-export class Home {
+export class Carrinho {
   public mockBooks = [
             {
                 id: 1,
@@ -68,8 +68,8 @@ export class Home {
                 isbn: "978-0-441-17271-9",
                 description: "An epic science fiction novel set in a distant future amidst a feudal interstellar society.",
                 cover: "dune-frank-herbert-book-cover.jpg",
-            },
-        ];
+            }
+        ]
 
-
+   public quantidadeLivros = this.mockBooks.length
 }

@@ -1,7 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './components/header/header';
-import { Funcionario } from './components/cadastro/funcionario/funcionario';
 import { LoginResponse } from './models/login-response';
 import { Autor } from './components/cadastro/autor/autor';
 import { Editora } from './components/cadastro/editora/editora';

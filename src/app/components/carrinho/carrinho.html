@@ -1,0 +1,42 @@
+<!-- Main Content -->
+<body>
+    <svg style="display: none;">
+        <symbol id="icon-trash" viewBox="0 0 24 24">
+            <path d="M6 7h12v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7zm3 2v8h2V9H9zm4 0v8h2V9h-2zm-5-3h8V4H8v2zm-2 0h-1v2H5v1h14v-1h-1V6H8v-1z"/>
+        </symbol>
+    </svg>
+<main class="container">
+    <section class="cart-hero">
+        <h1>Seu Carrinho de Livros</h1>
+    </section>
+
+    <div class="cart-layout">
+        
+        <!-- Lista de Itens -->
+        <div class="cart-items">
+
+            @for (book of mockBooks; track book.id) {
+                <app-itens-carrinho [data]="book"></app-itens-carrinho>
+            }
+        </div>
+        
+        <!-- Sumário do Carrinho -->
+        <div class="cart-summary">
+            <h3 class="summary-title">Resumo do Pedido</h3>
+
+            <div class="summary-line">
+                <h3>Total {{quantidadeLivros}} itens </h3>
+            </div>
+
+            <div class="checkout-btn-container">
+                <button class="btn btn-primary">
+                    <svg class="icon"><use xlink:href="#icon-check"></use></svg>
+                    Finalizar Pedido
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+</body>
