@@ -15,7 +15,7 @@
         <!-- Lista de Itens -->
         <div class="cart-items">
 
-            @for (book of mockBooks; track book.id) {
+            @for (book of mockBooks; track book.idEdicao) {
                 <app-itens-carrinho [data]="book"></app-itens-carrinho>
             }
         </div>

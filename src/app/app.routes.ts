@@ -10,6 +10,7 @@ import { Genero } from './components/cadastro/genero/genero';
 import {Idioma} from './components/cadastro/idioma/idioma';
 import {Pais} from './components/cadastro/pais/pais';
 import { BookDetails } from './components/livros/book-details';
+import { Carrinho } from './components/carrinho/carrinho';
 
 export const routes: Routes = [
     {
@@ -61,8 +62,13 @@ export const routes: Routes = [
         path: "cadastro/pais",
         component: Pais
     },
+        {
         path: 'livros/:titulo',
         component: BookDetails
+    },
+    {
+        path: 'carrinho',
+        component: Carrinho
     }
 
 

@@ -1,33 +1,83 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './components/header/header';
 import { LoginResponse } from './models/login-response';
-import { Autor } from './components/cadastro/autor/autor';
-import { Editora } from './components/cadastro/editora/editora';
-import { Genero } from './components/cadastro/genero/genero';
-import { Idioma } from './components/cadastro/idioma/idioma';
-import { Pais } from './components/cadastro/pais/pais';
+import { DecodeToken } from './models/decode-token';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Funcionario, Autor, Idioma, Editora, Genero, Pais],
+  imports: [RouterOutlet, Header],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('biblioteca-front');
-
   private token!: string
   private logado: boolean = false
+  private decodedToken: DecodeToken | null = null
+
+  private readonly S_KEY_TOKEN = 'authToken';
+  private readonly S_KEY_LOGADO = 'isLogged';
+  private readonly S_KEY_DECODED = 'decodedToken';
+
+  ngOnInit(): void {
+    try {
+      const token = sessionStorage.getItem(this.S_KEY_TOKEN);
+      const isLogged = sessionStorage.getItem(this.S_KEY_LOGADO);
+      const decodedRaw = sessionStorage.getItem(this.S_KEY_DECODED);
+
+      if (token) {
+        this.token = token;
+        this.logado = isLogged ? JSON.parse(isLogged) : true;
+        if (decodedRaw) {
+          try {
+            this.decodedToken = JSON.parse(decodedRaw) as DecodeToken;
+          } catch (e) {
+            try {
+              this.decodedToken = jwtDecode(this.token) as DecodeToken;
+            } catch (err) {
+              console.error('Erro ao decodificar token no ngOnInit:', err);
+              this.decodedToken = null;
+            }
+          }
+        } else {
+          try {
+            this.decodedToken = jwtDecode(this.token) as DecodeToken;
+          } catch (e) {
+            console.error('Erro ao decodificar token no ngOnInit:', e);
+            this.decodedToken = null;
+          }
+        }
+      }
+    } catch (e) {
+      console.error('Erro ao carregar estado de sessão:', e);
+    }
+  }
 
   setToken(event: LoginResponse){
     this.token = event.token
     this.logado = true
-    this.logarToken()
-  }
-
-  logarToken(){
-    console.log("Usuário logado", this.token)
+    try {
+      this.decodedToken = jwtDecode(this.token) as DecodeToken;
+      console.log(this.decodedToken.role)
+    } catch (e) {
+      console.error('Erro ao decodificar token:', e);
+      this.decodedToken = null;
+    }
+    try {
+      sessionStorage.setItem(this.S_KEY_TOKEN, this.token);
+      sessionStorage.setItem(this.S_KEY_LOGADO, JSON.stringify(this.logado));
+      sessionStorage.setItem(this.S_KEY_DECODED, JSON.stringify(this.decodedToken));
+      // notificar outros componentes na mesma aba sobre mudança de autenticação
+      try {
+        window.dispatchEvent(new CustomEvent('auth:changed'));
+      } catch (e) {
+        console.warn('Não foi possível disparar evento auth:changed', e);
+      }
+    } catch (e) {
+      console.error('Erro ao salvar estado no sessionStorage:', e);
+    }
   }
 
   getLogado(){
@@ -37,6 +87,18 @@ export class App {
   realizarLogout(){
     this.token = ""
     this.logado = false
-    console.log("usuário deslogado", this.logado, this.token)
+    // remover do sessionStorage
+    try {
+      sessionStorage.removeItem(this.S_KEY_TOKEN);
+      sessionStorage.removeItem(this.S_KEY_LOGADO);
+      sessionStorage.removeItem(this.S_KEY_DECODED);
+    } catch (e) {
+      console.error('Erro ao remover estado do sessionStorage:', e);
+    }
+    try {
+        window.dispatchEvent(new CustomEvent('auth:changed'));
+      } catch (e) {
+        console.warn('Não foi possível disparar evento auth:changed', e);
+      }
   }
 }
