@@ -50,8 +50,8 @@
                 </button>
             </div>
             <div id="books-grid" class="books-grid">
-                @for (book of mockBooks; track book.id) {
-                    <app-book [data]="book"></app-book>
+                @for (livro of books; track livro.idEdicao) {
+                    <app-book [data]="livro"></app-book>
                 }
             </div>
         </div>

@@ -19,19 +19,19 @@
     <section class="book-info-card">
         
         <div class="book-cover-container">
-            <!-- Capa do Livro: Usa a propriedade 'cover' como cor de fundo para um placeholder -->
-            <div class="book-cover large" [style.backgroundColor]="livro.cover">
-                {{ livro.genre }}
+            <!-- Capa do Livro: Usa a propriedade 'cover' como fallback -->
+            <div class="book-cover large" [style.backgroundColor]="livro.cover || '#eee'">
+                {{ livro.titulo.nome }}
             </div>
         </div>
         
         <div class="book-details-content">
-            <p class="book-genre">{{ livro.genre }}</p>
-            <h1 class="book-title">{{ livro.title }}</h1>
-            <p class="book-author">Por <span>{{ livro.author }}</span></p>
+            <p class="book-genre">{{ getCategories() }}</p>
+            <h1 class="book-title">{{ livro.titulo.nome }}</h1>
+            <p class="book-author">Por <span>{{ getAuthor() }}</span></p>
             
             <div class="details-meta">
-                <span>Ano de Publicação: {{ livro.year }}</span>
+                <span>Ano de Publicação: {{ getYear() }}</span>
             </div>
 
             <div class="action-buttons">
@@ -43,7 +43,7 @@
             </div>
             
             <h2 class="section-title">Sinopse</h2>
-            <p class="book-description">{{ livro.description }}</p>
+            <p class="book-description">{{ livro.titulo.descricao }}</p>
 
         </div>
     </section>

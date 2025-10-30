@@ -5,10 +5,10 @@
         </symbol>
     </svg>
     <div class="cart-item">
-        <div class="book-cover">{{data.cover}}</div>
+        <div class="book-cover">{{data.cover || '/placeholder.svg?height=80&width=60'}}</div>
         <div class="book-details">
-            <h2>{{data.title}}</h2>
-            <p>Autor: {{data.author}}</p>
+            <h2>{{ getTitle() }}</h2>
+            <p>Autor: {{ getAuthor() }}</p>
         </div>
         <div class="item-actions">
             <div class="quantity-control">
@@ -16,7 +16,7 @@
                 <span>1</span>
                 <button class="quantity-btn">+</button>
             </div>
-            <button class="remove-btn" aria-label="Remover item">
+            <button class="remove-btn" aria-label="Remover item" (click)="removerDoCarrinho()">
                 <svg class="icon"><use xlink:href="#icon-trash"></use></svg>
             </button>
         </div>
