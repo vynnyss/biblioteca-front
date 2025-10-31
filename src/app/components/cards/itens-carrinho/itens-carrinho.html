@@ -11,11 +11,6 @@
             <p>Autor: {{ getAuthor() }}</p>
         </div>
         <div class="item-actions">
-            <div class="quantity-control">
-                <button class="quantity-btn">-</button>
-                <span>1</span>
-                <button class="quantity-btn">+</button>
-            </div>
             <button class="remove-btn" aria-label="Remover item" (click)="removerDoCarrinho()">
                 <svg class="icon"><use xlink:href="#icon-trash"></use></svg>
             </button>

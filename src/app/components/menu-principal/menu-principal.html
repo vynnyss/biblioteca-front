@@ -1,7 +1,29 @@
-<div class="menu-principal">
-    <div class="cards-container">
-        @for (name of cardsAdministrador; track name){
-            <app-menu [cardName]="name"></app-menu>
-        }
+<app-menu-lateral [leftFromParent]="true">
+    <!-- left menu items populated from roleCards (projected into menu-lateral) -->
+    <div menu-items>
+      <ng-container *ngFor="let name of roleCards">
+          <a class="menu-link" href="#" (click)="selectCard(name, $event)">
+              <div class="menu-item">
+                  <h4 class="menu-item-title">{{ name }}</h4>
+              </div>
+          </a>
+      </ng-container>
     </div>
-</div>
+
+    <!-- right content area (project into .content slot of app-menu) -->
+    <div class="content">
+        <div class="menu-principal-right" *ngIf="!selectedCard">
+            <h2>Bem-vindo</h2>
+            <p>Selecione um item no menu à esquerda.</p>
+        </div>
+
+        <div class="menu-principal-right" *ngIf="selectedCard && selectedCard !== 'Dados cadastrais'">
+            <h2>{{ selectedCard }}</h2>
+            <p>Conteúdo para "{{ selectedCard }}" ainda não implementado.</p>
+        </div>
+
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Dados cadastrais'">
+            <app-perfil [email]="selectedEmail"></app-perfil>
+        </div>
+    </div>
+</app-menu-lateral>

@@ -1,0 +1,19 @@
+:host {
+  display: block;
+  font-family: var(--font-family, Arial, sans-serif);
+}
+.perfil-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  padding: 16px;
+  border-radius: 6px;
+  max-width: 720px;
+}
+.perfil-card h3 {
+  margin-top: 0;
+}
+.perfil-card dl { margin: 0; }
+.perfil-card .row { display: flex; gap: 8px; padding: 6px 0; }
+.perfil-card dt { width: 160px; font-weight: 600; }
+.perfil-card dd { margin: 0; }
+.error { color: #b00020; }

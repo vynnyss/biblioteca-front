@@ -40,26 +40,21 @@ export class Header implements OnInit {
   }
 
   ngOnInit(): void {
-    // inicializa contador a partir do sessionStorage
     this.loadCartCount();
-    // inicializa role a partir do decodedToken no sessionStorage
     this.loadDecodedTokenRole();
 
     console.log('Header: subscribing to cartService events');
     this.cartService.added$.subscribe(() => {
       console.log('Header: received cart added event');
-      // recarrega o contador e anima o badge
       this.loadCartCount();
       this.triggerCartPulse();
     });
 
-    // escuta mudanças no conteúdo do carrinho (remoções/atualizações)
     this.cartService.changed$.subscribe(() => {
       console.log('Header: received cart changed event');
       this.loadCartCount();
     });
 
-    // atualiza contador caso outra aba/janela modifique o sessionStorage
     window.addEventListener('storage', (ev) => {
       if (ev.key === 'cartBooks') {
         console.log('Header: storage event for cartBooks detected');
@@ -67,7 +62,6 @@ export class Header implements OnInit {
       }
     });
 
-    // escuta evento customizado para mudanças de autenticação na mesma aba
     window.addEventListener('auth:changed', () => {
       this.loadDecodedTokenRole();
     });
@@ -108,7 +102,7 @@ export class Header implements OnInit {
     if (!badge) return;
 
     badge.classList.remove('pulse');
-    void badge.offsetWidth; // força o reflow para reiniciar a animação
+    void badge.offsetWidth;
     badge.classList.add('pulse');
   }
 

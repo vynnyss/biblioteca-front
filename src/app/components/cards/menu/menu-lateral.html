@@ -1,0 +1,27 @@
+<div class="side-layout">
+    <aside class="side-menu">
+        <div class="menu-inner">
+            <div class="menu-header">{{ title }}</div>
+
+            <!-- allow parent to project left menu items; if not provided, render roleCards -->
+            <ng-content select="[menu-items]"></ng-content>
+
+            <ng-container *ngIf="!leftFromParent">
+              <!-- rendered cards based on roleCards -->
+              <ng-container *ngFor="let name of roleCards">
+                  <a class="menu-link" [href]="fullPath(name)">
+                      <div class="menu-item">
+                          <h3 class="menu-item-title">{{ name }}</h3>
+                      </div>
+                  </a>
+              </ng-container>
+            </ng-container>
+
+        </div>
+    </aside>
+
+    <!-- espaço à direita para o conteúdo principal da página -->
+    <div class="side-content">
+        <ng-content select=".content"></ng-content>
+    </div>
+</div>
