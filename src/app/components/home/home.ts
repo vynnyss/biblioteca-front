@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Book } from '../cards/book/book';
 import { GetServicos } from '../../servicos/api/get-servicos';
-import { BookModel } from '../../models/bookI-model';
+import { BookModel } from '../../models/book-model';
 
 @Component({
   selector: 'app-home',

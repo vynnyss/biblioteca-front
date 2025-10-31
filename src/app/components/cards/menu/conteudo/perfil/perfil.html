@@ -1,0 +1,21 @@
+<div class="perfil-root">
+	<ng-container *ngIf="loading">Carregando dados do perfil...</ng-container>
+	<ng-container *ngIf="error" class="error">{{ error }}</ng-container>
+
+	<section *ngIf="pessoa" class="perfil-card">
+		<h3>{{ pessoa.nome }}</h3>
+
+		<dl>
+			<div class="row"><dt>Email</dt><dd>{{ pessoa.email.endereco }}</dd></div>
+			<div class="row"><dt>Telefone</dt><dd>{{ pessoa.telefone.numero }}</dd></div>
+			<div class="row"><dt>CPF</dt><dd>{{ pessoa.cpf.valor }}</dd></div>
+			<div class="row"><dt>Sexo</dt><dd>{{ pessoa.sexo }}</dd></div>
+			<div class="row"><dt>Função</dt><dd>{{ pessoa.funcao }}</dd></div>
+			<div class="row"><dt>Data de Nascimento</dt><dd>{{ pessoa.dtNascimento | date:'longDate' }}</dd></div>
+		</dl>
+	</section>
+
+	<ng-container *ngIf="!loading && !pessoa && !error">
+		<p>Selecione um perfil para visualizar os dados.</p>
+	</ng-container>
+</div>
