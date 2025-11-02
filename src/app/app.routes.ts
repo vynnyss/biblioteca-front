@@ -11,6 +11,12 @@ import {Idioma} from './components/cadastro/idioma/idioma';
 import {Pais} from './components/cadastro/pais/pais';
 import { BookDetails } from './components/livros/book-details';
 import { Carrinho } from './components/carrinho/carrinho';
+import { NomeCompleto } from './components/atualizacao/nome-completo/nome-completo';
+import { Endereco } from './components/atualizacao/endereco/endereco';
+import { Cpf } from './components/atualizacao/cpf/cpf';
+import { Email } from './components/atualizacao/email/email';
+import { Sexo } from './components/atualizacao/sexo/sexo';
+import { Telefone } from './components/atualizacao/telefone/telefone';
 
 export const routes: Routes = [
     {
@@ -70,6 +76,37 @@ export const routes: Routes = [
         path: 'carrinho',
         component: Carrinho
     }
+
+    ,{
+        path: 'atualizacao/nome-completo',
+        component: NomeCompleto
+    }
+
+    ,{
+        path: 'atualizacao/endereco',
+        component: Endereco
+    }
+
+    ,{
+        path: 'atualizacao/cpf',
+        component: Cpf
+    }
+
+    ,{
+        path: 'atualizacao/email',
+        component: Email
+    }
+
+    ,{
+        path: 'atualizacao/sexo',
+        component: Sexo
+    }
+
+
+        ,{
+            path: 'atualizacao/telefone',
+            component: Telefone
+        }
 
 
    

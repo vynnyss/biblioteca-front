@@ -1,0 +1,59 @@
+<section class="cadastro-section">
+	<h2>Atualizar sexo</h2>
+
+	<form class="cadastro-form">
+		<div class="form-group sexo-group">
+			<label class="field-label">Sexo:</label>
+			<div class="sex-options">
+				<label for="feminino">
+					<input type="radio" id="feminino" name="sexo" value="feminino" [(ngModel)]="sexoValue">
+					Feminino
+				</label>
+				<label for="masculino">
+					<input type="radio" id="masculino" name="sexo" value="masculino" [(ngModel)]="sexoValue">
+					Masculino
+				</label>
+				<label for="outro">
+					<input type="radio" id="outro" name="sexo" value="outro" [(ngModel)]="sexoValue">
+					Outro
+				</label>
+				<label for="prefiro_nao_informar" class="full-line">
+					<input type="radio" id="prefiro_nao_informar" name="sexo" value="prefiro_nao_informar" [(ngModel)]="sexoValue">
+					Prefiro não informar
+				</label>
+			</div>
+		</div>
+
+		<div class="cadastro-buttons">
+			<button type="button" class="btn btn-cancelar" (click)="cancelar()">Cancelar</button>
+			<button type="submit" class="btn btn-salvar">Salvar</button>
+		</div>
+	</form>
+</section>
+
+<style>
+	.cadastro-buttons {
+		margin-top: 20px;
+		display: flex;
+		justify-content: center; 
+		gap: 10px; 
+	}
+
+	.btn {
+		padding: 10px 20px;
+		font-size: 16px;
+		cursor: pointer;
+	}
+
+	.btn-cancelar {
+		background-color: #ccc;
+		border: none;
+		color: #000;
+	}
+
+	.btn-salvar {
+		background-color: #4CAF50;
+		border: none;
+		color: white;
+	}
+</style>

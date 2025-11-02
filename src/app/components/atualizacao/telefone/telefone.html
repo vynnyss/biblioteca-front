@@ -1,0 +1,19 @@
+<section class="cadastro-section">
+	<h2>Atualizar Telefone</h2>
+
+		<form class="cadastro-form" (ngSubmit)="salvar()" #telForm="ngForm">
+			<div class="form-group full-width">
+				<label for="telefone">Telefone</label>
+				<input id="telefone" name="telefone" type="tel" placeholder="(00) 00000-0000" required
+					[(ngModel)]="telefoneValue" #telefone="ngModel" />
+				<div class="field-error" *ngIf="telefone.invalid && (telefone.dirty || telefone.touched)">
+					Informe um telefone válido.
+				</div>
+			</div>
+
+		<div class="cadastro-buttons">
+			<button type="button" class="btn btn-cancelar" (click)="cancelar()">Cancelar</button>
+			<button type="submit" class="btn btn-salvar" [disabled]="telForm.invalid">Salvar</button>
+		</div>
+	</form>
+</section>
