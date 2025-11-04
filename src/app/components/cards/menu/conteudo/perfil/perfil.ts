@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
-import { Pessoa } from '../../../../../models/pessoa-model';
+import { PessoaModel } from '../../../../../models/pessoa-model';
 
 @Component({
   selector: 'app-perfil',
@@ -13,7 +13,7 @@ import { Pessoa } from '../../../../../models/pessoa-model';
 export class Perfil implements OnChanges {
   @Input() email?: string;
 
-  public pessoa: Pessoa | null = null;
+  public pessoa: PessoaModel | null = null;
   public loading = false;
   public error: string | null = null;
 
@@ -32,7 +32,7 @@ export class Perfil implements OnChanges {
     this.loading = true;
 
     this.svc.getPessoaPorEmail(email).subscribe({
-      next: (p: Pessoa) => {
+      next: (p: PessoaModel) => {
         this.pessoa = p;
         this.loading = false;
       },

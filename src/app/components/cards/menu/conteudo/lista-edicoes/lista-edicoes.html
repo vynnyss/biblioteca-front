@@ -1,0 +1,65 @@
+<div class="lista-edicoes">
+	<h3>Edições</h3>
+
+		<div class="filters">
+		<label>
+			Título
+			<input type="text" [(ngModel)]="titleQuery" (input)="applyFilters()" placeholder="Pesquisar por título" />
+		</label>
+
+		<label>
+			Editora
+			<input type="text" [(ngModel)]="publisherQuery" (input)="applyFilters()" placeholder="Pesquisar por editora" />
+		</label>
+
+		<label>
+			Ano
+			<input type="text" [(ngModel)]="yearFilter" (input)="applyFilters()" placeholder="AAAA" />
+		</label>
+
+		<label>
+			Status
+			<select [(ngModel)]="statusFilter" (change)="applyFilters()">
+				<option value="">Todos</option>
+				<option *ngFor="let s of availableStatuses" [value]="s">{{ s }}</option>
+			</select>
+		</label>
+
+		<button class="btn btn-outline" type="button" (click)="clearFilters()">Limpar</button>
+	</div>
+
+	<div *ngIf="!selectedEdicao">
+		<div *ngIf="edicoes?.length; else empty">
+			<table class="table-edicoes">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Título</th>
+					<th>Editora</th>
+					<th>Ano</th>
+					<th>Status</th>
+					<th>Ações</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let ed of edicoes">
+					<td>{{ getId(ed) }}</td>
+					<td>{{ getName(ed) }}</td>
+					<td>{{ getEditora(ed) }}</td>
+					<td>{{ getAno(ed) }}</td>
+					<td>{{ getStatus(ed) }}</td>
+					<td><button type="button" (click)="showDetails(ed)">Detalhes</button></td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+
+	<div *ngIf="selectedEdicao">
+		<app-detalhes-edicao [edicao]="selectedEdicao" (close)="clearDetails()"></app-detalhes-edicao>
+	</div>
+
+	<ng-template #empty>
+		<p>Nenhuma edição encontrada.</p>
+	</ng-template>
+</div>

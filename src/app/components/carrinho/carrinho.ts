@@ -55,23 +55,12 @@ export class Carrinho implements OnInit {
         this.postService.postEmprestimo(emprestimo).subscribe({
           next: (response) => {
             console.log('Empréstimo realizado com sucesso:', response);
+            this.clearSessionCart();
           },
           error: (err) => {
             console.error('Erro ao realizar empréstimo:', err);
           }
         });
-        /*
-        // apagar o carrinho após finalizar
-        try {
-          sessionStorage.removeItem('cartBooks');
-          this.loadFromSession();
-          this.cartService.notifyCartChanged();
-        } catch (e) {
-          console.error('Erro ao limpar carrinho após finalizar pedido:', e);
-        }
-        // mandar para pagina inicial
-        window.location.href = '/';
-        */
       },
       error: (err) => {
         console.error('Erro ao buscar pessoa para finalizar pedido:', err);
@@ -93,4 +82,13 @@ export class Carrinho implements OnInit {
     this.quantidadeLivros = this.mockBooks.length;
   }
 
+  private clearSessionCart(): void {
+    try {
+      const key = 'cartBooks';
+      sessionStorage.removeItem(key);
+      console.log("carrinho limpo do storage com sucesso!")
+    } catch (e) {
+      console.error('Erro ao limpar carrinho do sessionStorage:', e);
+    }
+  }
 }

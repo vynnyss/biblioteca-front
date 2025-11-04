@@ -1,9 +1,10 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, OnInit, NgModule } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './components/header/header';
 import { LoginResponse } from './models/login-response';
 import { DecodeToken } from './models/decode-token';
 import { jwtDecode } from 'jwt-decode';
+
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,7 @@ import { jwtDecode } from 'jwt-decode';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
+
 export class App implements OnInit {
   protected readonly title = signal('biblioteca-front');
   private token!: string
@@ -89,9 +91,9 @@ export class App implements OnInit {
     this.logado = false
     // remover do sessionStorage
     try {
-      sessionStorage.removeItem(this.S_KEY_TOKEN);
-      sessionStorage.removeItem(this.S_KEY_LOGADO);
-      sessionStorage.removeItem(this.S_KEY_DECODED);
+      sessionStorage.clear();
+      // enviar para pagina inicial
+      window.location.href = '/';
     } catch (e) {
       console.error('Erro ao remover estado do sessionStorage:', e);
     }

@@ -1,0 +1,28 @@
+<div class="lista-exemplares-root">
+  <ng-container *ngIf="loading">Carregando exemplares...</ng-container>
+  <ng-container *ngIf="error" class="error">{{ error }}</ng-container>
+
+  <section>
+    <h4>Exemplares ({{ exemplares.length }})</h4>
+    <table class="table-exemplares">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Status</th>
+          <th>Estado Físico</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of exemplares">
+            <td>{{ getId(e) }}</td>
+            <td>{{ getStatus(e) }}</td>
+            <td>{{ getEstadoFisico(e) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <ng-container *ngIf="!loading && (!exemplares || exemplares.length === 0)">
+    <p>Nenhum exemplar encontrado para esta edição.</p>
+  </ng-container>
+</div>

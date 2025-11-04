@@ -20,18 +20,10 @@ export class Registro {
   enviarRegistro(email: string, senha: string, cargo: string){
     this.servicoApi.postRegistro(email, senha, cargo).subscribe({
       next: (res) => {
-        console.log(email)
-        console.log(senha)
-        console.log(cargo)
-        console.log('Sucesso no Registro', res);
-        this.closeModal();
+        console.log('Registro realizado com sucesso', res);
       },
       error: (err) => {
-        console.log(email)
-        console.log(senha)
-        console.log(cargo)
         console.error('Erro no registro', err);
-        this.closeModal();
       }
     })
   }

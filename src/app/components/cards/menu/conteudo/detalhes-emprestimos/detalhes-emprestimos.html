@@ -1,0 +1,83 @@
+<div class="detalhes-emprestimos-root">
+	<button class="btn btn-outline" type="button" (click)="onClose()">← Voltar</button>
+	<h3>Detalhes do Empréstimo</h3>
+
+	<div *ngIf="loading">Carregando detalhes do empréstimo...</div>
+
+	<div *ngIf="error" class="error">{{ error }}</div>
+
+	<div *ngIf="emprestimo; else noid">
+		<section class="emprestimo-card">
+            <div class="section-card">
+			<h4>Empréstimo #{{ emprestimo.idEmprestimo }}</h4>
+			<dl>
+				<dt>Início do Empréstimo</dt>
+				<dd>{{ emprestimo.dtInicioEmprestimo | date:'short' }}</dd>
+
+				<dt>Separação do Exemplar</dt>
+				<dd>{{ emprestimo.dtSeparacaoExemplar ? (emprestimo.dtSeparacaoExemplar | date:'short') : '—' }}</dd>
+
+				<dt>Retirada do Exemplar</dt>
+				<dd>{{ emprestimo.dtRetiradaExemplar ? (emprestimo.dtRetiradaExemplar | date:'short') : '—' }}</dd>
+
+				<dt>Devolução Prevista</dt>
+				<dd>{{ emprestimo.dtDevolucaoPrevista ? (emprestimo.dtDevolucaoPrevista | date:'short') : '—' }}</dd>
+
+				<dt>Data Devolvido</dt>
+				<dd>{{ emprestimo.dtDevolvidoExemplar ? (emprestimo.dtDevolvidoExemplar | date:'short') : 'Não devolvido' }}</dd>
+			</dl>
+            </div>
+
+			<div class="section-card">
+				<h5>Dados do Usuário</h5>
+				<dl>
+				<dt>Nome</dt>
+				<dd>{{ emprestimo.pessoa.nome || emprestimo.pessoa.username || '—' }}</dd>
+
+				<dt>Username</dt>
+				<dd>{{ emprestimo.pessoa.username || '—' }}</dd>
+
+				<dt>Email</dt>
+				<dd>{{ emprestimo.pessoa.email.endereco || '—' }}</dd>
+
+				<dt>CPF</dt>
+				<dd>{{ emprestimo.pessoa.cpf.valor || '—' }}</dd>
+
+				<dt>Telefone</dt>
+				<dd>{{ emprestimo.pessoa.telefone.numero || '—' }}</dd>
+				</dl>
+			</div>
+
+			<div class="section-card">
+				<h5>Dados do Exemplar</h5>
+				<dl>
+				<dt>ID</dt>
+				<dd>{{ emprestimo.exemplar.idExemplar || '—' }}</dd>
+
+				<dt>Status</dt>
+				<dd>{{ emprestimo.exemplar.status || '—' }}</dd>
+
+				<dt>Estado físico</dt>
+				<dd>{{ emprestimo.exemplar.estadoFisico || '—' }}</dd>
+
+				<dt>Título</dt>
+				<dd>{{ emprestimo.exemplar.edicao.titulo.nome || '—' }}</dd>
+
+				<dt>Editora</dt>
+				<dd>{{ emprestimo.exemplar.edicao.editora.nome || '—' }}</dd>
+				</dl>
+			</div>
+
+			<div class="section-card">
+				<dl>
+					<dt>Multa</dt>
+					<dd>{{ emprestimo.multa.valor || 0 }} ({{ emprestimo.multa.statusPagamento || '—' }})</dd>
+				</dl>
+			</div>
+		</section>
+	</div>
+
+	<ng-template #noid>
+		<p>Nenhum empréstimo selecionado.</p>
+	</ng-template>
+</div>
