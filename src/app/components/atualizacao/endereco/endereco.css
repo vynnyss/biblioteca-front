@@ -1,3 +1,4 @@
+
 :host {
   display: block;
   min-height: 100vh;
@@ -125,12 +126,11 @@ app-root {
   color: #374151;
 }
 
-/* === BOTÕES CENTRALIZADOS DENTRO DO FORM === */
 .cadastro-buttons {
   grid-column: span 2;
   display: flex;
-  justify-content: center; /* Centraliza horizontalmente */
-  align-items: center;     /* Centraliza verticalmente */
+  justify-content: center; 
+  align-items: center;     
   width: 100%;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
@@ -193,5 +193,4 @@ app-root {
     width: 100%;
   }
 }
-
 

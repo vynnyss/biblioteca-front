@@ -1,3 +1,4 @@
+/* Copied from cadastro/pessoa styles to match visual layout */
 :host {
   display: block;
   min-height: 100vh;
@@ -125,7 +126,6 @@ app-root {
   color: #374151;
 }
 
-/* === BOTÕES CENTRALIZADOS DENTRO DO FORM === */
 .cadastro-buttons {
   grid-column: span 2;
   display: flex;
@@ -193,5 +193,3 @@ app-root {
     width: 100%;
   }
 }
-
-

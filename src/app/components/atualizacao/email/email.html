@@ -1,0 +1,46 @@
+<section class="cadastro-section">
+	<h2>Atualizar e-mail</h2>
+
+
+	<form class="cadastro-form" (ngSubmit)="salvar()" #emailForm="ngForm">
+		<div class="form-group">
+			<label for="email">E-mail</label>
+			<input id="email" name="email" type="email" placeholder="seu@email.com" required
+				[(ngModel)]="emailValue" #email="ngModel" />
+			<div class="field-error" *ngIf="email.invalid && (email.dirty || email.touched)">
+				Por favor informe um e-mail válido.
+			</div>
+		</div>
+		<div class="cadastro-buttons">
+			<button class="btn btn-cancelar" type="button" (click)="cancelar()">Cancelar</button>
+			<button class="btn btn-salvar" type="submit" [disabled]="emailForm.invalid">Salvar</button>
+		</div>
+	</form>
+</section>
+
+<style>
+	.cadastro-buttons {
+		margin-top: 20px;
+		display: flex;
+		justify-content: center; 
+		gap: 10px; 
+	}
+
+	.btn {
+		padding: 10px 20px;
+		font-size: 16px;
+		cursor: pointer;
+	}
+
+	.btn-cancelar {
+		background-color: #ccc;
+		border: none;
+		color: #000;
+	}
+
+	.btn-salvar {
+		background-color: #4CAF50;
+		border: none;
+		color: white;
+	}
+</style>
