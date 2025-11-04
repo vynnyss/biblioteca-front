@@ -2,10 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { MenuLateral } from '../cards/menu/menu-lateral';
 import { CommonModule } from '@angular/common';
 import { Perfil } from '../cards/menu/conteudo/perfil/perfil';
+import { ListaClientes } from '../cards/menu/conteudo/lista-clientes/lista-clientes';
+import { ListaFuncionarios } from '../cards/menu/conteudo/lista-funcionarios/lista-funcionarios';
+import { ListaAutores } from '../cards/menu/conteudo/lista-autores/lista-autores';
+import { ListaEditoras } from '../cards/menu/conteudo/lista-editoras/lista-editoras';
+import { ListaEdicoes } from '../cards/menu/conteudo/lista-edicoes/lista-edicoes';
+import { ListaEmprestimos } from '../cards/menu/conteudo/lista-emprestimos/lista-emprestimos';
 
 @Component({
   selector: 'app-menu-principal',
-  imports: [MenuLateral, CommonModule, Perfil],
+  imports: [MenuLateral, CommonModule, Perfil, ListaClientes, ListaFuncionarios, ListaAutores, ListaEditoras, ListaEdicoes, ListaEmprestimos],
   templateUrl: './menu-principal.html',
   styleUrl: './menu-principal.css'
 })

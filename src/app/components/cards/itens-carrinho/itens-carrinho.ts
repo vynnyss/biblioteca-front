@@ -29,7 +29,6 @@ export class ItensCarrinho {
         cartBooks.splice(index, 1);
         sessionStorage.setItem(key, JSON.stringify(cartBooks));
         console.log("Livro removido do carrinho com sucesso!");
-        // notificar outros componentes (ex: Carrinho) para recarregarem os dados
         try {
           this.cartService.notifyCartChanged();
         } catch (e) {

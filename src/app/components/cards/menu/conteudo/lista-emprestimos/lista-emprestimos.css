@@ -1,0 +1,9 @@
+:host { display: block; }
+.emprestimos-table { width: 100%; border-collapse: collapse; }
+.emprestimos-table th, .emprestimos-table td { border: 1px solid #e6e6e6; padding: 8px; text-align: left; }
+.emprestimos-table thead { background: #fafafa; }
+.lista-emprestimos-root { display: flex; flex-direction: column; gap: 0.5rem; }
+.lista-emprestimos-root h3 { margin-top: 0; }
+.lista-emprestimos-root .filters { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+.lista-emprestimos-root section { flex: 1 1 auto; min-height: 48vh; overflow: auto; }
+.error { color: #b00020; }
