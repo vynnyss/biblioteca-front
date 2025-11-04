@@ -8,7 +8,7 @@ export type Sexo = 'MASCULINO' | 'FEMININO' | string;
 export type StatusConta = 'ATIVA' | 'INATIVA' | string;
 export type Funcao = 'CLIENTE' | 'FUNCIONARIO' | string;
 
-export interface Pessoa {
+export interface PessoaModel {
   idPessoa: number;
   nome: string;
   cpf: Cpf;

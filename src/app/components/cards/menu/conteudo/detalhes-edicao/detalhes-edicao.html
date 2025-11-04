@@ -1,0 +1,41 @@
+<!-- Reuse Book Details layout but show the edition passed in via `edicao` and remove add-to-cart -->
+<svg style="display: none;">
+	<symbol id="icon-book" viewBox="0 0 24 24">
+		<path d="M4 19h16v-1a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v1zm14.5-9L12 14.5 5.5 10a1 1 0 0 1-.5-.8V4a1 1 0 0 1 1-1h13a1 1 0 0 1 1 1v5.2a1 1 0 0 1-.5.8zM6 4v5.2l6 4 6-4V4H6z"/>
+	</symbol>
+</svg>
+
+<main class="container book-detail-page">
+	<section class="book-info-card">
+		<div class="book-cover-container">
+			<div class="book-cover large" [style.backgroundColor]="edicao?.cover || '#eee'">
+				{{ edicao?.titulo?.nome || edicao?.titulo || 'Edição' }}
+			</div>
+		</div>
+
+		<div class="book-details-content">
+			<p class="book-genre">{{ getCategories() }}</p>
+			<h1 class="book-title">{{ edicao?.titulo?.nome }}</h1>
+			<p class="book-author">Por <span>{{ getAuthor() }}</span></p>
+
+			<div class="details-meta">
+				<span>Ano de Publicação: {{ getYear() }}</span>
+			</div>
+
+			<!-- No add-to-cart button here (details view only) -->
+
+			<h2 class="section-title">Sinopse / Notas</h2>
+			<p class="book-description">{{ edicao?.titulo?.descricao || 'Sem descrição disponível.' }}</p>
+
+		</div>
+	</section>
+
+	<section class="debug-json" *ngIf="edicao">
+			<!-- Lista de exemplares para esta edição -->
+			<app-lista-exemplares [edicaoId]="edicao?.idEdicao"></app-lista-exemplares>
+
+			<div style="margin-top:1rem;">
+				<button class="btn btn-outline" type="button" (click)="onClose()">← Voltar</button>
+			</div>
+		</section>
+</main>

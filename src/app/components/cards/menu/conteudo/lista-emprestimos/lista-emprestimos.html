@@ -1,0 +1,70 @@
+<div class="lista-emprestimos-root">
+  <ng-container *ngIf="loading">Carregando empréstimos...</ng-container>
+  <ng-container *ngIf="error" class="error">{{ error }}</ng-container>
+
+      <h3>Empréstimos ({{ emprestimos.length }})</h3>
+
+      <div class="filters">
+        <label>
+          Status
+          <select [(ngModel)]="selectedStatus" (change)="applyFilters()">
+            <option value="">Todos</option>
+            <option *ngFor="let s of availableStatuses" [value]="s">{{ s }}</option>
+          </select>
+        </label>
+
+        <label>
+          Multa
+          <select [(ngModel)]="multaFilter" (change)="applyFilters()">
+            <option value="all">Todos</option>
+            <option value="with">Com Multa</option>
+            <option value="without">Sem Multa</option>
+          </select>
+        </label>
+
+        <label>
+          Buscar Pessoa (ID)
+          <input type="text" [(ngModel)]="pessoaQuery" (input)="applyFilters()" placeholder="Digite ID da pessoa" />
+        </label>
+
+        <button class="btn btn-outline" type="button" (click)="clearFilters()">Limpar</button>
+      </div>
+
+  <section *ngIf="!selectedId">
+    <div *ngIf="!loading && emprestimos?.length; else empty">
+
+      <table class="emprestimos-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Pessoa</th>
+            <th>Status</th>
+            <th>Multa</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let e of emprestimos">
+            <td>{{ e.idEmprestimo }}</td>
+            <td>{{ e.idPessoa }}</td>
+            <td>{{ e.status }}</td>
+            <td>{{ (e.multa.valor && e.multa.valor > 0) ? e.multa.valor : 'Sem Multa' }} {{ (e.multa.statusPagamento && e.multa.statusPagamento !== 'NAO_APLICAVEL') ? ('(' + e.multa.statusPagamento + ')') : '' }}</td>
+            <td><button class="btn btn-outline" type="button" (click)="showDetails(e.idEmprestimo)">Detalhes</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <ng-template #empty>
+    <p>Nenhum empréstimo encontrado.</p>
+  </ng-template>
+
+  <div *ngIf="selectedId">
+    <app-detalhes-emprestimos [idEmprestimo]="selectedId" (close)="clearDetails()"></app-detalhes-emprestimos>
+  </div>
+
+  <ng-container *ngIf="!loading && (!emprestimos || emprestimos.length === 0)">
+    <p>Nenhum empréstimo encontrado.</p>
+  </ng-container>
+</div>

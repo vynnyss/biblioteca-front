@@ -1,0 +1,68 @@
+<div class="detalhes-cliente-root">
+	<button class="btn btn-outline" type="button" (click)="onClose()">← Voltar</button>
+	<h3>Detalhes do Cliente</h3>
+
+	<div *ngIf="cliente; else noClient">
+		<div class="detalhes-grid">
+			<div class="left-col">
+				<section class="section-card cliente-info">
+					<h4>Dados do Cliente</h4>
+					<dl>
+						<dt>Nome</dt>
+						<dd>{{ cliente.nome }}</dd>
+
+						<dt>Email</dt>
+						<dd>{{ cliente.email.endereco || cliente.username }}</dd>
+
+						<dt>Telefone</dt>
+						<dd>{{ cliente.telefone.numero || '—' }}</dd>
+
+						<dt>CPF</dt>
+						<dd>{{ cliente.cpf.valor || '—' }}</dd>
+
+						<dt>Status</dt>
+						<dd>{{ cliente.statusConta }}</dd>
+					</dl>
+					<div class="actions">
+						<button class="btn btn-primary" type="button">Editar cliente</button>
+						<button class="btn btn-outline" type="button">Inativar cliente</button>
+					</div>
+				</section>
+
+				<section class="section-card endereco-info">
+					<h5>Endereço</h5>
+					<dl>
+						<dt>Rua</dt>
+						<dd>{{ cliente.endereco?.rua || '—' }}</dd>
+
+						<dt>Número</dt>
+						<dd>{{ cliente.endereco?.numero || '—' }}</dd>
+
+						<dt>Complemento</dt>
+						<dd>{{ cliente.endereco?.complemento || '—' }}</dd>
+
+						<dt>Bairro</dt>
+						<dd>{{ cliente.endereco?.bairro || '—' }}</dd>
+
+						<dt>Cidade / Estado</dt>
+						<dd>{{ (cliente.endereco?.cidade || '—') + ' / ' + (cliente.endereco?.estado || '—') }}</dd>
+
+						<dt>CEP</dt>
+						<dd>{{ cliente.endereco?.cep || '—' }}</dd>
+					</dl>
+				</section>
+			</div>
+
+			<div class="right-col">
+				<section class="section-card emprestimos-placeholder">
+					<h5>Empréstimos do cliente</h5>
+					<p class="muted">Lista de empréstimos será exibida aqui em breve.</p>
+				</section>
+			</div>
+		</div>
+	</div>
+
+	<ng-template #noClient>
+		<p>Nenhum cliente selecionado.</p>
+	</ng-template>
+</div>

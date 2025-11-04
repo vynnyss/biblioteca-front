@@ -16,14 +16,28 @@
             <h2>Bem-vindo</h2>
             <p>Selecione um item no menu à esquerda.</p>
         </div>
-
-        <div class="menu-principal-right" *ngIf="selectedCard && selectedCard !== 'Dados cadastrais'">
-            <h2>{{ selectedCard }}</h2>
-            <p>Conteúdo para "{{ selectedCard }}" ainda não implementado.</p>
-        </div>
-
         <div class="menu-principal-right" *ngIf="selectedCard === 'Dados cadastrais'">
             <app-perfil [email]="selectedEmail"></app-perfil>
+        </div>
+
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Clientes'">
+            <app-lista-clientes></app-lista-clientes>
+        </div>
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Emprestimos'">
+            <app-lista-emprestimos></app-lista-emprestimos>
+        </div>
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Funcionários'">
+            <app-lista-funcionarios></app-lista-funcionarios>
+        </div>
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Autores'">
+            <app-lista-autores></app-lista-autores>
+        </div>
+
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Editoras'">
+            <app-lista-editoras></app-lista-editoras>
+        </div>
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Livros'">
+            <app-lista-edicoes></app-lista-edicoes>
         </div>
     </div>
 </app-menu-lateral>

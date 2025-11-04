@@ -1,0 +1,8 @@
+:host { display: block; }
+.clientes-table { width: 100%; border-collapse: collapse; }
+.clientes-table th, .clientes-table td { border: 1px solid #e6e6e6; padding: 8px; text-align: left; }
+.clientes-table thead { background: #fafafa; }
+.lista-clientes-root h3 { margin-top: 0; }
+.error { color: #b00020; }
+
+.funcionarios-section { margin-top: 20px; }

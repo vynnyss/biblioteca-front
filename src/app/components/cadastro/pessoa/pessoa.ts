@@ -3,10 +3,33 @@ import { NgForm, FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-pessoa',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './pessoa.html',
   styleUrls: ['./pessoa.css']
 })
+
 export class Pessoa {
+  user: any = {
+    firstName: '',
+    lastName: '',
+    cpf: '',
+    dtNascimento: '',
+    sexo: '',
+    email: '',
+    telefone: '',
+    endereco: {
+       nomeLogradouro: '',
+       numero: '',
+       complemento: '',
+       bairro:'',
+       cep: '',
+       cidade: '',
+       idEstado: 0
+      }
+  };
+
+  private servicoApi = inject(PostService);
 
 mascaraCPF(event: any): void {
   const input = event.target;
@@ -22,8 +45,6 @@ mascaraCPF(event: any): void {
   if (valor.length > 11) {
     valor = valor.slice(0, 11);
   }
-
- 
   if (valor.length > 9) {
     valor = valor.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
   } else if (valor.length > 6) {
@@ -39,5 +60,18 @@ mascaraCPF(event: any): void {
 
   cancelar() {
     console.log('Ação de cancelar executada');
+  }
+
+
+  onSubmit(form: NgForm) {
+    if (form) {
+      this.user = form.value;
+      // Acessa todos os campos do formulário como um objeto JSON
+      const dadosDoFormulario = form.value;
+      console.log('Dados do formulário:', dadosDoFormulario);
+      // Aqui você pode enviar os dados para um serviço ou API
+    } else {
+      console.log('Formulário inválido');
+    }
   }
 }

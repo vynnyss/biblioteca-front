@@ -1,0 +1,27 @@
+
+:host { display: block; }
+.detalhes-emprestimos-root { padding: 1rem; }
+.emprestimo-card {
+	background: transparent;
+	padding: 0;
+	border-radius: 0;
+	box-shadow: none;
+	margin-top: 0.5rem;
+}
+.emprestimo-card h4 { margin-top: 0; margin-bottom: 0.75rem; }
+.emprestimo-card dl { display: grid; grid-template-columns: 220px 1fr; gap: 8px 16px; }
+
+.section-card {
+	background: #fff;
+	padding: 0.9rem 1rem;
+	border-radius: 8px;
+	box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+	margin-top: 0.8rem;
+}
+.section-card h5 { margin: 0 0 0.5rem 0; font-size: 0.95rem; }
+.section-card dl { margin: 0; }
+.emprestimo-card dt { font-weight: 700; color: #374151; }
+.emprestimo-card dd { margin: 0 0 8px 0; color: #111827; }
+.error { color: #b00020; }
+.btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.75rem; border-radius: 6px; border: 1px solid #d1d5db; background: white; cursor: pointer; }
+
