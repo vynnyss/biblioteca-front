@@ -1,0 +1,23 @@
+<div id="signup-modal" class="modal">
+    <div class="modal-content">
+        <h2>Criar Conta</h2>
+        <form id="signup-form">
+            <div class="form-group">
+                <label for="signup-email" class="form-label">Email</label>
+                <input type="email" id="signup-email" required class="form-input" #email>
+            </div>
+            <div class="form-group">
+                <label for="signup-password" class="form-label">Senha</label>
+                <input type="password" id="signup-password" required class="form-input" #senha>
+            </div>
+            <div class="form-group">
+                <label for="signup-name" class="form-label">Cargo</label>
+                <input type="text" id="signup-name" required class="form-input" #cargo>
+            </div>
+            <div class="form-buttons">
+                <button type="button" class="btn btn-primary" (click)="enviarRegistro(email.value, senha.value, cargo.value)">Create Account</button>
+                <button type="button" id="close-signup" class="btn btn-outline" (click)="closeModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

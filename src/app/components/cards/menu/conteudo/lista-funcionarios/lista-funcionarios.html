@@ -1,0 +1,77 @@
+
+
+<div class="lista-funcionarios-root">
+	<ng-container *ngIf="loadingAdmins || loadingFuncs">Carregando...</ng-container>
+	<ng-container *ngIf="error" class="error">{{ error }}</ng-container>
+
+	<div class="filters">
+		<label>
+			Nome
+			<input type="text" [(ngModel)]="nameQuery" (input)="applyFilters()" placeholder="Pesquisar por nome" />
+		</label>
+
+		<label>
+			Email
+			<input type="text" [(ngModel)]="emailQuery" (input)="applyFilters()" placeholder="Pesquisar por email ou username" />
+		</label>
+
+		<label>
+			Status
+			<select [(ngModel)]="statusFilter" (change)="applyFilters()">
+				<option value="">Todos</option>
+				<option *ngFor="let s of availableStatuses" [value]="s">{{ s }}</option>
+			</select>
+		</label>
+
+		<button class="btn btn-outline" type="button" (click)="clearFilters()">Limpar</button>
+	</div>
+
+	<section *ngIf="!loadingAdmins && administradores?.length">
+		<h3>Administradores ({{ administradores.length }})</h3>
+		<table class="clientes-table">
+			<thead>
+				<tr>
+					<th>Nome</th>
+					<th>Email</th>
+					<th>Telefone</th>
+					<th>Conta</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let a of administradores">
+					<td>{{ a.nome }}</td>
+					<td>{{ a.email.endereco || a.username }}</td>
+					<td>{{ a.telefone.numero }}</td>
+					<td>{{ a.statusConta }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<section *ngIf="!loadingFuncs && funcionarios?.length" class="funcionarios-section">
+		<h3>Funcionários ({{ funcionarios.length }})</h3>
+		<table class="clientes-table">
+			<thead>
+				<tr>
+					<th>Nome</th>
+					<th>Email</th>
+					<th>Telefone</th>
+					<th>Conta</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let f of funcionarios">
+					<td>{{ f.nome }}</td>
+					<td>{{ f.email.endereco || f.username }}</td>
+					<td>{{ f.telefone.numero }}</td>
+					<td>{{ f.statusConta }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<ng-container *ngIf="!loadingAdmins && !loadingFuncs && (!administradores?.length && !funcionarios?.length)">
+		<p>Nenhum usuário encontrado.</p>
+	</ng-container>
+</div>
+

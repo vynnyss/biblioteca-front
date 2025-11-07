@@ -1,0 +1,43 @@
+<app-menu-lateral [leftFromParent]="true">
+    <!-- left menu items populated from roleCards (projected into menu-lateral) -->
+    <div menu-items>
+      <ng-container *ngFor="let name of roleCards">
+          <a class="menu-link" href="#" (click)="selectCard(name, $event)">
+              <div class="menu-item">
+                  <h4 class="menu-item-title">{{ name }}</h4>
+              </div>
+          </a>
+      </ng-container>
+    </div>
+
+    <!-- right content area (project into .content slot of app-menu) -->
+    <div class="content">
+        <div class="menu-principal-right" *ngIf="!selectedCard">
+            <h2>Bem-vindo</h2>
+            <p>Selecione um item no menu à esquerda.</p>
+        </div>
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Dados cadastrais'">
+            <app-perfil [email]="selectedEmail"></app-perfil>
+        </div>
+
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Clientes'">
+            <app-lista-clientes></app-lista-clientes>
+        </div>
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Emprestimos'">
+            <app-lista-emprestimos></app-lista-emprestimos>
+        </div>
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Funcionários'">
+            <app-lista-funcionarios></app-lista-funcionarios>
+        </div>
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Autores'">
+            <app-lista-autores></app-lista-autores>
+        </div>
+
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Editoras'">
+            <app-lista-editoras></app-lista-editoras>
+        </div>
+        <div class="menu-principal-right" *ngIf="selectedCard === 'Livros'">
+            <app-lista-edicoes></app-lista-edicoes>
+        </div>
+    </div>
+</app-menu-lateral>

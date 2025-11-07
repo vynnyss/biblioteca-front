@@ -1,0 +1,64 @@
+<div class="lista-clientes-root">
+  <ng-container *ngIf="loading">Carregando clientes...</ng-container>
+  <ng-container *ngIf="error" class="error">{{ error }}</ng-container>
+
+  <section *ngIf="!selectedCliente">
+    <h3>Clientes ({{ clientes.length }})</h3>
+
+    <div class="filters">
+      <label>
+        Nome
+        <input type="text" [(ngModel)]="nameQuery" (input)="applyFilters()" placeholder="Pesquisar por nome" />
+      </label>
+
+      <label>
+        Email
+        <input type="text" [(ngModel)]="emailQuery" (input)="applyFilters()" placeholder="Pesquisar por email ou username" />
+      </label>
+
+      <label>
+        Status
+        <select [(ngModel)]="statusFilter" (change)="applyFilters()">
+          <option value="">Todos</option>
+          <option *ngFor="let s of availableStatuses" [value]="s">{{ s }}</option>
+        </select>
+      </label>
+
+      <button class="btn btn-outline" type="button" (click)="clearFilters()">Limpar</button>
+    </div>
+  </section>
+
+  <section *ngIf="!selectedCliente && !loading && clientes?.length">
+    <table class="clientes-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Telefone</th>
+          <th>CPF</th>
+          <th>Conta</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of clientes">
+          <td>{{ c.nome }}</td>
+          <td>{{ c.email.endereco || c.username }}</td>
+          <td>{{ c.telefone.numero }}</td>
+          <td>{{ c.cpf.valor }}</td>
+          <td>{{ c.statusConta }}</td>
+          <td><button class="btn btn-outline" type="button" (click)="showDetails(c)">Detalhes</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div *ngIf="selectedCliente">
+    <app-detalhes-cliente [cliente]="selectedCliente" (close)="clearDetails()"></app-detalhes-cliente>
+  </div>
+
+  <ng-container *ngIf="!selectedCliente && !loading && (!clientes || clientes.length === 0)">
+    <p>Nenhum cliente encontrado.</p>
+  </ng-container>
+
+</div>

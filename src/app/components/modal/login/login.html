@@ -1,0 +1,19 @@
+<div id="login-modal" class="modal">
+    <div class="modal-content">
+        <h2>Login</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="login-email" class="form-label">Email</label>
+                <input type="email" id="login-email" required class="form-input" #loginEmail>
+            </div>
+            <div class="form-group">
+                <label for="login-password" class="form-label">Senha</label>
+                <input type="password" id="login-password" required class="form-input" #loginSenha>
+            </div>
+            <div class="form-buttons">
+                <button type="button" class="btn btn-primary" (click)="enviarLogin(loginEmail.value, loginSenha.value)">Login</button>
+                <button type="button" id="close-login" class="btn btn-outline" (click)="closeModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

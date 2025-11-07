@@ -1,0 +1,28 @@
+<form [formGroup]="formAutor" (ngSubmit)="salvarAutor()" novalidate>
+
+  <h2 style="text-align: center; font-size: 2em; margin-bottom: 1em;">
+    Cadastro de Autor
+  </h2>
+
+  <div>
+    <label for="nome">Nome:</label><br />
+    <input id="nome" type="text" formControlName="nome" />
+    <div *ngIf="formAutor.get('nome')?.invalid && formAutor.get('nome')?.touched" style="color: red;">
+      Nome é obrigatório.
+    </div>
+  </div>
+
+  <div>
+    <label for="nacionalidade">Nacionalidade:</label><br />
+    <input id="nacionalidade" type="text" formControlName="nacionalidade" />
+  </div>
+
+  <div>
+    <label for="dataNascimento">Data de Nascimento:</label><br />
+    <input id="dataNascimento" type="date" formControlName="dataNascimento" />
+  </div>
+
+<div style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
+  <button type="button" onclick="cancelar()">Cancelar</button>
+  <button type="submit">Salvar</button>
+</div>

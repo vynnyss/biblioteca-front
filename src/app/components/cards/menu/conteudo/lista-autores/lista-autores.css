@@ -1,0 +1,8 @@
+
+:host { display: block; }
+.table-autores { width: 100%; border-collapse: collapse; }
+.table-autores th, .table-autores td { border: 1px solid #e6e6e6; padding: 8px; text-align: left; }
+.table-autores thead { background: #fafafa; }
+.lista-autores h3 { margin-top: 0; }
+.error { color: #b00020; }
+
