@@ -1,104 +1,65 @@
 <section class="cadastro-section">
   <h2>Cadastre-se</h2>
 
-  <form class="cadastro-form">
-    <label for="fname">Nome completo:</label><br>
-    <input type="text" id="fname" name="fname"><br>
+  <form #formPessoa="ngForm" (ngSubmit)="onSubmit(formPessoa)">
+    <label>Nome completo:</label><br>
+    <input type="text" name="nome" [(ngModel)]="user.nome" required><br>
 
-  
+    <label>CPF:</label><br>
+    <input
+      type="text"
+      name="cpf"
+      maxlength="14"
+      placeholder="000.000.000-00"
+      (input)="mascaraCPF($event)"
+      [(ngModel)]="user.cpf"
+      required><br>
 
-<label for="cpf">CPF:</label><br>
-<input
-  type="text"
-  id="cpf"
-  name="cpf"
-  maxlength="14"
-  (input)="mascaraCPF($event)"
-  placeholder="000.000.000-00">
+    <label>Data de Nascimento:</label><br>
+    <input type="date" id="dtNascimento" name="dtNascimento" [(ngModel)]="user.dtNascimento">
 
-    <br>
-    <label for="Data de nascimento">Data de Nascimento:</label><br>
-    <input type="date" id="Data de nascimento" name="Data de nascimento"><br>
 
 <label for="sexo">Sexo:</label><br>
+<select id="sexo" name="sexo" [(ngModel)]="user.sexo" required>
+  <option value="">Selecione</option>
+  <option value="MASCULINO">Masculino</option>
+  <option value="FEMININO">Feminino</option>
+  <option value="OUTRO">Outro</option>
+</select><br>
 
-<label for="feminino">
-  <input type="radio" id="feminino" name="sexo" value="feminino">
-  Feminino
-</label><br>
+    <label>E-mail:</label><br>
+    <input type="email" name="email" [(ngModel)]="user.email" required><br>
 
-<label for="masculino">
-  <input type="radio" id="masculino" name="sexo" value="masculino">
-  Masculino
-</label><br>
+    <label>Telefone:</label><br>
+    <input type="tel" name="telefone" [(ngModel)]="user.telefone" required><br>
 
-<label for="outro">
-  <input type="radio" id="outro" name="sexo" value="outro">
-  Outro
-</label><br>
+    <label>Endereço:</label><br>
+    <input type="text" name="nomeLogradouro" [(ngModel)]="user.endereco.nomeLogradouro" required><br>
 
-<label for="prefiro_nao_informar">
-  <input type="radio" id="prefiro_nao_informar" name="sexo" value="prefiro_nao_informar">
-  Prefiro não informar
-</label><br>
+    <label>Número:</label><br>
+    <input type="text" name="numero" [(ngModel)]="user.endereco.numero" required><br>
 
+    <label>Complemento:</label><br>
+    <input type="text" name="complemento" [(ngModel)]="user.endereco.complemento"><br>
 
-  <label for="E-mail">E-mail:</label><br>
-  <input class="small-input" type="email" id="e-mail" name="E-mail"><br>
+    <label>Bairro:</label><br>
+    <input type="text" name="bairro" [(ngModel)]="user.endereco.bairro" required><br>
 
-  <br>
+    <label>Cidade:</label><br>
+    <input type="text" name="cidade" [(ngModel)]="user.endereco.cidade" required><br>
 
-    <label for="Telefone">Telefone:</label><br>
-    <input type="tel" id="Telefone" name="Telefone"><br>
-    <br>
-    <label for="Endereço">Endereço:</label><br>
-    <input type="text" id="Endereço" name="Endereço"><br>
-    <br>
-    <label for="Número">Número:</label><br>
-    <input type="text" id="Numero" name="Número"><br>
-    <br>
-    <label for="Bairro">Bairro:</label><br>
-    <input type="text" name="bairro" maxlength="50" required><br>
-    <br>
-    <label for="Cidade">Cidade:</label><br>
-    <input type="text" name="cidade" maxlength="50" required><br>
-    <br>
-    <label for="Estado">Estado:</label><br>
-    <input type="text" name="Estado" maxlength="50" required><br>
-    <br>
-    <label for="CEP">CEP:</label><br>
-    <input type="text" name="cep" maxlength="9" placeholder="00000-000" required><br>
-    <br>
+    <label>Estado (ID):</label><br>
+    <input type="number" name="idEstado" [(ngModel)]="user.endereco.idEstado" required><br>
+
+    <label>CEP:</label><br>
+    <input type="text" name="cep" maxlength="9" placeholder="00000-000" [(ngModel)]="user.endereco.cep" required><br>
+
+    <label>Senha:</label><br>
+    <input type="password" name="senha" [(ngModel)]="user.senha" required><br>
+
     <div class="cadastro-buttons">
       <button type="button" class="btn btn-cancelar" (click)="cancelar()">Cancelar</button>
       <button type="submit" class="btn btn-salvar">Salvar</button>
     </div>
   </form>
 </section>
-
-<style>
-  .cadastro-buttons {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center; 
-    gap: 10px; 
-  }
-
-  .btn {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-
-  .btn-cancelar {
-    background-color: #ccc;
-    border: none;
-    color: #000;
-  }
-
-  .btn-salvar {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-  }
-</style>

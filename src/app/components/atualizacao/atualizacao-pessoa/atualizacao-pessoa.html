@@ -1,4 +1,6 @@
 <section class="cadastro-section">
+	<div *ngIf="loading" class="info-msg">Carregando seus dados...</div>
+	<div *ngIf="!loading && loadError" class="error-msg">{{ loadError }}</div>
 	<h2>Atualizar cadastro</h2>
 
 	<form class="cadastro-form" (ngSubmit)="onSubmit(form)" #form="ngForm">
@@ -53,19 +55,29 @@
 		<label for="Endereco">Endereço:</label><br>
 		<input type="text" id="Endereco" name="Endereco" [(ngModel)]="user.endereco.nomeLogradouro"><br>
 		<br>
-		<label for="Numero">Número:</label><br>
-		<input type="text" id="Numero" name="Numero" [(ngModel)]="user.endereco.numero"><br>
-		<br>
+	<label for="Numero">Número:</label><br>
+	<input type="text" id="Numero" name="Numero" [(ngModel)]="user.endereco.numero"><br>
+	<br>
+	<label for="Complemento">Complemento:</label><br>
+	<input type="text" id="Complemento" name="Complemento" [(ngModel)]="user.endereco.complemento"><br>
+	<br>
 		<label for="Bairro">Bairro:</label><br>
 		<input type="text" name="bairro" maxlength="50" required [(ngModel)]="user.endereco.bairro"><br>
 		<br>
 		<label for="Cidade">Cidade:</label><br>
 		<input type="text" name="cidade" maxlength="50" required [(ngModel)]="user.endereco.cidade"><br>
 		<br>
-		<label for="CEP">CEP:</label><br>
-		<input type="text" name="cep" maxlength="9" placeholder="00000-000" required [(ngModel)]="user.endereco.cep"><br>
-		<br>
-		<div class="cadastro-buttons">
+	<label for="CEP">CEP:</label><br>
+	<input type="text" name="cep" maxlength="9" placeholder="00000-000" required [(ngModel)]="user.endereco.cep"><br>
+	<br>
+	<label for="idEstado">Estado (ID numérico):</label><br>
+	<input type="number" id="idEstado" name="idEstado" [(ngModel)]="user.endereco.idEstado" min="1" placeholder="Ex: 2"><br>
+	<br>
+
+	<label for="senha">Senha:</label><br>
+	<input type="password" id="senha" name="senha" [(ngModel)]="user.senha" placeholder="Deixe em branco para manter" autocomplete="new-password"><br>
+	<br>
+	<div class="cadastro-buttons">
 			<button type="button" class="btn btn-cancelar" (click)="cancelar()">Cancelar</button>
 			<button type="submit" class="btn btn-salvar">Salvar</button>
 		</div>
@@ -98,5 +110,9 @@
 		border: none;
 		color: white;
 	}
+
+	.info-msg { text-align:center; margin-bottom:10px; font-size:14px; color:#334155; }
+	.error-msg { text-align:center; margin-bottom:10px; font-size:14px; color:#dc2626; font-weight:600; }
+	.origem { font-style:italic; }
 </style>
 
