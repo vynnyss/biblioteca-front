@@ -4,7 +4,7 @@
 
       <h3>Empréstimos ({{ emprestimos.length }})</h3>
 
-      <div class="filters">
+      <div class="filters" *ngIf="!selectedId">
         <label>
           Status
           <select [(ngModel)]="selectedStatus" (change)="applyFilters()">

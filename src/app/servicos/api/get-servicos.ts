@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BookModel } from '../../models/book-model';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PessoaModel } from '../../models/pessoa-model';
 import { AutorModel } from '../../models/autor';
@@ -20,6 +20,7 @@ export class GetServicos {
   private apiUrlGetExemplaresDaEdicao = "http://localhost:8080/exemplares/buscar-por-edicao";
 
   private apiUrlGetEmprestimos = "http://localhost:8080/emprestimos";
+  private apiUrlGetEmprestimosPorPessoa = "http://localhost:8080/emprestimos/buscar-por-pessoa";
 
   private apiUrlGetClientes = "http://localhost:8080/usuarios/clientes";
   private apiUrlGetFuncionarios = "http://localhost:8080/usuarios/funcionarios";
@@ -43,6 +44,15 @@ export class GetServicos {
 
   getApiUrlGetEmprestimosPorID(id : number): Observable<EmprestimoModel> {
     return this.http.get<EmprestimoModel>(`${this.apiUrlGetEmprestimos}/${id}`);
+  }
+
+  getApiUrlGetEmprestimosPorPessoa(idPessoa: number): Observable<ListaEmprestimoModel[]> {
+    const token = sessionStorage.getItem('authToken');
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+    return this.http.get<ListaEmprestimoModel[]>(`${this.apiUrlGetEmprestimosPorPessoa}/${idPessoa}`, { headers });
   }
 
   getApiUrlGetFuncionarios(): Observable<PessoaModel[]> {

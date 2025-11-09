@@ -25,7 +25,23 @@
 					</dl>
 					<div class="actions">
 						<button class="btn btn-primary" type="button">Editar cliente</button>
-						<button class="btn btn-outline" type="button">Inativar cliente</button>
+						<button 
+							*ngIf="isAdministrador()" 
+							class="btn btn-outline" 
+							type="button">
+							Inativar cliente
+						</button>
+					</div>
+
+					<!-- Botões condicionais para aprovação/rejeição -->
+					<div class="actions" *ngIf="cliente.statusConta === 'EM_ANALISE_APROVACAO'">
+						<button class="btn btn-success" type="button" (click)="aprovarConta()">Aprovar Conta</button>
+						<button class="btn btn-danger" type="button" (click)="rejeitarConta()">Rejeitar Conta</button>
+					</div>
+
+					<!-- Botão condicional para solicitar exclusão -->
+					<div class="actions" *ngIf="cliente.statusConta === 'ATIVA' && isBibliotecario()">
+						<button class="btn btn-danger" type="button" (click)="solicitarExclusao()">Solicitar Exclusão</button>
 					</div>
 				</section>
 
@@ -54,9 +70,40 @@
 			</div>
 
 			<div class="right-col">
-				<section class="section-card emprestimos-placeholder">
+				<section class="section-card emprestimos-section">
 					<h5>Empréstimos do cliente</h5>
-					<p class="muted">Lista de empréstimos será exibida aqui em breve.</p>
+					
+					<div *ngIf="loadingEmprestimos" class="loading-msg">
+						Carregando empréstimos...
+					</div>
+
+					<div *ngIf="errorEmprestimos" class="error-msg">
+						{{ errorEmprestimos }}
+					</div>
+
+					<div *ngIf="!loadingEmprestimos && !errorEmprestimos">
+						<div *ngIf="emprestimos.length > 0; else noEmprestimos">
+							<div class="emprestimo-item" *ngFor="let emp of emprestimos">
+								<div class="emp-header">
+									<strong>Empréstimo #{{ emp.idEmprestimo }}</strong>
+									<span class="emp-status" [class.status-ativo]="emp.status === 'ATIVO'">
+										{{ emp.status }}
+									</span>
+								</div>
+								<div class="emp-info">
+									<span class="emp-label">Pessoa:</span>
+									<span>{{ emp.idPessoa }}</span>
+								</div>
+								<div class="emp-info" *ngIf="emp.multa && emp.multa.valor > 0">
+									<span class="emp-label">Multa:</span>
+									<span class="multa-valor">R$ {{ emp.multa.valor }}</span>
+								</div>
+							</div>
+						</div>
+						<ng-template #noEmprestimos>
+							<p class="muted">Nenhum empréstimo encontrado para este cliente.</p>
+						</ng-template>
+					</div>
 				</section>
 			</div>
 		</div>
