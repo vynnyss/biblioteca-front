@@ -90,8 +90,11 @@ export class PostService {
   }
 
   postTitulo(titulo: any, token?: string): Observable<any> {
-    const options = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-    return this.http.post<any>(`${this.apiUrlTitulos}`, titulo, options);
+    const headers: any = { 'Content-Type': 'application/json' };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    return this.http.post<any>(`${this.apiUrlTitulos}`, titulo, { headers });
   }
 
   postLivro(livro: any, token?: string): Observable<any> {

@@ -1,8 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PostService } from '../../../servicos/api/post-service';
+import { GetServicos } from '../../../servicos/api/get-servicos';
+import { Estado } from '../../../models/estado';
 
 @Component({
   selector: 'app-funcionario',
@@ -11,7 +13,9 @@ import { PostService } from '../../../servicos/api/post-service';
   templateUrl: './funcionario.html',
   styleUrls: ['./funcionario.css']
 })
-export class Funcionario {
+export class Funcionario implements OnInit {
+  estados: Estado[] = [];
+
   user = {
     nome: '',
     cpf: '',
@@ -33,7 +37,25 @@ export class Funcionario {
   };
 
   private api = inject(PostService);
+  private getServicos = inject(GetServicos);
   private router = inject(Router);
+
+  ngOnInit(): void {
+    this.carregarEstados();
+  }
+
+  carregarEstados(): void {
+    this.getServicos.getEstados().subscribe({
+      next: (data) => {
+        this.estados = data;
+        console.log('✅ Estados carregados:', this.estados);
+      },
+      error: (err) => {
+        console.error('❌ Erro ao carregar estados:', err);
+        alert('⚠️ Erro ao carregar lista de estados.');
+      }
+    });
+  }
 
   mascaraCPF(event: any): void {
     const input = event.target as HTMLInputElement;
