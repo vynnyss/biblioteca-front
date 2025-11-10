@@ -17,6 +17,9 @@ import { Cpf } from './components/atualizacao/cpf/cpf';
 import { Email } from './components/atualizacao/email/email';
 import { Sexo } from './components/atualizacao/sexo/sexo';
 import { Telefone } from './components/atualizacao/telefone/telefone';
+import { AtualizacaoPessoa } from './components/atualizacao/atualizacao-pessoa/atualizacao-pessoa';
+import { AtualizacaoLivro } from './components/atualizacao/atualizacao-livro/atualizacao-livro';
+
 
 export const routes: Routes = [
     {
@@ -47,6 +50,10 @@ export const routes: Routes = [
     {
         path: "cadastro/autor",
         component: Autor
+    },
+    {
+        path: "atualizacao/pessoa",
+        component: AtualizacaoPessoa
     },
 
         {
@@ -106,8 +113,11 @@ export const routes: Routes = [
         ,{
             path: 'atualizacao/telefone',
             component: Telefone
-        }
+        },
 
+    {
+        path: 'atualizacao/livro',
+        component: AtualizacaoLivro
+    }
 
-   
 ];

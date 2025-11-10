@@ -1,0 +1,118 @@
+<section class="cadastro-section">
+	<div *ngIf="loading" class="info-msg">Carregando seus dados...</div>
+	<div *ngIf="!loading && loadError" class="error-msg">{{ loadError }}</div>
+	<h2>Atualizar cadastro</h2>
+
+	<form class="cadastro-form" (ngSubmit)="onSubmit(form)" #form="ngForm">
+		<label for="nome">Nome completo:</label><br>
+		<input type="text" id="nome" name="nome" [(ngModel)]="user.nome"><br>
+
+		<label for="cpf">CPF:</label><br>
+		<input
+			type="text"
+			id="cpf"
+			name="cpf"
+			maxlength="14"
+			(input)="mascaraCPF($event)"
+			placeholder="000.000.000-00"
+			[(ngModel)]="user.cpf">
+
+		<br>
+		<label for="dtNascimento">Data de Nascimento:</label><br>
+		<input type="date" id="dtNascimento" name="dtNascimento" [(ngModel)]="user.dtNascimento"><br>
+
+		<label for="sexo">Sexo:</label><br>
+
+		<label for="feminino">
+			<input type="radio" id="feminino" name="sexo" value="F" [(ngModel)]="user.sexo">
+			Feminino
+		</label><br>
+
+		<label for="masculino">
+			<input type="radio" id="masculino" name="sexo" value="M" [(ngModel)]="user.sexo">
+			Masculino
+		</label><br>
+
+		<label for="outro">
+			<input type="radio" id="outro" name="sexo" value="O" [(ngModel)]="user.sexo">
+			Outro
+		</label><br>
+
+		<label for="prefiro_nao_informar">
+			<input type="radio" id="prefiro_nao_informar" name="sexo" value="" [(ngModel)]="user.sexo">
+			Prefiro não informar
+		</label><br>
+
+
+		<label for="email">E-mail:</label><br>
+		<input class="small-input" type="email" id="email" name="email" [(ngModel)]="user.email"><br>
+
+		<br>
+
+		<label for="telefone">Telefone:</label><br>
+		<input type="tel" id="telefone" name="telefone" [(ngModel)]="user.telefone"><br>
+		<br>
+		<label for="Endereco">Endereço:</label><br>
+		<input type="text" id="Endereco" name="Endereco" [(ngModel)]="user.endereco.nomeLogradouro"><br>
+		<br>
+	<label for="Numero">Número:</label><br>
+	<input type="text" id="Numero" name="Numero" [(ngModel)]="user.endereco.numero"><br>
+	<br>
+	<label for="Complemento">Complemento:</label><br>
+	<input type="text" id="Complemento" name="Complemento" [(ngModel)]="user.endereco.complemento"><br>
+	<br>
+		<label for="Bairro">Bairro:</label><br>
+		<input type="text" name="bairro" maxlength="50" required [(ngModel)]="user.endereco.bairro"><br>
+		<br>
+		<label for="Cidade">Cidade:</label><br>
+		<input type="text" name="cidade" maxlength="50" required [(ngModel)]="user.endereco.cidade"><br>
+		<br>
+	<label for="CEP">CEP:</label><br>
+	<input type="text" name="cep" maxlength="9" placeholder="00000-000" required [(ngModel)]="user.endereco.cep"><br>
+	<br>
+	<label for="idEstado">Estado (ID numérico):</label><br>
+	<input type="number" id="idEstado" name="idEstado" [(ngModel)]="user.endereco.idEstado" min="1" placeholder="Ex: 2"><br>
+	<br>
+
+	<label for="senha">Senha:</label><br>
+	<input type="password" id="senha" name="senha" [(ngModel)]="user.senha" placeholder="Deixe em branco para manter" autocomplete="new-password"><br>
+	<br>
+	<div class="cadastro-buttons">
+			<button type="button" class="btn btn-cancelar" (click)="cancelar()">Cancelar</button>
+			<button type="submit" class="btn btn-salvar">Salvar</button>
+		</div>
+	</form>
+</section>
+
+<style>
+	
+	.cadastro-buttons {
+		margin-top: 20px;
+		display: flex;
+		justify-content: center;
+		gap: 10px;
+	}
+
+	.btn {
+		padding: 10px 20px;
+		font-size: 16px;
+		cursor: pointer;
+	}
+
+	.btn-cancelar {
+		background-color: #ccc;
+		border: none;
+		color: #000;
+	}
+
+	.btn-salvar {
+		background-color: #f97316;
+		border: none;
+		color: white;
+	}
+
+	.info-msg { text-align:center; margin-bottom:10px; font-size:14px; color:#334155; }
+	.error-msg { text-align:center; margin-bottom:10px; font-size:14px; color:#dc2626; font-weight:600; }
+	.origem { font-style:italic; }
+</style>
+
