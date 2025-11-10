@@ -15,6 +15,7 @@ export class Home implements OnInit {
 
   ngOnInit(): void {
     this.getServicos.getApiUrlGetEdicoes().subscribe((data) => {
+      console.log('Home: loaded books', data);
       this.books = data;
     });
   }

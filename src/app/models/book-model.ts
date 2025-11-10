@@ -13,5 +13,5 @@ export interface BookModel {
     editora: Publisher;
     idioma: Language;
     statusAtivo: string;
-    cover?: string;
+    imagemUrl?: string;
 }
