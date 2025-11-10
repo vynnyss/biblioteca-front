@@ -8,6 +8,7 @@ import { EditoraModel } from '../../models/editora-model';
 import { ExemplarModel } from '../../models/exemplar-model';
 import { ListaEmprestimoModel } from '../../models/lista-emprestimo-model';
 import { EmprestimoModel } from '../../models/emprestimo-model';
+import { Estado } from '../../models/estado';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ export class GetServicos {
   private apiUrlGetExemplaresDaEdicao = "http://localhost:8080/exemplares/buscar-por-edicao";
 
   private apiUrlGetEmprestimos = "http://localhost:8080/emprestimos";
+  private apiUrlGetEstados = "http://localhost:8080/estados";
 
   private apiUrlGetClientes = "http://localhost:8080/usuarios/clientes";
   private apiUrlGetFuncionarios = "http://localhost:8080/usuarios/funcionarios";
@@ -65,5 +67,9 @@ export class GetServicos {
     const apiUrlGetPessoaPorEmail = `http://localhost:8080/usuarios/buscar-por-email`;
     const params = new HttpParams().set('email', email);
     return this.http.get<PessoaModel>(apiUrlGetPessoaPorEmail, { params });
+  }
+
+  getEstados(): Observable<Estado[]> {
+    return this.http.get<Estado[]>(this.apiUrlGetEstados);
   }
 }

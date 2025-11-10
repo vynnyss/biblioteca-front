@@ -309,9 +309,10 @@ export class Livro implements OnInit {
     }
 
     const token = sessionStorage.getItem('authToken') || undefined;
-    const payload = {
+    const payload: any = {
       nome,
-      descricao
+      descricao,
+      statusAtivo: 'ATIVO'
     };
 
     console.log('[Livro] Cadastrando novo título:', payload);
@@ -329,8 +330,10 @@ export class Livro implements OnInit {
         }
       },
       error: (err) => {
-        console.error('[Livro] Erro ao cadastrar título:', err);
-        alert('Erro ao cadastrar título. Tente novamente.');
+        const backend = err?.error;
+        console.error('[Livro] Erro ao cadastrar título:', err, backend);
+        const msg = backend?.mensagem || backend?.message || backend?.error || backend?.errors?.[0]?.defaultMessage || 'Erro ao cadastrar título. Tente novamente.';
+        alert(msg);
       }
     });
   }
@@ -604,7 +607,29 @@ export class Livro implements OnInit {
       };
 
       const token = sessionStorage.getItem('authToken') || undefined;
+      if (!token) {
+        alert('Faça login para cadastrar livros. Sua sessão pode ter expirado.');
+        console.warn('[Livro] Token ausente no sessionStorage ao tentar cadastrar livro.');
+        return;
+      }
+
       console.log('[Livro] Enviando cadastro de livro:', payload);
+      console.log('[Livro] Token presente?', !!token);
+      console.log('[Livro] Token (primeiros 20 chars):', token.substring(0, 20) + '...');
+      
+      // Tenta decodificar o token para ver as permissões
+      try {
+        const tokenParts = token.split('.');
+        if (tokenParts.length === 3) {
+          const decodedPayload = JSON.parse(atob(tokenParts[1]));
+          console.log('[Livro] Token decodificado - Role:', decodedPayload.role || decodedPayload.authorities);
+          console.log('[Livro] Token decodificado - Sub:', decodedPayload.sub);
+          console.log('[Livro] Token decodificado - Exp:', new Date(decodedPayload.exp * 1000));
+        }
+      } catch (e) {
+        console.error('[Livro] Erro ao decodificar token:', e);
+      }
+
       this.apiService.postLivro(payload, token).subscribe({
         next: (res) => {
           console.log('[Livro] Livro cadastrado com sucesso:', res);
@@ -614,6 +639,14 @@ export class Livro implements OnInit {
         },
         error: (err) => {
           console.error('[Livro] Erro ao cadastrar livro:', err);
+          if (err?.status === 401) {
+            alert('Sessão expirada ou não autenticada. Entre novamente para continuar.');
+            return;
+          }
+          if (err?.status === 403) {
+            alert('Você não tem permissão para cadastrar livros. Faça login com uma conta autorizada.');
+            return;
+          }
           const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao cadastrar livro. Tente novamente.';
           alert(msg);
         }

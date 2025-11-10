@@ -1,7 +1,7 @@
 <section class="cadastro-section">
-  <h2>Cadastre-se</h2>
-
   <form #formPessoa="ngForm" (ngSubmit)="onSubmit(formPessoa)">
+    <h2>Cadastre-se</h2>
+
     <label>Nome completo:</label><br>
     <input type="text" name="nome" [(ngModel)]="user.nome" required><br>
 
@@ -48,8 +48,11 @@
     <label>Cidade:</label><br>
     <input type="text" name="cidade" [(ngModel)]="user.endereco.cidade" required><br>
 
-    <label>Estado (ID):</label><br>
-    <input type="number" name="idEstado" [(ngModel)]="user.endereco.idEstado" required><br>
+    <label>Estado (UF):</label><br>
+    <select name="idEstado" [(ngModel)]="user.endereco.idEstado" required>
+      <option value="">Selecione um estado</option>
+      <option *ngFor="let estado of estados" [value]="estado.idEstado">{{ estado.nome }}</option>
+    </select><br>
 
     <label>CEP:</label><br>
     <input type="text" name="cep" maxlength="9" placeholder="00000-000" [(ngModel)]="user.endereco.cep" required><br>
