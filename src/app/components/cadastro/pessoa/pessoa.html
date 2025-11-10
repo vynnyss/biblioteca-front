@@ -1,6 +1,7 @@
 <section class="cadastro-section">
   <h2>Cadastre-se</h2>
 
+<<<<<<< HEAD
   <form class="cadastro-form">
     <label for="fname">Nome completo:</label><br>
     <input type="text" id="fname" name="fname"><br>
@@ -69,12 +70,71 @@
     <label for="CEP">CEP:</label><br>
     <input type="text" name="cep" maxlength="9" placeholder="00000-000" required><br>
     <br>
+=======
+  <form #formPessoa="ngForm" (ngSubmit)="onSubmit(formPessoa)">
+    <label>Nome completo:</label><br>
+    <input type="text" name="nome" [(ngModel)]="user.nome" required><br>
+
+    <label>CPF:</label><br>
+    <input
+      type="text"
+      name="cpf"
+      maxlength="14"
+      placeholder="000.000.000-00"
+      (input)="mascaraCPF($event)"
+      [(ngModel)]="user.cpf"
+      required><br>
+
+    <label>Data de Nascimento:</label><br>
+    <input type="date" id="dtNascimento" name="dtNascimento" [(ngModel)]="user.dtNascimento">
+
+
+<label for="sexo">Sexo:</label><br>
+<select id="sexo" name="sexo" [(ngModel)]="user.sexo" required>
+  <option value="">Selecione</option>
+  <option value="MASCULINO">Masculino</option>
+  <option value="FEMININO">Feminino</option>
+  <option value="OUTRO">Outro</option>
+</select><br>
+
+    <label>E-mail:</label><br>
+    <input type="email" name="email" [(ngModel)]="user.email" required><br>
+
+    <label>Telefone:</label><br>
+    <input type="tel" name="telefone" [(ngModel)]="user.telefone" required><br>
+
+    <label>Endereço:</label><br>
+    <input type="text" name="nomeLogradouro" [(ngModel)]="user.endereco.nomeLogradouro" required><br>
+
+    <label>Número:</label><br>
+    <input type="text" name="numero" [(ngModel)]="user.endereco.numero" required><br>
+
+    <label>Complemento:</label><br>
+    <input type="text" name="complemento" [(ngModel)]="user.endereco.complemento"><br>
+
+    <label>Bairro:</label><br>
+    <input type="text" name="bairro" [(ngModel)]="user.endereco.bairro" required><br>
+
+    <label>Cidade:</label><br>
+    <input type="text" name="cidade" [(ngModel)]="user.endereco.cidade" required><br>
+
+    <label>Estado (ID):</label><br>
+    <input type="number" name="idEstado" [(ngModel)]="user.endereco.idEstado" required><br>
+
+    <label>CEP:</label><br>
+    <input type="text" name="cep" maxlength="9" placeholder="00000-000" [(ngModel)]="user.endereco.cep" required><br>
+
+    <label>Senha:</label><br>
+    <input type="password" name="senha" [(ngModel)]="user.senha" required><br>
+
+>>>>>>> origin/dev
     <div class="cadastro-buttons">
       <button type="button" class="btn btn-cancelar" (click)="cancelar()">Cancelar</button>
       <button type="submit" class="btn btn-salvar">Salvar</button>
     </div>
   </form>
 </section>
+<<<<<<< HEAD
 
 <style>
   .cadastro-buttons {
@@ -102,3 +162,5 @@
     color: white;
   }
 </style>
+=======
+>>>>>>> origin/dev

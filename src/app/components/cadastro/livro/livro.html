@@ -1,14 +1,38 @@
 <div class="container">
   <h2>Cadastro de Livro</h2>
 
+<<<<<<< HEAD
   <form>
     <div class="form-group">
       <label for="titulo">Título:</label>
       <input type="text" id="titulo" name="titulo" placeholder="Digite o título do livro" required />
+=======
+  <form (ngSubmit)="onSubmit(livroForm)" #livroForm="ngForm">
+    <div class="form-group">
+      <label for="titulo">Título:</label>
+      <select 
+        id="titulo" 
+        name="titulo" 
+        [(ngModel)]="tituloSelecionado"
+        (change)="onTituloChange($any($event.target).value)"
+        required>
+        <option value="">Selecione um título</option>
+        <option *ngFor="let titulo of titulos" [value]="titulo.idTitulo">
+          {{ titulo.nome }}
+        </option>
+        <option value="novo" style="font-weight: bold; color: #f97316;">
+          ➕ Cadastrar novo título
+        </option>
+      </select>
+      <span *ngIf="carregandoTitulos" style="font-size: 12px; color: #666;">
+        Carregando títulos...
+      </span>
+>>>>>>> origin/dev
     </div>
 
     <div class="form-group">
       <label for="autor">Autor:</label>
+<<<<<<< HEAD
       <input type="text" id="autor" name="autor" placeholder="Digite o nome do autor" required />
     </div>
 
@@ -56,10 +80,83 @@
     <div class="form-group">
       <label for="editora">Editora:</label>
       <input type="text" id="editora" name="editora" placeholder="Digite o nome da editora" required />
+=======
+      <select 
+        id="autor" 
+        name="autor" 
+        [(ngModel)]="autorSelecionado"
+        (change)="onAutorChange($any($event.target).value)"
+        required>
+        <option value="">Selecione um autor</option>
+        <option *ngFor="let autor of autores" [value]="autor.idAutor || autor.id">
+          {{ autor.nome }}
+        </option>
+        <option value="novo" style="font-weight: bold; color: #16a34a;">
+          ➕ Cadastrar novo autor
+        </option>
+      </select>
+      <span *ngIf="carregandoAutores" style="font-size: 12px; color: #666;">
+        Carregando autores...
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="categoria">Categoria:</label>
+      <select 
+        id="categoria" 
+        name="categoria" 
+        [(ngModel)]="categoriaSelecionada"
+        (change)="onCategoriaChange($any($event.target).value)"
+        required>
+        <option value="">Selecione a categoria</option>
+        <option *ngFor="let categoria of categorias" [value]="categoria.idCategoria || categoria.id">
+          {{ categoria.nome }}
+        </option>
+        <option value="novo" style="font-weight: bold; color: #ea580c;">
+          ➕ Cadastrar nova categoria
+        </option>
+      </select>
+      <span *ngIf="carregandoCategorias" style="font-size: 12px; color: #666;">
+        Carregando categorias...
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="dataPublicacao">Data de Publicação:</label>
+      <input
+        type="date"
+        id="dataPublicacao"
+        name="dataPublicacao"
+        [(ngModel)]="livro.dataPublicacao"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="editora">Editora:</label>
+      <select 
+        id="editora" 
+        name="editora" 
+        [(ngModel)]="editoraSelecionada"
+        (change)="onEditoraChange($any($event.target).value)"
+        required>
+        <option value="">Selecione uma editora</option>
+        <option *ngFor="let editora of editoras" [value]="editora.idEditora || editora.id">
+          {{ editora.nome }}
+        </option>
+        <option value="novo" style="font-weight: bold; color: #8b5cf6;">
+          ➕ Cadastrar nova editora
+        </option>
+      </select>
+      <span *ngIf="carregandoEditoras" style="font-size: 12px; color: #666;">
+        Carregando editoras...
+      </span>
+>>>>>>> origin/dev
     </div>
 
     <div class="form-group">
       <label for="idioma">Idioma:</label>
+<<<<<<< HEAD
       <select id="idioma" name="idioma" required>
         <option value="">Selecione o idioma</option>
         <option value="Português">Português</option>
@@ -77,19 +174,49 @@
         <option value="Latim">Latim</option>
         <option value="Outro">Outro</option>
       </select>
+=======
+      <select 
+        id="idioma" 
+        name="idioma" 
+        [(ngModel)]="idiomaSelecionado"
+        (change)="onIdiomaChange($any($event.target).value)"
+        required>
+        <option value="">Selecione um idioma</option>
+        <option *ngFor="let idioma of idiomas" [value]="idioma.idIdioma || idioma.id">
+          {{ idioma.nome }}
+        </option>
+        <option value="novo" style="font-weight: bold; color: #dc2626;">
+          ➕ Cadastrar novo idioma
+        </option>
+      </select>
+      <span *ngIf="carregandoIdiomas" style="font-size: 12px; color: #666;">
+        Carregando idiomas...
+      </span>
+>>>>>>> origin/dev
     </div>
 
     <div class="form-group">
       <label for="paginas">Quantidade de Páginas:</label>
+<<<<<<< HEAD
       <input type="number" id="paginas" name="paginas" placeholder="Ex: 320" required />
+=======
+      <input type="number" id="paginas" name="paginas" [(ngModel)]="livro.paginas" placeholder="Ex: 320" required />
+>>>>>>> origin/dev
     </div>
 
     <div class="form-group">
       <label for="tipoCapa">Tipo de Capa:</label>
+<<<<<<< HEAD
       <select id="tipoCapa" name="tipoCapa" required>
         <option value="">Selecione o tipo de capa</option>
         <option value="dura">Capa dura</option>
         <option value="flexivel">Capa flexível</option>
+=======
+      <select id="tipoCapa" name="tipoCapa" [(ngModel)]="livro.tipoCapa" required>
+        <option value="">Selecione o tipo de capa</option>
+        <option value="dura">Capa dura</option>
+        <option value="flexivel">Capa mole</option>
+>>>>>>> origin/dev
         <option value="brochura">Brochura</option>
         <option value="espiral">Espiral</option>
         <option value="outro">Outro</option>
@@ -98,6 +225,7 @@
 
     <div class="form-group">
       <label for="estado">Estado físico:</label>
+<<<<<<< HEAD
       <select id="estado" name="estado" required>
         <option value="">Selecione o estado físico</option>
         <option value="Novo">Novo</option>
@@ -110,12 +238,37 @@
         <option value="Restaurado">Restaurado</option>
         <option value="Colecionável">Colecionável</option>
         <option value="Danificado">Danificado</option>
+=======
+      <select 
+        id="estado" 
+        name="estado" 
+        [(ngModel)]="estadoFisicoSelecionado"
+        required>
+        <option value="">Selecione o estado físico</option>
+        <option value="MUITO_RUIM">Muito ruim</option>
+        <option value="RUIM">Ruim</option>
+        <option value="BOM">Bom</option>
+        <option value="OTIMO">Ótimo</option>
+        <option value="EXCELENTE">Excelente</option>
+>>>>>>> origin/dev
       </select>
     </div>
 
     <div class="form-group">
       <label for="edicao">Edição:</label>
+<<<<<<< HEAD
       <input type="text" id="edicao" name="edicao" placeholder="Ex: 1ª edição, Revisada, Ampliada..." required />
+=======
+      <input 
+        type="text" 
+        id="edicao" 
+        name="edicao" 
+        [(ngModel)]="livro.edicaoNome"
+        placeholder="Ex: 1ª edição, Revisada, Ampliada..."
+        maxlength="60"
+        required />
+      <small style="color: #666; font-size: 12px;">Máximo 60 caracteres</small>
+>>>>>>> origin/dev
     </div>
 
     <div class="form-group">
@@ -125,15 +278,24 @@
 
     <div class="form-group">
       <label for="estoque">Quantidade em Estoque:</label>
+<<<<<<< HEAD
       <input type="number" id="estoque" name="estoque" placeholder="Ex: 10" min="0" required />
     </div>
 
     <div style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
       <button type="button" onclick="cancelar()">Cancelar</button>
+=======
+      <input type="number" id="estoque" name="estoque" [(ngModel)]="livro.estoque" placeholder="Ex: 10" min="0" required />
+    </div>
+
+    <div style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
+      <button type="button" (click)="cancelar()">Cancelar</button>
+>>>>>>> origin/dev
       <button type="submit">Salvar</button>
     </div>
   </form>
 
+<<<<<<< HEAD
   <script>
     document.querySelectorAll('.form-group.genero input[type="radio"]').forEach((radio) => {
       radio.addEventListener('change', () => {
@@ -144,3 +306,292 @@
       });
     });
   </script>
+=======
+
+  <div *ngIf="mostrarModalTitulo" class="modal-overlay" (click)="fecharModalTitulo()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Cadastrar Novo Título</h3>
+      
+      <div class="form-group">
+        <label for="novoTituloNome">Nome do Título: *</label>
+        <input 
+          type="text" 
+          id="novoTituloNome" 
+          name="novoTituloNome"
+          [(ngModel)]="novoTitulo.nome"
+          placeholder="Digite o nome do título"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="novoTituloDescricao">Descrição do Título: *</label>
+        <textarea 
+          id="novoTituloDescricao" 
+          name="novoTituloDescricao"
+          [(ngModel)]="novoTitulo.descricao"
+          placeholder="Descreva brevemente o título"
+          rows="4"
+          required
+        ></textarea>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+        <button type="button" class="btn-cancelar" (click)="fecharModalTitulo()">Cancelar</button>
+        <button type="button" class="btn-salvar verde" (click)="salvarNovoTitulo()">Salvar título</button>
+      </div>
+    </div>
+  </div>
+
+ 
+  <div *ngIf="mostrarModalAutor" class="modal-overlay" (click)="fecharModalAutor()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Cadastrar Novo Autor</h3>
+      
+      <div class="form-group">
+        <label for="novoAutorNome">Nome do Autor: *</label>
+        <input 
+          type="text" 
+          id="novoAutorNome" 
+          name="novoAutorNome"
+          [(ngModel)]="novoAutor.nome"
+          placeholder="Digite o nome do autor"
+          required
+        />
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+        <button type="button" class="btn-cancelar" (click)="fecharModalAutor()">Cancelar</button>
+        <button type="button" class="btn-salvar verde" (click)="salvarNovoAutor()">Salvar autor</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="mostrarModalEditora" class="modal-overlay" (click)="fecharModalEditora()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Cadastrar Nova Editora</h3>
+      
+      <div class="form-group">
+        <label for="novaEditoraNome">Nome da Editora: *</label>
+        <input 
+          type="text" 
+          id="novaEditoraNome" 
+          name="novaEditoraNome"
+          [(ngModel)]="novaEditora.nome"
+          placeholder="Digite o nome da editora"
+          required
+        />
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+        <button type="button" class="btn-cancelar" (click)="fecharModalEditora()">Cancelar</button>
+        <button type="button" class="btn-salvar verde" (click)="salvarNovaEditora()">Salvar editora</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="mostrarModalIdioma" class="modal-overlay" (click)="fecharModalIdioma()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Cadastrar Novo Idioma</h3>
+      
+      <div class="form-group">
+        <label for="novoIdiomaNome">Nome do Idioma: *</label>
+        <input 
+          type="text" 
+          id="novoIdiomaNome" 
+          name="novoIdiomaNome"
+          [(ngModel)]="novoIdioma.nome"
+          placeholder="Digite o nome do idioma"
+          required
+        />
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+        <button type="button" class="btn-cancelar" (click)="fecharModalIdioma()">Cancelar</button>
+        <button type="button" class="btn-salvar verde" (click)="salvarNovoIdioma()">Salvar idioma</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="mostrarModalCategoria" class="modal-overlay" (click)="fecharModalCategoria()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Cadastrar Nova Categoria</h3>
+      
+      <div class="form-group">
+        <label for="novaCategoriaNome">Nome da Categoria: *</label>
+        <input 
+          type="text" 
+          id="novaCategoriaNome" 
+          name="novaCategoriaNome"
+          [(ngModel)]="novaCategoria.nome"
+          placeholder="Digite o nome da categoria"
+          required
+        />
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+        <button type="button" class="btn-cancelar" (click)="fecharModalCategoria()">Cancelar</button>
+        <button type="button" class="btn-salvar verde" (click)="salvarNovaCategoria()">Salvar categoria</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="mostrarModalEstadoFisico" class="modal-overlay" (click)="fecharModalEstadoFisico()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Cadastrar Novo Estado Físico</h3>
+      
+      <div class="form-group">
+        <label for="novoEstadoFisico">Estado Físico: *</label>
+        <input 
+          type="text" 
+          id="novoEstadoFisico" 
+          name="novoEstadoFisico"
+          [(ngModel)]="novoEstadoFisico.estadoFisico"
+          placeholder="Ex: EXCELENTE, BOM, REGULAR"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="qtdEstoque">Quantidade em Estoque: *</label>
+        <input 
+          type="number" 
+          id="qtdEstoque" 
+          name="qtdEstoque"
+          [(ngModel)]="novoEstadoFisico.qtdEstoque"
+          min="1"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="edicaoId">ID da Edição: *</label>
+        <input 
+          type="number" 
+          id="edicaoId" 
+          name="edicaoId"
+          [(ngModel)]="novoEstadoFisico.edicaoId"
+          placeholder="Digite o ID da edição"
+          required
+        />
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+        <button type="button" class="btn-cancelar" (click)="fecharModalEstadoFisico()">Cancelar</button>
+        <button type="button" class="btn-salvar verde" (click)="salvarNovoEstadoFisico()">Salvar estado físico</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="mostrarModalEdicao" class="modal-overlay" (click)="fecharModalEdicao()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Cadastrar Nova Edição</h3>
+      
+      <div class="form-group">
+        <label for="novaEdicaoNome">Nome da Edição: *</label>
+        <input 
+          type="text" 
+          id="novaEdicaoNome" 
+          name="novaEdicaoNome"
+          [(ngModel)]="novaEdicao.nome"
+          placeholder="Ex: 1ª edição, Revisada, Ampliada..."
+          required
+        />
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+        <button type="button" class="btn-cancelar" (click)="fecharModalEdicao()">Cancelar</button>
+        <button type="button" class="btn-salvar verde" (click)="salvarNovaEdicao()">Salvar edição</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .modal-content .form-group {
+    margin-bottom: 15px;
+  }
+
+  .modal-content label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
+  }
+
+  .modal-content input,
+  .modal-content textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  .modal-content textarea {
+    resize: vertical;
+    font-family: inherit;
+  }
+
+  .btn-cancelar {
+    background-color: #ccc;
+    border: none;
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .btn-salvar {
+    background-color: #f97316;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .btn-salvar.verde {
+    background-color: #16a34a; 
+  }
+  .btn-salvar.verde:hover {
+    background-color: #15803d;
+  }
+
+  .btn-cancelar:hover {
+    background-color: #bbb;
+  }
+
+  .btn-salvar:hover {
+    background-color: #ea580c;
+  }
+</style>
+>>>>>>> origin/dev

@@ -4,6 +4,9 @@
 .table-exemplares thead { background: #fafafa; }
 .lista-exemplares-root h4 { margin-top: 0; }
 .error { color: #b00020; }
+<<<<<<< HEAD
 .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.85rem; border-radius: 6px; border: 1px solid #d1d5db; background: white; cursor: pointer; font-size: 0.875rem; }
 .btn-danger { background: linear-gradient(180deg,#ef4444,#dc2626); color: white; border-color: transparent; }
 .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
+=======
+>>>>>>> origin/dev

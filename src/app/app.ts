@@ -71,7 +71,18 @@ export class App implements OnInit {
       sessionStorage.setItem(this.S_KEY_TOKEN, this.token);
       sessionStorage.setItem(this.S_KEY_LOGADO, JSON.stringify(this.logado));
       sessionStorage.setItem(this.S_KEY_DECODED, JSON.stringify(this.decodedToken));
+<<<<<<< HEAD
       // notificar outros componentes na mesma aba sobre mudança de autenticação
+=======
+      
+      if (event.id) {
+        sessionStorage.setItem('userId', String(event.id));
+        console.log('[App] userId salvo no sessionStorage:', event.id);
+      } else {
+        console.warn('[App] Backend não retornou userId no login. Tela de atualização pode falhar.');
+      }
+      
+>>>>>>> origin/dev
       try {
         window.dispatchEvent(new CustomEvent('auth:changed'));
       } catch (e) {
@@ -89,10 +100,15 @@ export class App implements OnInit {
   realizarLogout(){
     this.token = ""
     this.logado = false
+<<<<<<< HEAD
     // remover do sessionStorage
     try {
       sessionStorage.clear();
       // enviar para pagina inicial
+=======
+    try {
+      sessionStorage.clear();
+>>>>>>> origin/dev
       window.location.href = '/';
     } catch (e) {
       console.error('Erro ao remover estado do sessionStorage:', e);

@@ -1,10 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PessoaModel } from '../../../../../models/pessoa-model';
+<<<<<<< HEAD
 import { PutService } from '../../../../../servicos/api/put-service';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
 import { DecodeToken } from '../../../../../models/decode-token';
 import { ListaEmprestimoModel } from '../../../../../models/lista-emprestimo-model';
+=======
+>>>>>>> origin/dev
 
 @Component({
   selector: 'app-detalhes-cliente',
@@ -14,6 +17,7 @@ import { ListaEmprestimoModel } from '../../../../../models/lista-emprestimo-mod
   styleUrls: ['./detalhes-cliente.css']
 })
 export class DetalhesCliente {
+<<<<<<< HEAD
   @Input() set cliente(value: PessoaModel | null) {
     this._cliente = value;
     if (value?.idPessoa) {
@@ -122,4 +126,12 @@ export class DetalhesCliente {
       }
     });
   }
+=======
+  @Input() cliente: PessoaModel | null = null;
+  @Output() close = new EventEmitter<void>();
+
+  public onClose() {
+    this.close.emit();
+  }
+>>>>>>> origin/dev
 }

@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+<<<<<<< HEAD
 import { DecodeToken } from '../../../models/decode-token';
+=======
+>>>>>>> origin/dev
 
 @Component({
   selector: 'app-menu-lateral',
@@ -23,12 +26,17 @@ export class MenuLateral implements OnInit {
   ngOnInit(): void {
     try {
       const raw = sessionStorage.getItem('decodedToken');
+<<<<<<< HEAD
       if (raw) {
         const decoded: DecodeToken = JSON.parse(raw);
         this.role = decoded.role ?? '';
       } else {
         this.role = '';
       }
+=======
+      const decoded = raw ? JSON.parse(raw) as { role?: string } : null;
+      this.role = decoded?.role ?? '';
+>>>>>>> origin/dev
     } catch (e) {
       console.error('MenuLateral: erro ao ler decodedToken', e);
       this.role = '';
@@ -38,7 +46,11 @@ export class MenuLateral implements OnInit {
 
   private assignRole(role: string) {
     if (role === 'CLIENTE') this.roleCards = this.cardsCliente;
+<<<<<<< HEAD
     else if (role === 'BIBLIOTECARIO') this.roleCards = this.cardsFuncionario;
+=======
+    else if (role === 'FUNCIONARIO') this.roleCards = this.cardsFuncionario;
+>>>>>>> origin/dev
     else if (role === 'ADMINISTRADOR') this.roleCards = this.cardsAdministrador;
     else this.roleCards = this.cardsAdministrador;
   }
