@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
+import { PutService } from '../../../../../servicos/api/put-service';
 import { EditoraModel } from '../../../../../models/editora-model';
 
 @Component({
@@ -20,7 +21,11 @@ export class ListaEditoras implements OnInit {
   public statusFilter: string = '';
   public availableStatuses: string[] = [];
 
-  constructor(private serv: GetServicos) {}
+  // edição
+  public editandoId: number | null = null;
+  public novoNome: string = '';
+
+  constructor(private serv: GetServicos, private putService: PutService) {}
 
   ngOnInit(): void {
     this.serv.getApiUrlGetEditoras().subscribe({
@@ -68,5 +73,36 @@ export class ListaEditoras implements OnInit {
   public getStatus(editora: EditoraModel): string {
     if (!editora) return '';
     return editora.statusAtivo ?? JSON.stringify(editora);
+  }
+
+  public iniciarEdicao(editora: EditoraModel): void {
+    if (!editora?.idEditora) return;
+    this.editandoId = editora.idEditora;
+    this.novoNome = editora.nome || '';
+  }
+
+  public cancelarEdicao(): void {
+    this.editandoId = null;
+    this.novoNome = '';
+  }
+
+  public salvarEdicao(): void {
+    if (!this.editandoId || !this.novoNome.trim()) {
+      alert('Nome não pode estar vazio.');
+      return;
+    }
+    this.putService.atualizarNomeEditora(this.editandoId, this.novoNome.trim()).subscribe({
+      next: () => {
+        alert('Nome atualizado com sucesso!');
+        this.editandoId = null;
+        this.novoNome = '';
+        // Recarregar lista
+        this.ngOnInit();
+      },
+      error: (err) => {
+        console.error('Erro ao atualizar nome da editora:', err);
+        alert('Erro ao atualizar nome da editora.');
+      }
+    });
   }
 }

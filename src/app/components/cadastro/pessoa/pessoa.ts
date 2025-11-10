@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { inject } from '@angular/core';
+import { PostService } from '../../../servicos/api/post-service';
 
 @Component({
   selector: 'app-pessoa',

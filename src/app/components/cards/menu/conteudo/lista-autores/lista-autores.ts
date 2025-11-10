@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
+import { PutService } from '../../../../../servicos/api/put-service';
 import { AutorModel } from '../../../../../models/autor';
 
 @Component({
@@ -20,7 +21,11 @@ export class ListaAutores implements OnInit {
   public statusFilter: string = '';
   public availableStatuses: string[] = [];
 
-  constructor(private serv: GetServicos) {}
+  // edição
+  public editandoId: number | null = null;
+  public novoNome: string = '';
+
+  constructor(private serv: GetServicos, private putService: PutService) {}
 
   ngOnInit(): void {
     this.serv.getApiUrlGetAutores().subscribe({
@@ -68,5 +73,36 @@ export class ListaAutores implements OnInit {
   public getStatus(autor: AutorModel): string {
     if (!autor) return '';
     return autor.statusAtivo ?? JSON.stringify(autor);
+  }
+
+  public iniciarEdicao(autor: AutorModel): void {
+    if (!autor?.idAutor) return;
+    this.editandoId = autor.idAutor;
+    this.novoNome = autor.nome || '';
+  }
+
+  public cancelarEdicao(): void {
+    this.editandoId = null;
+    this.novoNome = '';
+  }
+
+  public salvarEdicao(): void {
+    if (!this.editandoId || !this.novoNome.trim()) {
+      alert('Nome não pode estar vazio.');
+      return;
+    }
+    this.putService.atualizarNomeAutor(this.editandoId, this.novoNome.trim()).subscribe({
+      next: () => {
+        alert('Nome atualizado com sucesso!');
+        this.editandoId = null;
+        this.novoNome = '';
+        // Recarregar lista
+        this.ngOnInit();
+      },
+      error: (err) => {
+        console.error('Erro ao atualizar nome do autor:', err);
+        alert('Erro ao atualizar nome do autor.');
+      }
+    });
   }
 }
