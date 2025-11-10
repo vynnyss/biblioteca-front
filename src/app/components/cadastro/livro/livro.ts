@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import { Component } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
-
-@Component({
-  selector: 'app-livro',
-  templateUrl: './livro.html',
-  styleUrls: ['./livro.css']
-})
-export class Livro {}
-=======
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -660,4 +649,3 @@ export class Livro implements OnInit {
     }
   }
 }
->>>>>>> origin/dev

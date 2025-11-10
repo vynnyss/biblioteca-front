@@ -25,7 +25,6 @@
 					</dl>
 					<div class="actions">
 						<button class="btn btn-primary" type="button">Editar cliente</button>
-<<<<<<< HEAD
 						<button 
 							*ngIf="isAdministrador()" 
 							class="btn btn-outline" 
@@ -43,9 +42,6 @@
 					<!-- Botão condicional para solicitar exclusão -->
 					<div class="actions" *ngIf="cliente.statusConta === 'ATIVA' && isBibliotecario()">
 						<button class="btn btn-danger" type="button" (click)="solicitarExclusao()">Solicitar Exclusão</button>
-=======
-						<button class="btn btn-outline" type="button">Inativar cliente</button>
->>>>>>> origin/dev
 					</div>
 				</section>
 
@@ -74,7 +70,6 @@
 			</div>
 
 			<div class="right-col">
-<<<<<<< HEAD
 				<section class="section-card emprestimos-section">
 					<h5>Empréstimos do cliente</h5>
 					
@@ -109,11 +104,6 @@
 							<p class="muted">Nenhum empréstimo encontrado para este cliente.</p>
 						</ng-template>
 					</div>
-=======
-				<section class="section-card emprestimos-placeholder">
-					<h5>Empréstimos do cliente</h5>
-					<p class="muted">Lista de empréstimos será exibida aqui em breve.</p>
->>>>>>> origin/dev
 				</section>
 			</div>
 		</div>

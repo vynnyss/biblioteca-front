@@ -10,14 +10,10 @@ export class PostService {
   private apiUrlLogin = "http://localhost:8080/auth/login";
   private apiUrlRegistro = "http://localhost:8080/auth/registro";
   private apiUrlEmprestimo = "http://localhost:8080/emprestimos";
-<<<<<<< HEAD
-
-=======
   private apiUrlUsuarios = "http://localhost:8080/usuarios"; 
   private apiUrlUsuario = "http://localhost:8080/usuario";
   private apiUrlTitulos = "http://localhost:8080/titulos";  
   private apiUrlLivros = "http://localhost:8080/livros";
->>>>>>> origin/dev
 
   constructor(private http: HttpClient){}
 
@@ -42,8 +38,6 @@ export class PostService {
   postEmprestimo(payload: Emprestimo): Observable<any> {
     return this.http.post<any>(`${this.apiUrlEmprestimo}`, payload);
   }
-<<<<<<< HEAD
-=======
 
   putUsuario(id: number, payload: any, token: string): Observable<any> {
     const headers = {
@@ -104,5 +98,4 @@ export class PostService {
     const options = token ? { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } } : {};
     return this.http.post<any>(`${this.apiUrlLivros}`, livro, options);
   }
->>>>>>> origin/dev
 }

@@ -47,11 +47,7 @@ export class MenuPrincipal implements OnInit {
 
     if (role === 'CLIENTE') {
       this.roleCards = this.cardsCliente;
-<<<<<<< HEAD
     } else if (role === 'BIBLIOTECARIO') {
-=======
-    } else if (role === 'FUNCIONARIO') {
->>>>>>> origin/dev
       this.roleCards = this.cardsFuncionario;
     } else if (role === 'ADMINISTRADOR') {
       this.roleCards = this.cardsAdministrador;

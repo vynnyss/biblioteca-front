@@ -1,14 +1,7 @@
-<<<<<<< HEAD
-import { Component } from '@angular/core';
-import { NgForm, FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { inject } from '@angular/core';
-=======
 import { Component, inject } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
->>>>>>> origin/dev
 import { PostService } from '../../../servicos/api/post-service';
 
 @Component({
@@ -18,79 +11,14 @@ import { PostService } from '../../../servicos/api/post-service';
   templateUrl: './pessoa.html',
   styleUrls: ['./pessoa.css']
 })
-<<<<<<< HEAD
-
-export class Pessoa {
-  user: any = {
-    firstName: '',
-    lastName: '',
-=======
 export class Pessoa {
   user: any = {
     nome: '',
->>>>>>> origin/dev
     cpf: '',
     dtNascimento: '',
     sexo: '',
     email: '',
     telefone: '',
-<<<<<<< HEAD
-    endereco: {
-       nomeLogradouro: '',
-       numero: '',
-       complemento: '',
-       bairro:'',
-       cep: '',
-       cidade: '',
-       idEstado: 0
-      }
-  };
-
-  private servicoApi = inject(PostService);
-
-mascaraCPF(event: any): void {
-  const input = event.target;
-  let valor = input.value;
-
-  
-  const posInicial = input.selectionStart;
-
-  
-  valor = valor.replace(/\D/g, '');
-
-  
-  if (valor.length > 11) {
-    valor = valor.slice(0, 11);
-  }
-  if (valor.length > 9) {
-    valor = valor.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
-  } else if (valor.length > 6) {
-    valor = valor.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
-  } else if (valor.length > 3) {
-    valor = valor.replace(/(\d{3})(\d{1,3})/, '$1.$2');
-  }
-
-  
-  input.value = valor;
-  input.setSelectionRange(posInicial, posInicial);
-}
-
-  cancelar() {
-    console.log('Ação de cancelar executada');
-  }
-
-
-  onSubmit(form: NgForm) {
-    if (form) {
-      this.user = form.value;
-      // Acessa todos os campos do formulário como um objeto JSON
-      const dadosDoFormulario = form.value;
-      console.log('Dados do formulário:', dadosDoFormulario);
-      // Aqui você pode enviar os dados para um serviço ou API
-    } else {
-      console.log('Formulário inválido');
-    }
-=======
     senha: '',
     endereco: {
       nomeLogradouro: '',
@@ -190,6 +118,5 @@ mascaraCPF(event: any): void {
         alert(`⚠️ ${msg}`);
       }
     });
->>>>>>> origin/dev
   }
 }

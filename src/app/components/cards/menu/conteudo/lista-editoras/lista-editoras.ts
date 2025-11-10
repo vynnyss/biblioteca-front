@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
-<<<<<<< HEAD
 import { PutService } from '../../../../../servicos/api/put-service';
-=======
->>>>>>> origin/dev
 import { EditoraModel } from '../../../../../models/editora-model';
 
 @Component({
@@ -24,15 +21,11 @@ export class ListaEditoras implements OnInit {
   public statusFilter: string = '';
   public availableStatuses: string[] = [];
 
-<<<<<<< HEAD
   // edição
   public editandoId: number | null = null;
   public novoNome: string = '';
 
   constructor(private serv: GetServicos, private putService: PutService) {}
-=======
-  constructor(private serv: GetServicos) {}
->>>>>>> origin/dev
 
   ngOnInit(): void {
     this.serv.getApiUrlGetEditoras().subscribe({
@@ -81,7 +74,6 @@ export class ListaEditoras implements OnInit {
     if (!editora) return '';
     return editora.statusAtivo ?? JSON.stringify(editora);
   }
-<<<<<<< HEAD
 
   public iniciarEdicao(editora: EditoraModel): void {
     if (!editora?.idEditora) return;
@@ -113,6 +105,4 @@ export class ListaEditoras implements OnInit {
       }
     });
   }
-=======
->>>>>>> origin/dev
 }

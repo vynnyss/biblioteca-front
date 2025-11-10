@@ -1,12 +1,6 @@
 <div class="container">
   <h2>Cadastro de Livro</h2>
 
-<<<<<<< HEAD
-  <form>
-    <div class="form-group">
-      <label for="titulo">Título:</label>
-      <input type="text" id="titulo" name="titulo" placeholder="Digite o título do livro" required />
-=======
   <form (ngSubmit)="onSubmit(livroForm)" #livroForm="ngForm">
     <div class="form-group">
       <label for="titulo">Título:</label>
@@ -27,60 +21,10 @@
       <span *ngIf="carregandoTitulos" style="font-size: 12px; color: #666;">
         Carregando títulos...
       </span>
->>>>>>> origin/dev
     </div>
 
     <div class="form-group">
       <label for="autor">Autor:</label>
-<<<<<<< HEAD
-      <input type="text" id="autor" name="autor" placeholder="Digite o nome do autor" required />
-    </div>
-
-    <div class="form-group">
-      <label for="genero">Gênero:</label>
-      <select id="genero" name="genero" required>
-        <option value="">Selecione o gênero</option>
-        <option value="Romance">Romance</option>
-        <option value="Ficção">Ficção</option>
-        <option value="Fantasia">Fantasia</option>
-        <option value="Técnico">Técnico</option>
-        <option value="Biografia">Biografia</option>
-        <option value="Autoajuda">Autoajuda</option>
-        <option value="Infantil">Infantil</option>
-        <option value="Suspense">Suspense</option>
-        <option value="Terror">Terror</option>
-        <option value="Poesia">Poesia</option>
-        <option value="Drama">Drama</option>
-        <option value="Aventura">Aventura</option>
-        <option value="Outro">Outro</option>
-      </select>
-    </div>
-
-<div class="form-group">
-  <label for="dataPublicacao">Data de Publicação:</label>
-  <input
-    type="date"
-    id="dataPublicacao"
-    name="dataPublicacao"
-    required
-  />
-</div>
-      <input
-        type="text"
-        id="ano"
-        name="ano"
-        placeholder="Ex: 2024"
-        maxlength="4"
-        pattern="\d{4}"
-        title="Digite um ano com 4 dígitos"
-        required
-      />
-   
-
-    <div class="form-group">
-      <label for="editora">Editora:</label>
-      <input type="text" id="editora" name="editora" placeholder="Digite o nome da editora" required />
-=======
       <select 
         id="autor" 
         name="autor" 
@@ -151,30 +95,10 @@
       <span *ngIf="carregandoEditoras" style="font-size: 12px; color: #666;">
         Carregando editoras...
       </span>
->>>>>>> origin/dev
     </div>
 
     <div class="form-group">
       <label for="idioma">Idioma:</label>
-<<<<<<< HEAD
-      <select id="idioma" name="idioma" required>
-        <option value="">Selecione o idioma</option>
-        <option value="Português">Português</option>
-        <option value="Inglês">Inglês</option>
-        <option value="Espanhol">Espanhol</option>
-        <option value="Francês">Francês</option>
-        <option value="Alemão">Alemão</option>
-        <option value="Italiano">Italiano</option>
-        <option value="Japonês">Japonês</option>
-        <option value="Chinês">Chinês</option>
-        <option value="Coreano">Coreano</option>
-        <option value="Russo">Russo</option>
-        <option value="Árabe">Árabe</option>
-        <option value="Hebraico">Hebraico</option>
-        <option value="Latim">Latim</option>
-        <option value="Outro">Outro</option>
-      </select>
-=======
       <select 
         id="idioma" 
         name="idioma" 
@@ -192,31 +116,19 @@
       <span *ngIf="carregandoIdiomas" style="font-size: 12px; color: #666;">
         Carregando idiomas...
       </span>
->>>>>>> origin/dev
     </div>
 
     <div class="form-group">
       <label for="paginas">Quantidade de Páginas:</label>
-<<<<<<< HEAD
-      <input type="number" id="paginas" name="paginas" placeholder="Ex: 320" required />
-=======
       <input type="number" id="paginas" name="paginas" [(ngModel)]="livro.paginas" placeholder="Ex: 320" required />
->>>>>>> origin/dev
     </div>
 
     <div class="form-group">
       <label for="tipoCapa">Tipo de Capa:</label>
-<<<<<<< HEAD
-      <select id="tipoCapa" name="tipoCapa" required>
-        <option value="">Selecione o tipo de capa</option>
-        <option value="dura">Capa dura</option>
-        <option value="flexivel">Capa flexível</option>
-=======
       <select id="tipoCapa" name="tipoCapa" [(ngModel)]="livro.tipoCapa" required>
         <option value="">Selecione o tipo de capa</option>
         <option value="dura">Capa dura</option>
         <option value="flexivel">Capa mole</option>
->>>>>>> origin/dev
         <option value="brochura">Brochura</option>
         <option value="espiral">Espiral</option>
         <option value="outro">Outro</option>
@@ -225,20 +137,6 @@
 
     <div class="form-group">
       <label for="estado">Estado físico:</label>
-<<<<<<< HEAD
-      <select id="estado" name="estado" required>
-        <option value="">Selecione o estado físico</option>
-        <option value="Novo">Novo</option>
-        <option value="Como novo">Como novo</option>
-        <option value="Muito bom">Muito bom</option>
-        <option value="Bom">Bom</option>
-        <option value="Regular">Regular</option>
-        <option value="Aceitável">Aceitável</option>
-        <option value="Ruim">Ruim</option>
-        <option value="Restaurado">Restaurado</option>
-        <option value="Colecionável">Colecionável</option>
-        <option value="Danificado">Danificado</option>
-=======
       <select 
         id="estado" 
         name="estado" 
@@ -250,15 +148,11 @@
         <option value="BOM">Bom</option>
         <option value="OTIMO">Ótimo</option>
         <option value="EXCELENTE">Excelente</option>
->>>>>>> origin/dev
       </select>
     </div>
 
     <div class="form-group">
       <label for="edicao">Edição:</label>
-<<<<<<< HEAD
-      <input type="text" id="edicao" name="edicao" placeholder="Ex: 1ª edição, Revisada, Ampliada..." required />
-=======
       <input 
         type="text" 
         id="edicao" 
@@ -268,7 +162,6 @@
         maxlength="60"
         required />
       <small style="color: #666; font-size: 12px;">Máximo 60 caracteres</small>
->>>>>>> origin/dev
     </div>
 
     <div class="form-group">
@@ -278,35 +171,15 @@
 
     <div class="form-group">
       <label for="estoque">Quantidade em Estoque:</label>
-<<<<<<< HEAD
-      <input type="number" id="estoque" name="estoque" placeholder="Ex: 10" min="0" required />
-    </div>
-
-    <div style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
-      <button type="button" onclick="cancelar()">Cancelar</button>
-=======
       <input type="number" id="estoque" name="estoque" [(ngModel)]="livro.estoque" placeholder="Ex: 10" min="0" required />
     </div>
 
     <div style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
       <button type="button" (click)="cancelar()">Cancelar</button>
->>>>>>> origin/dev
       <button type="submit">Salvar</button>
     </div>
   </form>
 
-<<<<<<< HEAD
-  <script>
-    document.querySelectorAll('.form-group.genero input[type="radio"]').forEach((radio) => {
-      radio.addEventListener('change', () => {
-        document.querySelectorAll('.form-group.genero div').forEach((div) => {
-          div.classList.remove('selecionado');
-        });
-        radio.parentElement.classList.add('selecionado');
-      });
-    });
-  </script>
-=======
 
   <div *ngIf="mostrarModalTitulo" class="modal-overlay" (click)="fecharModalTitulo()">
     <div class="modal-content" (click)="$event.stopPropagation()">
@@ -594,4 +467,3 @@
     background-color: #ea580c;
   }
 </style>
->>>>>>> origin/dev

@@ -2,7 +2,6 @@
 	<button class="btn btn-outline" type="button" (click)="onClose()">← Voltar</button>
 	<h3>Detalhes do Empréstimo</h3>
 
-<<<<<<< HEAD
 	<!-- Ações rápidas para o empréstimo (sem comportamento implementado ainda) -->
 	<div class="emprestimo-actions">
 		<button class="btn btn-primary" type="button" (click)="registrarRetirada()">Registrar Retirada</button>
@@ -10,8 +9,6 @@
 		<button class="btn btn-outline" type="button" (click)="registrarSeparacao()">Registrar Separação</button>
 	</div>
 
-=======
->>>>>>> origin/dev
 	<div *ngIf="loading">Carregando detalhes do empréstimo...</div>
 
 	<div *ngIf="error" class="error">{{ error }}</div>
@@ -35,12 +32,9 @@
 
 				<dt>Data Devolvido</dt>
 				<dd>{{ emprestimo.dtDevolvidoExemplar ? (emprestimo.dtDevolvidoExemplar | date:'short') : 'Não devolvido' }}</dd>
-<<<<<<< HEAD
 
 				<dt>Status do Empréstimo</dt>
 				<dd>{{ emprestimo.status || '—' }}</dd>
-=======
->>>>>>> origin/dev
 			</dl>
             </div>
 

@@ -1,10 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
-<<<<<<< HEAD
 import { PutService } from '../../../../../servicos/api/put-service';
-=======
->>>>>>> origin/dev
 import { EmprestimoModel } from '../../../../../models/emprestimo-model';
 
 @Component({
@@ -26,11 +23,7 @@ export class DetalhesEmprestimos {
   public loading = false;
   public error: string | null = null;
 
-<<<<<<< HEAD
   constructor(private serv: GetServicos, private putService: PutService) {}
-=======
-  constructor(private serv: GetServicos) {}
->>>>>>> origin/dev
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('idEmprestimo' in changes) {
@@ -60,7 +53,6 @@ export class DetalhesEmprestimos {
     });
   }
 
-<<<<<<< HEAD
   public registrarSeparacao() {
     if (!this.emprestimo?.idEmprestimo) return;
     this.putService.registrarSeparacao(this.emprestimo.idEmprestimo).subscribe({
@@ -103,6 +95,4 @@ export class DetalhesEmprestimos {
     });
   }
 
-=======
->>>>>>> origin/dev
 }

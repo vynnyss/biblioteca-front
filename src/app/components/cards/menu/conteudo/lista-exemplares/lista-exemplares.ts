@@ -1,13 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
-<<<<<<< HEAD
 import { PutService } from '../../../../../servicos/api/put-service';
 import { ExemplarModel } from '../../../../../models/exemplar-model';
 import { DecodeToken } from '../../../../../models/decode-token';
-=======
-import { ExemplarModel } from '../../../../../models/exemplar-model';
->>>>>>> origin/dev
 
 @Component({
   selector: 'app-lista-exemplares',
@@ -23,11 +19,7 @@ export class ListaExemplares implements OnChanges {
   public loading = false;
   public error: string | null = null;
 
-<<<<<<< HEAD
   constructor(private serv: GetServicos, private putService: PutService) {}
-=======
-  constructor(private serv: GetServicos) {}
->>>>>>> origin/dev
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('edicaoId' in changes) {
@@ -69,7 +61,6 @@ export class ListaExemplares implements OnChanges {
   public getEstadoFisico(item: ExemplarModel): string {
     return item?.estadoFisico ?? '—';
   }
-<<<<<<< HEAD
 
   public isBibliotecario(): boolean {
     const raw = sessionStorage.getItem('decodedToken');
@@ -103,6 +94,4 @@ export class ListaExemplares implements OnChanges {
       }
     });
   }
-=======
->>>>>>> origin/dev
 }
