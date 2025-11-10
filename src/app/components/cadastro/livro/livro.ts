@@ -22,7 +22,7 @@ export class Livro implements OnInit {
   carregandoTitulos: boolean = false;
   
   autores: any[] = [];
-  autorSelecionado: number | string = '';
+  autoresSelecionados: number[] = [];
   mostrarModalAutor: boolean = false;
   carregandoAutores: boolean = false;
   
@@ -37,21 +37,17 @@ export class Livro implements OnInit {
   carregandoIdiomas: boolean = false;
   
   categorias: any[] = [];
-  categoriaSelecionada: number | string = '';
+  categoriasSelecionadas: number[] = [];
   mostrarModalCategoria: boolean = false;
   carregandoCategorias: boolean = false;
   
-  estadoFisicoSelecionado: string = '';
-  mostrarModalEstadoFisico: boolean = false;
-  
-  edicoes: any[] = [];
-  edicaoSelecionada: number | string = '';
-  mostrarModalEdicao: boolean = false;
-  carregandoEdicoes: boolean = false;
+  // Campos de estado físico e edição removidos (não enviados ao backend)
   
   novoTitulo = {
     nome: '',
-    descricao: ''
+    descricao: '',
+    idsCategorias: [] as number[],
+    idsAutores: [] as number[]
   };
 
   novoAutor = {
@@ -70,29 +66,17 @@ export class Livro implements OnInit {
     nome: ''
   };
 
-  novoEstadoFisico = {
-    estadoFisico: '',
-    qtdEstoque: 1,
-    edicaoId: null as number | null
-  };
-
-  novaEdicao = {
-    nome: ''
-  };
-
   livro = {
     idTitulo: null as number | null,
-    idAutor: null as number | null,
     idEditora: null as number | null,
     idIdioma: null as number | null,
-    idCategoria: null as number | null,
-    idEstadoFisico: null as number | null,
-    idEdicao: null as number | null,
-    edicaoNome: '',
+    descricaoEdicao: '',
     dataPublicacao: '',
-    paginas: null as number | null,
+    qtdPaginas: null as number | null,
     tipoCapa: '',
-    estoque: null as number | null
+    tamanho: '',
+    classificacao: '',
+    imagemFile: null as File | null
   };
 
   ngOnInit(): void {
@@ -201,27 +185,6 @@ export class Livro implements OnInit {
     });
   }
 
-
-  carregarEdicoes(): void {
-    this.carregandoEdicoes = true;
-    const token = sessionStorage.getItem('authToken');
-    
-    this.http.get<any[]>('http://localhost:8080/edicoes', {
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-    }).subscribe({
-      next: (edicoes: any) => {
-        this.edicoes = Array.isArray(edicoes) ? edicoes : [];
-        this.carregandoEdicoes = false;
-        console.log('[Livro] Edições carregadas:', this.edicoes);
-      },
-      error: (err) => {
-        console.error('[Livro] Erro ao carregar edições:', err);
-        this.carregandoEdicoes = false;
-        alert('Erro ao carregar lista de edições.');
-      }
-    });
-  }
-
   onTituloChange(value: string): void {
     if (value === 'novo') {
       this.mostrarModalTitulo = true;
@@ -229,17 +192,47 @@ export class Livro implements OnInit {
     } else {
       this.tituloSelecionado = value;
       this.livro.idTitulo = value ? Number(value) : null;
+      
+      // Se um título foi selecionado, preenche automaticamente autores e categorias
+      if (value) {
+        const tituloSelecionado = this.titulos.find(t => t.idTitulo === Number(value));
+        if (tituloSelecionado) {
+          // Preenche autores do título
+          this.autoresSelecionados = tituloSelecionado.autores.map((a: any) => a.idAutor);
+          
+          // Preenche categorias do título
+          this.categoriasSelecionadas = tituloSelecionado.categorias.map((c: any) => c.idCategoria);
+        }
+      } else {
+        // Se nenhum título está selecionado, limpa as seleções
+        this.autoresSelecionados = [];
+        this.categoriasSelecionadas = [];
+      }
     }
   }
 
   onAutorChange(value: string): void {
     if (value === 'novo') {
       this.abrirModalNovoAutor();
-      this.autorSelecionado = '';
-    } else {
-      this.autorSelecionado = value;
-      this.livro.idAutor = value ? Number(value) : null;
     }
+  }
+
+  toggleAutor(idAutor: number): void {
+    // Bloqueia alteração se um título estiver selecionado
+    if (this.tituloSelecionado && this.tituloSelecionado !== '') {
+      return;
+    }
+    
+    const index = this.autoresSelecionados.indexOf(idAutor);
+    if (index > -1) {
+      this.autoresSelecionados.splice(index, 1);
+    } else {
+      this.autoresSelecionados.push(idAutor);
+    }
+  }
+
+  isAutorSelecionado(idAutor: number): boolean {
+    return this.autoresSelecionados.includes(idAutor);
   }
 
   onEditoraChange(value: string): void {
@@ -265,35 +258,87 @@ export class Livro implements OnInit {
   onCategoriaChange(value: string): void {
     if (value === 'novo') {
       this.abrirModalNovaCategoria();
-      this.categoriaSelecionada = '';
-    } else {
-      this.categoriaSelecionada = value;
-      this.livro.idCategoria = value ? Number(value) : null;
     }
   }
 
-  onEstadoFisicoChange(value: string): void {
-    this.estadoFisicoSelecionado = value;
+  toggleCategoria(idCategoria: number): void {
+    // Bloqueia alteração se um título estiver selecionado
+    if (this.tituloSelecionado && this.tituloSelecionado !== '') {
+      return;
+    }
+    
+    const index = this.categoriasSelecionadas.indexOf(idCategoria);
+    if (index > -1) {
+      this.categoriasSelecionadas.splice(index, 1);
+    } else {
+      this.categoriasSelecionadas.push(idCategoria);
+    }
   }
 
-  onEdicaoChange(value: string): void {
-    if (value === 'novo') {
-      this.abrirModalNovaEdicao();
-      this.edicaoSelecionada = '';
+  isCategoriaSelecionada(idCategoria: number): boolean {
+    return this.categoriasSelecionadas.includes(idCategoria);
+  }
+
+  onImagemChange(event: any): void {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Validação do tipo de arquivo
+      if (!file.type.startsWith('image/')) {
+        alert('Por favor, selecione apenas arquivos de imagem.');
+        event.target.value = '';
+        return;
+      }
+
+      // Validação do tamanho (máximo 5MB)
+      const maxSize = 5 * 1024 * 1024; // 5MB em bytes
+      if (file.size > maxSize) {
+        alert('A imagem deve ter no máximo 5MB.');
+        event.target.value = '';
+        return;
+      }
+
+      // Armazena o arquivo diretamente
+      this.livro.imagemFile = file;
+      console.log('[Livro] Imagem carregada com sucesso:', file.name);
     } else {
-      this.edicaoSelecionada = value;
-      this.livro.idEdicao = value ? Number(value) : null;
+      this.livro.imagemFile = null;
     }
   }
 
   abrirModalNovoTitulo(): void {
     this.mostrarModalTitulo = true;
-    this.novoTitulo = { nome: '', descricao: '' };
+    this.novoTitulo = { nome: '', descricao: '', idsCategorias: [], idsAutores: [] };
   }
 
   fecharModalTitulo(): void {
     this.mostrarModalTitulo = false;
-    this.novoTitulo = { nome: '', descricao: '' };
+    this.novoTitulo = { nome: '', descricao: '', idsCategorias: [], idsAutores: [] };
+  }
+
+  toggleAutorNoTitulo(idAutor: number): void {
+    const index = this.novoTitulo.idsAutores.indexOf(idAutor);
+    if (index > -1) {
+      this.novoTitulo.idsAutores.splice(index, 1);
+    } else {
+      this.novoTitulo.idsAutores.push(idAutor);
+    }
+  }
+
+  toggleCategoriaNoTitulo(idCategoria: number): void {
+    const index = this.novoTitulo.idsCategorias.indexOf(idCategoria);
+    if (index > -1) {
+      this.novoTitulo.idsCategorias.splice(index, 1);
+    } else {
+      this.novoTitulo.idsCategorias.push(idCategoria);
+    }
+  }
+
+  isAutorSelecionadoNoTitulo(idAutor: number): boolean {
+    return this.novoTitulo.idsAutores.includes(idAutor);
+  }
+
+  isCategoriaSelecionadaNoTitulo(idCategoria: number): boolean {
+    return this.novoTitulo.idsCategorias.includes(idCategoria);
   }
 
   salvarNovoTitulo(): void {
@@ -307,11 +352,21 @@ export class Livro implements OnInit {
       alert('Por favor, informe a descrição do título.');
       return;
     }
+    if (this.novoTitulo.idsAutores.length === 0) {
+      alert('Por favor, selecione pelo menos um autor.');
+      return;
+    }
+    if (this.novoTitulo.idsCategorias.length === 0) {
+      alert('Por favor, selecione pelo menos uma categoria.');
+      return;
+    }
 
     const token = sessionStorage.getItem('authToken') || undefined;
     const payload = {
       nome,
-      descricao
+      descricao,
+      idsAutores: this.novoTitulo.idsAutores,
+      idsCategorias: this.novoTitulo.idsCategorias
     };
 
     console.log('[Livro] Cadastrando novo título:', payload);
@@ -364,8 +419,7 @@ export class Livro implements OnInit {
         
         if (autorNovo?.idAutor || autorNovo?.id) {
           const id = autorNovo.idAutor || autorNovo.id;
-          this.autorSelecionado = id;
-          this.livro.idAutor = id;
+          this.autoresSelecionados.push(id);
         }
       },
       error: (err) => {
@@ -484,8 +538,7 @@ export class Livro implements OnInit {
         
         if (categoriaNova?.idCategoria || categoriaNova?.id) {
           const id = categoriaNova.idCategoria || categoriaNova.id;
-          this.categoriaSelecionada = id;
-          this.livro.idCategoria = id;
+          this.categoriasSelecionadas.push(id);
         }
       },
       error: (err) => {
@@ -495,75 +548,33 @@ export class Livro implements OnInit {
     });
   }
 
-  abrirModalNovoEstadoFisico(): void {
-  alert('Cadastro de novo estado físico desativado. Use opções pré-definidas.');
-  }
-
-  fecharModalEstadoFisico(): void {
-    this.mostrarModalEstadoFisico = false;
-    this.novoEstadoFisico = { estadoFisico: '', qtdEstoque: 1, edicaoId: null };
-  }
-
-  salvarNovoEstadoFisico(): void {
-    alert('Cadastro de novo estado físico desativado. Use as opções pré-definidas.');
-    this.fecharModalEstadoFisico();
-  }
-
-  abrirModalNovaEdicao(): void {
-    this.mostrarModalEdicao = true;
-    this.novaEdicao = { nome: '' };
-  }
-
-  fecharModalEdicao(): void {
-    this.mostrarModalEdicao = false;
-    this.novaEdicao = { nome: '' };
-  }
-
-  salvarNovaEdicao(): void {
-    const nome = this.novaEdicao.nome.trim();
-    if (!nome) {
-      alert('Por favor, informe o nome da edição.');
-      return;
-    }
-
-    const payload = { nome };
-    console.log('[Livro] Cadastrando nova edição:', payload);
-    
-    this.apiService.postCadastro('http://localhost:8080/edicoes', payload).subscribe({
-      next: (edicaoNova: any) => {
-        console.log('[Livro] Edição cadastrada com sucesso:', edicaoNova);
-        alert('Edição cadastrada com sucesso!');
-        this.fecharModalEdicao();
-        this.carregarEdicoes();
-        
-        if (edicaoNova?.idEdicao || edicaoNova?.id) {
-          const id = edicaoNova.idEdicao || edicaoNova.id;
-          this.edicaoSelecionada = id;
-          this.livro.idEdicao = id;
-        }
-      },
-      error: (err) => {
-        console.error('[Livro] Erro ao cadastrar edição:', err);
-        alert('Erro ao cadastrar edição. Tente novamente.');
-      }
-    });
-  }
-
   onSubmit(form: NgForm): void {
     if (form && form.valid) {
-      if (!this.livro.idTitulo || !this.livro.idAutor || !this.livro.idEditora || !this.livro.idIdioma || !this.livro.idCategoria) {
-        alert('Selecione título, autor, editora, idioma e categoria.');
+      if (!this.livro.idTitulo) {
+        alert('Selecione um título.');
         return;
       }
-      if (!this.livro.edicaoNome || String(this.livro.edicaoNome).trim() === '') {
-        alert('Informe a edição do livro.');
+      if (this.autoresSelecionados.length === 0) {
+        alert('Selecione pelo menos um autor.');
+        return;
+      }
+      if (this.categoriasSelecionadas.length === 0) {
+        alert('Selecione pelo menos uma categoria.');
+        return;
+      }
+      if (!this.livro.idEditora || !this.livro.idIdioma) {
+        alert('Selecione editora e idioma.');
+        return;
+      }
+      if (!this.livro.descricaoEdicao || String(this.livro.descricaoEdicao).trim() === '') {
+        alert('Informe a descrição da edição do livro.');
         return;
       }
       if (!this.livro.dataPublicacao) {
         alert('Informe a data de publicação.');
         return;
       }
-      if (this.livro.paginas == null || this.livro.paginas <= 0) {
+      if (this.livro.qtdPaginas == null || this.livro.qtdPaginas <= 0) {
         alert('Informe um número de páginas válido.');
         return;
       }
@@ -571,41 +582,52 @@ export class Livro implements OnInit {
         alert('Selecione o tipo de capa.');
         return;
       }
-      if (this.livro.estoque == null || this.livro.estoque < 0) {
-        alert('Informe um estoque válido (0 ou mais).');
+      if (!this.livro.tamanho) {
+        alert('Selecione o tamanho do livro.');
         return;
       }
-      if (!this.estadoFisicoSelecionado) {
-        alert('Selecione o estado físico.');
+      if (!this.livro.classificacao) {
+        alert('Selecione a classificação indicativa.');
         return;
       }
 
-      const mapEstado: any = {
-        'MUITO_RUIM': 'MUITO_RUIM',
-        'RUIM': 'RUIM',
-        'BOM': 'BOM',
-        'OTIMO': 'OTIMO',
-        'EXCELENTE': 'EXCELENTE'
+      const mapTipoCapa: any = {
+        'dura': 'DURA',
+        'flexivel': 'MOLE',
       };
-      const estadoFisico = mapEstado[this.estadoFisicoSelecionado] || 'BOM';
+      const tipoCapa = mapTipoCapa[this.livro.tipoCapa] || this.livro.tipoCapa.toUpperCase();
 
-      const payload = {
-        idTitulo: this.livro.idTitulo,
-        idAutor: this.livro.idAutor,
-        idEditora: this.livro.idEditora,
-        idIdioma: this.livro.idIdioma,
-        idCategoria: this.livro.idCategoria,
-        edicaoNome: String(this.livro.edicaoNome).trim(),
-        dataPublicacao: this.livro.dataPublicacao,
-        paginas: this.livro.paginas,
-        tipoCapa: this.livro.tipoCapa,
-        estoque: this.livro.estoque,
-        estadoFisico
+      // Cria o objeto JSON para o campo "edicao"
+      const edicaoData = {
+        descricaoEdicao: String(this.livro.descricaoEdicao).trim(),
+        tipoCapa: tipoCapa,
+        qtdPaginas: this.livro.qtdPaginas,
+        tamanho: this.livro.tamanho.toUpperCase(),
+        classificacao: this.livro.classificacao.toUpperCase(),
+        dtPublicacao: this.livro.dataPublicacao,
+        tituloId: this.livro.idTitulo,
+        editoraId: this.livro.idEditora,
+        idiomaId: this.livro.idIdioma
       };
+
+      // Cria FormData para enviar multipart/form-data
+      const formData = new FormData();
+      
+      // Adiciona o JSON como Blob com tipo application/json no campo "edicao"
+      const edicaoBlob = new Blob([JSON.stringify(edicaoData)], { type: 'application/json' });
+      formData.append('edicao', edicaoBlob);
+      
+      // Adiciona a imagem se foi fornecida
+      if (this.livro.imagemFile) {
+        formData.append('imagem', this.livro.imagemFile, this.livro.imagemFile.name);
+      }
 
       const token = sessionStorage.getItem('authToken') || undefined;
-      console.log('[Livro] Enviando cadastro de livro:', payload);
-      this.apiService.postLivro(payload, token).subscribe({
+      console.log('[Livro] Enviando cadastro de livro (FormData)');
+      console.log('[Livro] Dados da edição:', edicaoData);
+      console.log('[Livro] Imagem:', this.livro.imagemFile ? this.livro.imagemFile.name : 'Nenhuma');
+      
+      this.apiService.postLivro(formData, token).subscribe({
         next: (res) => {
           console.log('[Livro] Livro cadastrado com sucesso:', res);
           alert('Livro cadastrado com sucesso!');
@@ -627,25 +649,21 @@ export class Livro implements OnInit {
     if (confirm('Deseja realmente cancelar? Os dados não salvos serão perdidos.')) {
       this.livro = {
         idTitulo: null,
-        idAutor: null,
         idEditora: null,
         idIdioma: null,
-        idCategoria: null,
-        idEstadoFisico: null,
-        idEdicao: null,
-        edicaoNome: '',
+        descricaoEdicao: '',
         dataPublicacao: '',
-        paginas: null,
+        qtdPaginas: null,
         tipoCapa: '',
-        estoque: null
+        tamanho: '',
+        classificacao: '',
+        imagemFile: null
       };
       this.tituloSelecionado = '';
-      this.autorSelecionado = '';
+      this.autoresSelecionados = [];
       this.editoraSelecionada = '';
       this.idiomaSelecionado = '';
-      this.categoriaSelecionada = '';
-      this.estadoFisicoSelecionado = '';
-      this.edicaoSelecionada = '';
+      this.categoriasSelecionadas = [];
     }
   }
 }

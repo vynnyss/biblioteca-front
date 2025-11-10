@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
 import { BookModel } from '../../../../../models/book-model';
 import { DetalhesEdicao } from '../detalhes-edicao/detalhes-edicao';
@@ -8,7 +9,7 @@ import { DetalhesEdicao } from '../detalhes-edicao/detalhes-edicao';
 @Component({
   selector: 'app-lista-edicoes',
   standalone: true,
-  imports: [CommonModule, FormsModule, DetalhesEdicao],
+  imports: [CommonModule, FormsModule, DetalhesEdicao, RouterLink],
   templateUrl: './lista-edicoes.html',
   styleUrl: './lista-edicoes.css'
 })

@@ -3,6 +3,82 @@
 
   <form (ngSubmit)="onSubmit(livroForm)" #livroForm="ngForm">
     <div class="form-group">
+      <label>Autores: * <small style="color: #666;">(selecione um ou mais)</small></label>
+      <small *ngIf="tituloSelecionado && tituloSelecionado !== ''" style="display: block; color: #f97316; font-size: 11px; margin-bottom: 4px;">
+        ⚠️ Autores definidos pelo título selecionado. Para alterar, remova a seleção do título.
+      </small>
+      <div class="checkbox-list-form" [class.disabled]="tituloSelecionado && tituloSelecionado !== ''">
+        <div 
+          *ngFor="let autor of autores" 
+          class="checkbox-item"
+          [class.selected]="isAutorSelecionado(autor.idAutor || autor.id)"
+          [class.disabled]="tituloSelecionado && tituloSelecionado !== ''"
+          (click)="toggleAutor(autor.idAutor || autor.id)">
+          <input 
+            type="checkbox" 
+            [checked]="isAutorSelecionado(autor.idAutor || autor.id)"
+            [disabled]="tituloSelecionado && tituloSelecionado !== ''"
+            readonly
+          />
+          <span>{{ autor.nome }}</span>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+        <small style="color: #666; font-size: 11px;">
+          Selecionados: {{ autoresSelecionados.length }}
+        </small>
+        <button 
+          type="button" 
+          class="btn-add-novo" 
+          (click)="onAutorChange('novo')"
+          [disabled]="tituloSelecionado && tituloSelecionado !== ''">
+          ➕ Cadastrar novo autor
+        </button>
+      </div>
+      <span *ngIf="carregandoAutores" style="font-size: 12px; color: #666;">
+        Carregando autores...
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label>Categorias: * <small style="color: #666;">(selecione uma ou mais)</small></label>
+      <small *ngIf="tituloSelecionado && tituloSelecionado !== ''" style="display: block; color: #f97316; font-size: 11px; margin-bottom: 4px;">
+        ⚠️ Categorias definidas pelo título selecionado. Para alterar, remova a seleção do título.
+      </small>
+      <div class="checkbox-list-form" [class.disabled]="tituloSelecionado && tituloSelecionado !== ''">
+        <div 
+          *ngFor="let categoria of categorias" 
+          class="checkbox-item"
+          [class.selected]="isCategoriaSelecionada(categoria.idCategoria || categoria.id)"
+          [class.disabled]="tituloSelecionado && tituloSelecionado !== ''"
+          (click)="toggleCategoria(categoria.idCategoria || categoria.id)">
+          <input 
+            type="checkbox" 
+            [checked]="isCategoriaSelecionada(categoria.idCategoria || categoria.id)"
+            [disabled]="tituloSelecionado && tituloSelecionado !== ''"
+            readonly
+          />
+          <span>{{ categoria.nome }}</span>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+        <small style="color: #666; font-size: 11px;">
+          Selecionadas: {{ categoriasSelecionadas.length }}
+        </small>
+        <button 
+          type="button" 
+          class="btn-add-novo" 
+          (click)="onCategoriaChange('novo')"
+          [disabled]="tituloSelecionado && tituloSelecionado !== ''">
+          ➕ Cadastrar nova categoria
+        </button>
+      </div>
+      <span *ngIf="carregandoCategorias" style="font-size: 12px; color: #666;">
+        Carregando categorias...
+      </span>
+    </div>
+
+    <div class="form-group">
       <label for="titulo">Título:</label>
       <select 
         id="titulo" 
@@ -20,48 +96,6 @@
       </select>
       <span *ngIf="carregandoTitulos" style="font-size: 12px; color: #666;">
         Carregando títulos...
-      </span>
-    </div>
-
-    <div class="form-group">
-      <label for="autor">Autor:</label>
-      <select 
-        id="autor" 
-        name="autor" 
-        [(ngModel)]="autorSelecionado"
-        (change)="onAutorChange($any($event.target).value)"
-        required>
-        <option value="">Selecione um autor</option>
-        <option *ngFor="let autor of autores" [value]="autor.idAutor || autor.id">
-          {{ autor.nome }}
-        </option>
-        <option value="novo" style="font-weight: bold; color: #16a34a;">
-          ➕ Cadastrar novo autor
-        </option>
-      </select>
-      <span *ngIf="carregandoAutores" style="font-size: 12px; color: #666;">
-        Carregando autores...
-      </span>
-    </div>
-
-    <div class="form-group">
-      <label for="categoria">Categoria:</label>
-      <select 
-        id="categoria" 
-        name="categoria" 
-        [(ngModel)]="categoriaSelecionada"
-        (change)="onCategoriaChange($any($event.target).value)"
-        required>
-        <option value="">Selecione a categoria</option>
-        <option *ngFor="let categoria of categorias" [value]="categoria.idCategoria || categoria.id">
-          {{ categoria.nome }}
-        </option>
-        <option value="novo" style="font-weight: bold; color: #ea580c;">
-          ➕ Cadastrar nova categoria
-        </option>
-      </select>
-      <span *ngIf="carregandoCategorias" style="font-size: 12px; color: #666;">
-        Carregando categorias...
       </span>
     </div>
 
@@ -120,7 +154,7 @@
 
     <div class="form-group">
       <label for="paginas">Quantidade de Páginas:</label>
-      <input type="number" id="paginas" name="paginas" [(ngModel)]="livro.paginas" placeholder="Ex: 320" required />
+      <input type="number" id="paginas" name="paginas" [(ngModel)]="livro.qtdPaginas" placeholder="Ex: 320" required />
     </div>
 
     <div class="form-group">
@@ -128,36 +162,40 @@
       <select id="tipoCapa" name="tipoCapa" [(ngModel)]="livro.tipoCapa" required>
         <option value="">Selecione o tipo de capa</option>
         <option value="dura">Capa dura</option>
-        <option value="flexivel">Capa mole</option>
-        <option value="brochura">Brochura</option>
-        <option value="espiral">Espiral</option>
-        <option value="outro">Outro</option>
+        <option value="flexivel">Capa mole/flexível</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label for="estado">Estado físico:</label>
-      <select 
-        id="estado" 
-        name="estado" 
-        [(ngModel)]="estadoFisicoSelecionado"
-        required>
-        <option value="">Selecione o estado físico</option>
-        <option value="MUITO_RUIM">Muito ruim</option>
-        <option value="RUIM">Ruim</option>
-        <option value="BOM">Bom</option>
-        <option value="OTIMO">Ótimo</option>
-        <option value="EXCELENTE">Excelente</option>
+      <label for="tamanho">Tamanho do Livro:</label>
+      <select id="tamanho" name="tamanho" [(ngModel)]="livro.tamanho" required>
+        <option value="">Selecione o tamanho</option>
+        <option value="pequeno">Pequeno</option>
+        <option value="medio">Médio</option>
+        <option value="grande">Grande</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label for="edicao">Edição:</label>
+      <label for="classificacao">Classificação Indicativa:</label>
+      <select id="classificacao" name="classificacao" [(ngModel)]="livro.classificacao" required>
+        <option value="">Selecione a classificação</option>
+        <option value="l">Livre (L)</option>
+        <option value="C10">10 anos</option>
+        <option value="C12">12 anos</option>
+        <option value="C14">14 anos</option>
+        <option value="C16">16 anos</option>
+        <option value="C18">18 anos</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="edicao">Descrição da Edição:</label>
       <input 
         type="text" 
         id="edicao" 
         name="edicao" 
-        [(ngModel)]="livro.edicaoNome"
+        [(ngModel)]="livro.descricaoEdicao"
         placeholder="Ex: 1ª edição, Revisada, Ampliada..."
         maxlength="60"
         required />
@@ -166,12 +204,13 @@
 
     <div class="form-group">
       <label for="imagem">Imagem do livro:</label>
-      <input type="file" id="imagem" name="imagem" accept="image/*" />
-    </div>
-
-    <div class="form-group">
-      <label for="estoque">Quantidade em Estoque:</label>
-      <input type="number" id="estoque" name="estoque" [(ngModel)]="livro.estoque" placeholder="Ex: 10" min="0" required />
+      <input 
+        type="file" 
+        id="imagem" 
+        name="imagem" 
+        accept="image/*"
+        (change)="onImagemChange($event)" />
+      <small style="color: #666; font-size: 12px;">Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 5MB</small>
     </div>
 
     <div style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
@@ -182,7 +221,7 @@
 
 
   <div *ngIf="mostrarModalTitulo" class="modal-overlay" (click)="fecharModalTitulo()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-content modal-titulo" (click)="$event.stopPropagation()">
       <h3>Cadastrar Novo Título</h3>
       
       <div class="form-group">
@@ -207,6 +246,48 @@
           rows="4"
           required
         ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Autores: * <small style="color: #666;">(selecione um ou mais)</small></label>
+        <div class="checkbox-list">
+          <div 
+            *ngFor="let autor of autores" 
+            class="checkbox-item"
+            [class.selected]="isAutorSelecionadoNoTitulo(autor.idAutor || autor.id)"
+            (click)="toggleAutorNoTitulo(autor.idAutor || autor.id)">
+            <input 
+              type="checkbox" 
+              [checked]="isAutorSelecionadoNoTitulo(autor.idAutor || autor.id)"
+              readonly
+            />
+            <span>{{ autor.nome }}</span>
+          </div>
+        </div>
+        <small style="color: #666; font-size: 11px;">
+          Selecionados: {{ novoTitulo.idsAutores.length }}
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Categorias: * <small style="color: #666;">(selecione uma ou mais)</small></label>
+        <div class="checkbox-list">
+          <div 
+            *ngFor="let categoria of categorias" 
+            class="checkbox-item"
+            [class.selected]="isCategoriaSelecionadaNoTitulo(categoria.idCategoria || categoria.id)"
+            (click)="toggleCategoriaNoTitulo(categoria.idCategoria || categoria.id)">
+            <input 
+              type="checkbox" 
+              [checked]="isCategoriaSelecionadaNoTitulo(categoria.idCategoria || categoria.id)"
+              readonly
+            />
+            <span>{{ categoria.nome }}</span>
+          </div>
+        </div>
+        <small style="color: #666; font-size: 11px;">
+          Selecionadas: {{ novoTitulo.idsCategorias.length }}
+        </small>
       </div>
 
       <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
@@ -308,76 +389,6 @@
       </div>
     </div>
   </div>
-
-  <div *ngIf="mostrarModalEstadoFisico" class="modal-overlay" (click)="fecharModalEstadoFisico()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <h3>Cadastrar Novo Estado Físico</h3>
-      
-      <div class="form-group">
-        <label for="novoEstadoFisico">Estado Físico: *</label>
-        <input 
-          type="text" 
-          id="novoEstadoFisico" 
-          name="novoEstadoFisico"
-          [(ngModel)]="novoEstadoFisico.estadoFisico"
-          placeholder="Ex: EXCELENTE, BOM, REGULAR"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="qtdEstoque">Quantidade em Estoque: *</label>
-        <input 
-          type="number" 
-          id="qtdEstoque" 
-          name="qtdEstoque"
-          [(ngModel)]="novoEstadoFisico.qtdEstoque"
-          min="1"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="edicaoId">ID da Edição: *</label>
-        <input 
-          type="number" 
-          id="edicaoId" 
-          name="edicaoId"
-          [(ngModel)]="novoEstadoFisico.edicaoId"
-          placeholder="Digite o ID da edição"
-          required
-        />
-      </div>
-
-      <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
-        <button type="button" class="btn-cancelar" (click)="fecharModalEstadoFisico()">Cancelar</button>
-        <button type="button" class="btn-salvar verde" (click)="salvarNovoEstadoFisico()">Salvar estado físico</button>
-      </div>
-    </div>
-  </div>
-
-  <div *ngIf="mostrarModalEdicao" class="modal-overlay" (click)="fecharModalEdicao()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <h3>Cadastrar Nova Edição</h3>
-      
-      <div class="form-group">
-        <label for="novaEdicaoNome">Nome da Edição: *</label>
-        <input 
-          type="text" 
-          id="novaEdicaoNome" 
-          name="novaEdicaoNome"
-          [(ngModel)]="novaEdicao.nome"
-          placeholder="Ex: 1ª edição, Revisada, Ampliada..."
-          required
-        />
-      </div>
-
-      <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
-        <button type="button" class="btn-cancelar" (click)="fecharModalEdicao()">Cancelar</button>
-        <button type="button" class="btn-salvar verde" (click)="salvarNovaEdicao()">Salvar edição</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <style>
@@ -401,6 +412,12 @@
     max-width: 500px;
     width: 90%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-content.modal-titulo {
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
   }
 
   .modal-content h3 {
@@ -465,5 +482,90 @@
 
   .btn-salvar:hover {
     background-color: #ea580c;
+  }
+
+  .checkbox-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    background-color: #f9f9f9;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    background-color: white;
+  }
+
+  .checkbox-item:hover {
+    background-color: #f0f0f0;
+  }
+
+  .checkbox-item.selected {
+    background-color: #e0f2fe;
+    border: 1px solid #0ea5e9;
+  }
+
+  .checkbox-item input[type="checkbox"] {
+    margin-right: 8px;
+    cursor: pointer;
+    pointer-events: none;
+  }
+
+  .checkbox-item span {
+    flex: 1;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .checkbox-list-form {
+    max-height: 180px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    background-color: #f9f9f9;
+  }
+
+  .checkbox-list-form.disabled {
+    background-color: #f5f5f5;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  .checkbox-item.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .btn-add-novo {
+    background-color: transparent;
+    border: 1px solid #16a34a;
+    color: #16a34a;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .btn-add-novo:hover:not(:disabled) {
+    background-color: #16a34a;
+    color: white;
+  }
+
+  .btn-add-novo:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: #9ca3af;
+    color: #9ca3af;
   }
 </style>
