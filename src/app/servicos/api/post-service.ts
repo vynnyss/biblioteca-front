@@ -13,7 +13,7 @@ export class PostService {
   private apiUrlUsuarios = "http://localhost:8080/usuarios"; 
   private apiUrlUsuario = "http://localhost:8080/usuario";
   private apiUrlTitulos = "http://localhost:8080/titulos";  
-  private apiUrlLivros = "http://localhost:8080/livros";
+  private apiUrlLivros = "http://localhost:8080/edicoes";
 
   constructor(private http: HttpClient){}
 
@@ -98,10 +98,29 @@ export class PostService {
   }
 
   postLivro(livro: any, token?: string): Observable<any> {
-    const headers: any = { 'Content-Type': 'application/json' };
+    // Para FormData, não definimos Content-Type - deixamos o browser definir automaticamente
+    const httpOptions: any = {};
+    
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      httpOptions.headers = {
+        'Authorization': `Bearer ${token}`
+      };
     }
-    return this.http.post<any>(`${this.apiUrlLivros}`, livro, { headers });
+    
+    return this.http.post<any>(`${this.apiUrlLivros}`, livro, httpOptions);
+  }
+
+  postExemplar(exemplar: any, token?: string): Observable<any> {
+    const httpOptions: any = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    
+    if (token) {
+      httpOptions.headers['Authorization'] = `Bearer ${token}`;
+    }
+    
+    return this.http.post<any>('http://localhost:8080/exemplares', exemplar, httpOptions);
   }
 }

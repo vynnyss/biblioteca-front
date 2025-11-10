@@ -32,10 +32,53 @@
 
 	<section class="debug-json" *ngIf="edicao">
 			<!-- Lista de exemplares para esta edição -->
-			<app-lista-exemplares [edicaoId]="edicao?.idEdicao"></app-lista-exemplares>
+			<app-lista-exemplares [edicaoId]="edicao?.idEdicao" [recarregar]="recarregarExemplares"></app-lista-exemplares>
 
-			<div style="margin-top:1rem;">
+			<div style="margin-top:1rem; display: flex; gap: 1rem;">
 				<button class="btn btn-outline" type="button" (click)="onClose()">← Voltar</button>
+				<button class="btn btn-primary" type="button" (click)="abrirModalNovoExemplar()">+ Adicionar Exemplares</button>
 			</div>
 		</section>
+
+	<!-- Modal para cadastrar novo exemplar -->
+	<div *ngIf="mostrarModalExemplar" class="modal-overlay" (click)="fecharModalExemplar()">
+		<div class="modal-content" (click)="$event.stopPropagation()">
+			<h3>Adicionar Exemplares</h3>
+			
+			<div class="form-group">
+				<label for="estadoFisico">Estado Físico: *</label>
+				<select 
+					id="estadoFisico" 
+					name="estadoFisico"
+					[(ngModel)]="novoExemplar.estadoFisico"
+					required>
+					<option value="">Selecione o estado físico</option>
+					<option value="MUITO_RUIM">Muito Ruim</option>
+					<option value="RUIM">Ruim</option>
+					<option value="BOM">Bom</option>
+					<option value="OTIMO">Ótimo</option>
+					<option value="EXCELENTE">Excelente</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="qtdEstoque">Quantidade de Exemplares: *</label>
+				<input 
+					type="number" 
+					id="qtdEstoque" 
+					name="qtdEstoque"
+					[(ngModel)]="novoExemplar.qtdEstoque"
+					min="1"
+					placeholder="Ex: 5"
+					required
+				/>
+				<small>Quantidade de exemplares que serão adicionados</small>
+			</div>
+
+			<div class="modal-actions">
+				<button type="button" class="btn btn-outline" (click)="fecharModalExemplar()">Cancelar</button>
+				<button type="button" class="btn btn-primary" (click)="salvarNovoExemplar()">Salvar</button>
+			</div>
+		</div>
+	</div>
 </main>

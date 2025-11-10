@@ -96,8 +96,10 @@ export class App implements OnInit {
   realizarLogout(){
     this.token = ""
     this.logado = false
+    // remover do sessionStorage
     try {
       sessionStorage.clear();
+      // enviar para pagina inicial
       window.location.href = '/';
     } catch (e) {
       console.error('Erro ao remover estado do sessionStorage:', e);

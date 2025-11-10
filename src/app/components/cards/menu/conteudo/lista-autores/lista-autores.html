@@ -25,6 +25,7 @@
 					<th>ID</th>
 					<th>Nome</th>
 					<th>Status</th>
+					<th>Ações</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -32,6 +33,15 @@
                     <td>{{ getId(autor) }}</td>
                     <td>{{ getName(autor) }}</td>
                     <td>{{ getStatus(autor) }}</td>
+					<td>
+						<button 
+							class="btn-icon" 
+							type="button" 
+							(click)="iniciarEdicao(autor)"
+							title="Editar nome">
+							✏️
+						</button>
+					</td>
                 </tr>
 			</tbody>
 		</table>
@@ -40,4 +50,23 @@
 	<ng-template #empty>
 		<p>Nenhum autor encontrado.</p>
 	</ng-template>
+
+	<!-- Modal de edição -->
+	<div class="modal-overlay" *ngIf="editandoId !== null" (click)="cancelarEdicao()">
+		<div class="modal-content" (click)="$event.stopPropagation()">
+			<h4>Editar Nome do Autor</h4>
+			<label>
+				Nome
+				<input 
+					type="text" 
+					[(ngModel)]="novoNome" 
+					placeholder="Digite o novo nome"
+					class="input-nome" />
+			</label>
+			<div class="modal-actions">
+				<button class="btn btn-primary" type="button" (click)="salvarEdicao()">Salvar</button>
+				<button class="btn btn-outline" type="button" (click)="cancelarEdicao()">Cancelar</button>
+			</div>
+		</div>
+	</div>
 </div>

@@ -1,7 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
+import { PutService } from '../../../../../servicos/api/put-service';
 import { ExemplarModel } from '../../../../../models/exemplar-model';
+import { DecodeToken } from '../../../../../models/decode-token';
 
 @Component({
   selector: 'app-lista-exemplares',
@@ -12,12 +14,13 @@ import { ExemplarModel } from '../../../../../models/exemplar-model';
 })
 export class ListaExemplares implements OnChanges {
   @Input() edicaoId?: number | null;
+  @Input() recarregar: boolean = false;
 
   public exemplares: ExemplarModel[] = [];
   public loading = false;
   public error: string | null = null;
 
-  constructor(private serv: GetServicos) {}
+  constructor(private serv: GetServicos, private putService: PutService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('edicaoId' in changes) {
@@ -26,6 +29,11 @@ export class ListaExemplares implements OnChanges {
         this.loadExemplares(id);
       } else {
         this.exemplares = [];
+      }
+    }
+    if ('recarregar' in changes && !changes['recarregar'].firstChange) {
+      if (this.edicaoId != null) {
+        this.loadExemplares(this.edicaoId);
       }
     }
   }
@@ -58,5 +66,38 @@ export class ListaExemplares implements OnChanges {
 
   public getEstadoFisico(item: ExemplarModel): string {
     return item?.estadoFisico ?? '—';
+  }
+
+  public isBibliotecario(): boolean {
+    const raw = sessionStorage.getItem('decodedToken');
+    if (!raw) return false;
+    try {
+      const decoded: DecodeToken = JSON.parse(raw);
+      return decoded.role === 'BIBLIOTECARIO' || decoded.role === 'FUNCIONARIO';
+    } catch {
+      return false;
+    }
+  }
+
+  public podeExcluir(item: ExemplarModel): boolean {
+    return this.isBibliotecario();
+  }
+
+  public solicitarExclusaoExemplar(item: ExemplarModel) {
+    if (!item?.idExemplar) return;
+    if (!confirm('Deseja realmente solicitar a exclusão deste exemplar?')) return;
+    this.putService.solicitarExclusaoExemplar(item.idExemplar).subscribe({
+      next: () => {
+        alert('Solicitação de exclusão enviada com sucesso!');
+        // Recarregar lista para atualizar status
+        if (this.edicaoId) {
+          this.loadExemplares(this.edicaoId);
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao solicitar exclusão de exemplar:', err);
+        alert('Erro ao solicitar exclusão do exemplar.');
+      }
+    });
   }
 }

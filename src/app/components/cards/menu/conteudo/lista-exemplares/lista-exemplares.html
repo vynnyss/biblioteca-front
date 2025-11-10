@@ -10,6 +10,7 @@
           <th>ID</th>
           <th>Status</th>
           <th>Estado Físico</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -17,6 +18,16 @@
             <td>{{ getId(e) }}</td>
             <td>{{ getStatus(e) }}</td>
             <td>{{ getEstadoFisico(e) }}</td>
+            <td>
+              <button 
+                *ngIf="podeExcluir(e)" 
+                class="btn btn-danger btn-sm" 
+                type="button" 
+                (click)="solicitarExclusaoExemplar(e)">
+                Solicitar Exclusão
+              </button>
+              <span *ngIf="!podeExcluir(e)">—</span>
+            </td>
         </tr>
       </tbody>
     </table>

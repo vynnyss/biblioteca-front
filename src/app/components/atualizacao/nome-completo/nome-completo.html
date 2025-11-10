@@ -1,0 +1,43 @@
+<section class="cadastro-section">
+	<h2>Atualizar nome completo</h2>
+
+	<form class="cadastro-form">
+		<div class="form-group">
+			<label for="fname">Nome completo:</label>
+			<input type="text" id="fname" name="fname">
+		</div>
+
+		<div class="cadastro-buttons">
+			<button type="button" class="btn btn-cancelar" (click)="cancelar()">Cancelar</button>
+			<button type="submit" class="btn btn-salvar">Salvar</button>
+		</div>
+	</form>
+</section>
+
+
+<style>
+	.cadastro-buttons {
+		margin-top: 20px;
+		display: flex;
+		justify-content: center; 
+		gap: 10px; 
+	}
+
+	.btn {
+		padding: 10px 20px;
+		font-size: 16px;
+		cursor: pointer;
+	}
+
+	.btn-cancelar {
+		background-color: #ccc;
+		border: none;
+		color: #000;
+	}
+
+	.btn-salvar {
+		background-color: #4CAF50;
+		border: none;
+		color: white;
+	}
+</style>
