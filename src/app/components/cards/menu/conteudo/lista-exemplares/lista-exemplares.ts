@@ -14,6 +14,7 @@ import { DecodeToken } from '../../../../../models/decode-token';
 })
 export class ListaExemplares implements OnChanges {
   @Input() edicaoId?: number | null;
+  @Input() recarregar: boolean = false;
 
   public exemplares: ExemplarModel[] = [];
   public loading = false;
@@ -28,6 +29,11 @@ export class ListaExemplares implements OnChanges {
         this.loadExemplares(id);
       } else {
         this.exemplares = [];
+      }
+    }
+    if ('recarregar' in changes && !changes['recarregar'].firstChange) {
+      if (this.edicaoId != null) {
+        this.loadExemplares(this.edicaoId);
       }
     }
   }

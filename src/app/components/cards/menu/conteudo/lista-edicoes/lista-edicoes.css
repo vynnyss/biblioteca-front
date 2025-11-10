@@ -6,3 +6,32 @@
 .lista-edicoes h3 { margin-top: 0; }
 .error { color: #b00020; }
 
+.header-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	border-radius: 6px;
+	border: 1px solid #d1d5db;
+	background: white;
+	cursor: pointer;
+	font-size: 0.875rem;
+	text-decoration: none;
+}
+
+.btn-primary {
+	background: linear-gradient(180deg, #2563eb, #1e40af);
+	color: white;
+	border-color: transparent;
+}
+
+.btn-primary:hover {
+	opacity: 0.9;
+}
