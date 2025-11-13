@@ -2,6 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { PostService } from '../../../servicos/api/post-service';
+import { GetServicos } from '../../../servicos/api/get-servicos';
+import { Estado } from '../../../models/estado';
 import { jwtDecode } from 'jwt-decode';
 import { DecodeToken } from '../../../models/decode-token';
 
@@ -13,6 +15,7 @@ import { DecodeToken } from '../../../models/decode-token';
   styleUrls: ['./atualizacao-pessoa.css']
 })
 export class AtualizacaoPessoa implements OnInit {
+  estados: Estado[] = [];
   user: any = {
     nome: '',
     cpf: '',
@@ -39,8 +42,12 @@ export class AtualizacaoPessoa implements OnInit {
   origemCarga: string = '';
 
   private postService = inject(PostService);
+  private getServicos = inject(GetServicos);
 
   ngOnInit(): void {
+    // Carrega lista de estados para o dropdown
+    this.carregarEstados();
+
     this.loading = true;
     this.loadError = '';
     const token = sessionStorage.getItem('authToken') || '';
@@ -120,6 +127,20 @@ export class AtualizacaoPessoa implements OnInit {
       this.loading = false;
       console.error('[AtualizacaoPessoa] Erro ao decodificar token:', decodeErr);
     }
+  }
+
+  private carregarEstados(): void {
+    this.getServicos.getEstados().subscribe({
+      next: (lista) => {
+        this.estados = lista || [];
+        // Se vier idEstado como string, mantém; conversão ocorre no submit
+        // Apenas log para debug
+        console.log('[AtualizacaoPessoa] Estados carregados:', this.estados);
+      },
+      error: (err) => {
+        console.error('[AtualizacaoPessoa] Erro ao carregar estados:', err);
+      }
+    });
   }
 
   private carregarPorId(idUsuario: number, token: string): void {

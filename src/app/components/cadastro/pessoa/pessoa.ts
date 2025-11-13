@@ -1,8 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PostService } from '../../../servicos/api/post-service';
+import { GetServicos } from '../../../servicos/api/get-servicos';
+import { Estado } from '../../../models/estado';
 
 @Component({
   selector: 'app-pessoa',
@@ -11,7 +13,9 @@ import { PostService } from '../../../servicos/api/post-service';
   templateUrl: './pessoa.html',
   styleUrls: ['./pessoa.css']
 })
-export class Pessoa {
+export class Pessoa implements OnInit {
+  estados: Estado[] = [];
+  
   user: any = {
     nome: '',
     cpf: '',
@@ -32,7 +36,25 @@ export class Pessoa {
   };
 
   private servicoApi = inject(PostService);
+  private getServicos = inject(GetServicos);
   private router = inject(Router);
+
+  ngOnInit(): void {
+    this.carregarEstados();
+  }
+
+  carregarEstados(): void {
+    this.getServicos.getEstados().subscribe({
+      next: (data) => {
+        this.estados = data;
+        console.log('✅ Estados carregados:', this.estados);
+      },
+      error: (err) => {
+        console.error('❌ Erro ao carregar estados:', err);
+        alert('⚠️ Erro ao carregar lista de estados.');
+      }
+    });
+  }
 
   mascaraCPF(event: any): void {
     const input = event.target as HTMLInputElement;
@@ -89,7 +111,7 @@ export class Pessoa {
     this.servicoApi.postCadastro('http://localhost:8080/auth/registro', payload).subscribe({
       next: (res) => {
         console.log('✅ Usuário cadastrado com sucesso:', res);
-        alert('✅ Cadastro realizado com sucesso!');
+        alert('🎉 Sucesso! Seu cadastro foi recebido e está passando por análise. Avisaremos quando estiver tudo pronto.');
         form.resetForm();
 
         setTimeout(() => {
@@ -101,7 +123,7 @@ export class Pessoa {
         let msg = 'Erro ao cadastrar. Verifique os dados e tente novamente.';
 
         if (err.status === 200 && err.error?.text) {
-          alert(`✅ ${err.error.text}`);
+          alert('🎉 Sucesso! Seu cadastro foi recebido e está passando por análise. Avisaremos quando estiver tudo pronto.');
           form.resetForm();
           setTimeout(() => this.router.navigate(['/home']), 1000);
           return;

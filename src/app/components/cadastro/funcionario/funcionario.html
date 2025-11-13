@@ -71,8 +71,11 @@
     <label for="cidade">Cidade:</label><br>
     <input type="text" id="cidade" name="cidade" [(ngModel)]="user.endereco.cidade" required><br><br>
 
-    <label for="idEstado">Estado (ID):</label><br>
-    <input type="number" id="idEstado" name="idEstado" [(ngModel)]="user.endereco.idEstado" required><br><br>
+    <label for="idEstado">Estado (UF):</label><br>
+    <select id="idEstado" name="idEstado" [(ngModel)]="user.endereco.idEstado" required>
+      <option value="">Selecione um estado</option>
+      <option *ngFor="let estado of estados" [value]="estado.idEstado">{{ estado.nome }}</option>
+    </select><br><br>
 
       <label for="senha">Senha:</label><br>
       <input type="password" id="senha" name="senha" [(ngModel)]="user.senha" required><br><br>

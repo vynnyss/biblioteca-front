@@ -362,7 +362,7 @@ export class Livro implements OnInit {
     }
 
     const token = sessionStorage.getItem('authToken') || undefined;
-    const payload = {
+    const payload: any = {
       nome,
       descricao,
       idsAutores: this.novoTitulo.idsAutores,
@@ -384,8 +384,10 @@ export class Livro implements OnInit {
         }
       },
       error: (err) => {
-        console.error('[Livro] Erro ao cadastrar título:', err);
-        alert('Erro ao cadastrar título. Tente novamente.');
+        const backend = err?.error;
+        console.error('[Livro] Erro ao cadastrar título:', err, backend);
+        const msg = backend?.mensagem || backend?.message || backend?.error || backend?.errors?.[0]?.defaultMessage || 'Erro ao cadastrar título. Tente novamente.';
+        alert(msg);
       }
     });
   }
@@ -636,6 +638,14 @@ export class Livro implements OnInit {
         },
         error: (err) => {
           console.error('[Livro] Erro ao cadastrar livro:', err);
+          if (err?.status === 401) {
+            alert('Sessão expirada ou não autenticada. Entre novamente para continuar.');
+            return;
+          }
+          if (err?.status === 403) {
+            alert('Você não tem permissão para cadastrar livros. Faça login com uma conta autorizada.');
+            return;
+          }
           const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao cadastrar livro. Tente novamente.';
           alert(msg);
         }
