@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { ItensCarrinho } from '../cards/itens-carrinho/itens-carrinho';
 import { BookModel } from '../../models/book-model';
 import { CartService } from '../../servicos/utils/cart-service';
@@ -18,6 +19,7 @@ export class Carrinho implements OnInit {
   private cartService = inject(CartService);
   private getServicos = inject(GetServicos);
   private postService = inject(PostService);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.loadFromSession();
@@ -87,6 +89,8 @@ export class Carrinho implements OnInit {
       const key = 'cartBooks';
       sessionStorage.removeItem(key);
       console.log("carrinho limpo do storage com sucesso!")
+      this.cartService.notifyCartChanged();
+      this.router.navigate(['/menu-principal'], { state: { selectedCard: 'Emprestimos' } });
     } catch (e) {
       console.error('Erro ao limpar carrinho do sessionStorage:', e);
     }

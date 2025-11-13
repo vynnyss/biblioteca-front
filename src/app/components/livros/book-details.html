@@ -19,9 +19,12 @@
     <section class="book-info-card">
         
         <div class="book-cover-container">
-            <!-- Capa do Livro: Usa a propriedade 'cover' como fallback -->
-            <div class="book-cover large" [style.backgroundColor]="livro.cover || '#eee'">
-                {{ livro.titulo.nome }}
+            <!-- Capa do Livro: Usa a propriedade 'imagemUrl' como fallback -->
+            <div class="book-cover large">
+                <img 
+                    [src]="livro.imagemUrl || '/placeholder.svg?height=600&width=400'" 
+                    [alt]="livro.titulo.nome + ' cover'"
+                />
             </div>
         </div>
         

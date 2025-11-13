@@ -22,7 +22,7 @@
           </select>
         </label>
 
-        <label>
+        <label *ngIf="!isCliente()">
           Buscar Pessoa (ID)
           <input type="text" [(ngModel)]="pessoaQuery" (input)="applyFilters()" placeholder="Digite ID da pessoa" />
         </label>

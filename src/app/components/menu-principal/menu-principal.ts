@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenuLateral } from '../cards/menu/menu-lateral';
 import { CommonModule } from '@angular/common';
 import { Perfil } from '../cards/menu/conteudo/perfil/perfil';
@@ -24,6 +25,8 @@ export class MenuPrincipal implements OnInit {
   public cardsFuncionario: string[] = ['Clientes', 'Emprestimos', 'Livros', 'Autores', 'Editoras', 'Funcionários'];
   public cardsAdministrador: string[] = ['Clientes', 'Emprestimos', 'Livros', 'Autores', 'Editoras', 'Funcionários', 'Relatórios'];
 
+  constructor(private router: Router) {}
+
   ngOnInit(): void {
     // tenta ler role do decodedToken salvo no sessionStorage
     try {
@@ -40,6 +43,13 @@ export class MenuPrincipal implements OnInit {
     }
 
     this.assignRole(this.role);
+
+    // Verifica se há um estado passado pela navegação
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras?.state || history.state;
+    if (state?.selectedCard) {
+      this.selectCard(state.selectedCard);
+    }
   }
 
   public assignRole(role: string) {
