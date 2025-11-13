@@ -33,12 +33,12 @@ export class PutService {
     return this.http.put(`${this.apiAprovarConta}/${id}`, {});
   }
 
-  rejeitarConta(id: number) {
-    return this.http.put(`${this.apiRejeitarConta}/${id}`, {});
+  rejeitarConta(id: number, motivo: string) {
+    return this.http.put(`${this.apiRejeitarConta}/${id}`, { motivo });
   }
 
-  solicitarExclusaoConta(id: number) {
-    return this.http.put(`${this.apiSolicitarExclusao}/${id}`, {});
+  solicitarExclusaoConta(id: number, motivo: string) {
+    return this.http.put(`${this.apiSolicitarExclusao}/${id}`, { motivo });
   }
 
   solicitarExclusaoExemplar(id: number) {

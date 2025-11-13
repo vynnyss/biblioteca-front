@@ -8,8 +8,11 @@
 <main class="container book-detail-page">
 	<section class="book-info-card">
 		<div class="book-cover-container">
-			<div class="book-cover large" [style.backgroundColor]="edicao?.cover || '#eee'">
-				{{ edicao?.titulo?.nome || edicao?.titulo || 'Edição' }}
+			<div class="book-cover large">
+				<img 
+					[src]="edicao?.imagemUrl || '/placeholder.svg?height=600&width=400'" 
+					[alt]="(edicao?.titulo?.nome || 'Edição') + ' cover'"
+				/>
 			</div>
 		</div>
 

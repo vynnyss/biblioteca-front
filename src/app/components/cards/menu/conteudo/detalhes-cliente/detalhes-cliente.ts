@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { PessoaModel } from '../../../../../models/pessoa-model';
 import { PutService } from '../../../../../servicos/api/put-service';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
@@ -9,7 +10,7 @@ import { ListaEmprestimoModel } from '../../../../../models/lista-emprestimo-mod
 @Component({
   selector: 'app-detalhes-cliente',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './detalhes-cliente.html',
   styleUrls: ['./detalhes-cliente.css']
 })
@@ -32,6 +33,12 @@ export class DetalhesCliente {
   public emprestimos: ListaEmprestimoModel[] = [];
   public loadingEmprestimos = false;
   public errorEmprestimos: string | null = null;
+
+  public mostrarModalRejeicao = false;
+  public motivoRejeicao = '';
+
+  public mostrarModalExclusao = false;
+  public motivoExclusao = '';
 
   constructor(private putService: PutService, private getService: GetServicos) {}
 
@@ -75,11 +82,31 @@ export class DetalhesCliente {
     });
   }
 
+  public abrirModalRejeicao() {
+    this.mostrarModalRejeicao = true;
+    this.motivoRejeicao = '';
+  }
+
+  public fecharModalRejeicao() {
+    this.mostrarModalRejeicao = false;
+    this.motivoRejeicao = '';
+  }
+
   public rejeitarConta() {
     if (!this.cliente?.idPessoa) return;
-    this.putService.rejeitarConta(this.cliente.idPessoa).subscribe({
+    if (!this.motivoRejeicao.trim()) {
+      alert('Por favor, informe o motivo da rejeição.');
+      return;
+    }
+    if (this.motivoRejeicao.trim().length < 8) {
+      alert('O motivo deve ter no mínimo 8 caracteres.');
+      return;
+    }
+    
+    this.putService.rejeitarConta(this.cliente.idPessoa, this.motivoRejeicao).subscribe({
       next: () => {
         alert('Conta rejeitada com sucesso!');
+        this.fecharModalRejeicao();
         this.close.emit();
       },
       error: (err) => {
@@ -89,12 +116,31 @@ export class DetalhesCliente {
     });
   }
 
+  public abrirModalExclusao() {
+    this.mostrarModalExclusao = true;
+    this.motivoExclusao = '';
+  }
+
+  public fecharModalExclusao() {
+    this.mostrarModalExclusao = false;
+    this.motivoExclusao = '';
+  }
+
   public solicitarExclusao() {
     if (!this.cliente?.idPessoa) return;
-    if (!confirm('Deseja realmente solicitar a exclusão desta conta?')) return;
-    this.putService.solicitarExclusaoConta(this.cliente.idPessoa).subscribe({
+    if (!this.motivoExclusao.trim()) {
+      alert('Por favor, informe o motivo da exclusão.');
+      return;
+    }
+    if (this.motivoExclusao.trim().length < 8) {
+      alert('O motivo deve ter no mínimo 8 caracteres.');
+      return;
+    }
+    
+    this.putService.solicitarExclusaoConta(this.cliente.idPessoa, this.motivoExclusao).subscribe({
       next: () => {
         alert('Solicitação de exclusão enviada com sucesso!');
+        this.fecharModalExclusao();
         this.close.emit();
       },
       error: (err) => {

@@ -26,28 +26,84 @@ export class ListaEmprestimos implements OnInit {
   public pessoaQuery: string = '';
   public availableStatuses: string[] = [];
 
+  private userRole: string = '';
+  private userIdPessoa: number | null = null;
+
+  public isCliente(): boolean {
+    return this.userRole === 'CLIENTE';
+  }
+
   constructor(private serv: GetServicos) {}
 
   ngOnInit(): void {
+    // Verifica a role do usuário
+    try {
+      const raw = sessionStorage.getItem('decodedToken');
+      if (raw) {
+        const decoded = JSON.parse(raw) as { role?: string; idPessoa?: number; email?: string; sub?: string };
+        this.userRole = decoded?.role ?? '';
+        this.userIdPessoa = decoded?.idPessoa ?? null;
+
+        // Se for CLIENTE mas não tem idPessoa, busca pelo email
+        if (this.userRole === 'CLIENTE' && !this.userIdPessoa) {
+          const email = decoded?.email ?? decoded?.sub ?? sessionStorage.getItem('username');
+          if (email) {
+            this.serv.getPessoaPorEmail(email).subscribe({
+              next: (pessoa) => {
+                this.userIdPessoa = pessoa.idPessoa;
+                this.load();
+              },
+              error: (err) => {
+                console.error('Erro ao buscar pessoa por email:', err);
+                this.load();
+              }
+            });
+            return; // Aguarda buscar pessoa antes de carregar empréstimos
+          }
+        }
+      }
+    } catch (e) {
+      console.error('Erro ao ler decodedToken:', e);
+    }
+
     this.load();
   }
 
   private load() {
     this.loading = true;
     this.error = null;
-    this.serv.getApiUrlGetEmprestimos().subscribe({
-      next: (list: ListaEmprestimoModel[]) => {
-        this.allEmprestimos = list || [];
-        this.availableStatuses = Array.from(new Set(this.allEmprestimos.map(x => x.status))).filter(s => !!s);
-        this.applyFilters();
-        this.loading = false;
-      },
-      error: (err: any) => {
-        console.error('Erro ao carregar emprestimos:', err);
-        this.error = 'Erro ao carregar empréstimos.';
-        this.loading = false;
-      }
-    });
+
+    // Se for CLIENTE, busca apenas seus empréstimos
+    if (this.userRole === 'CLIENTE' && this.userIdPessoa) {
+      this.serv.getApiUrlGetEmprestimosPorPessoa(this.userIdPessoa).subscribe({
+        next: (list: ListaEmprestimoModel[]) => {
+          this.allEmprestimos = list || [];
+          this.availableStatuses = Array.from(new Set(this.allEmprestimos.map(x => x.status))).filter(s => !!s);
+          this.applyFilters();
+          this.loading = false;
+        },
+        error: (err: any) => {
+          console.error('Erro ao carregar emprestimos do cliente:', err);
+          this.error = 'Erro ao carregar empréstimos.';
+          this.loading = false;
+        }
+      });
+    } else {
+      // Se não for CLIENTE, busca todos os empréstimos
+      this.serv.getApiUrlGetEmprestimos().subscribe({
+        next: (list: ListaEmprestimoModel[]) => {
+          this.allEmprestimos = list || [];
+          this.availableStatuses = Array.from(new Set(this.allEmprestimos.map(x => x.status))).filter(s => !!s);
+          this.applyFilters();
+          this.loading = false;
+        },
+        error: (err: any) => {
+          console.error('Erro ao carregar emprestimos:', err);
+          this.error = 'Erro ao carregar empréstimos.';
+          this.loading = false;
+        }
+      });
+    }
   }
 
   public showDetails(id: number) {

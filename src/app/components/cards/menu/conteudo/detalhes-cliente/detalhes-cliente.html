@@ -36,12 +36,12 @@
 					<!-- Botões condicionais para aprovação/rejeição -->
 					<div class="actions" *ngIf="cliente.statusConta === 'EM_ANALISE_APROVACAO'">
 						<button class="btn btn-success" type="button" (click)="aprovarConta()">Aprovar Conta</button>
-						<button class="btn btn-danger" type="button" (click)="rejeitarConta()">Rejeitar Conta</button>
+						<button class="btn btn-danger" type="button" (click)="abrirModalRejeicao()">Rejeitar Conta</button>
 					</div>
 
 					<!-- Botão condicional para solicitar exclusão -->
 					<div class="actions" *ngIf="cliente.statusConta === 'ATIVA' && isBibliotecario()">
-						<button class="btn btn-danger" type="button" (click)="solicitarExclusao()">Solicitar Exclusão</button>
+						<button class="btn btn-danger" type="button" (click)="abrirModalExclusao()">Solicitar Exclusão</button>
 					</div>
 				</section>
 
@@ -112,4 +112,56 @@
 	<ng-template #noClient>
 		<p>Nenhum cliente selecionado.</p>
 	</ng-template>
+
+	<!-- Modal para rejeitar conta -->
+	<div *ngIf="mostrarModalRejeicao" class="modal-overlay" (click)="fecharModalRejeicao()">
+		<div class="modal-content" (click)="$event.stopPropagation()">
+			<h3>Rejeitar Conta</h3>
+			
+			<div class="form-group">
+				<label for="motivoRejeicao">Motivo da Rejeição: *</label>
+				<textarea 
+					id="motivoRejeicao" 
+					name="motivoRejeicao"
+					[(ngModel)]="motivoRejeicao"
+					rows="4"
+					placeholder="Digite o motivo da rejeição da conta..."
+					minlength="8"
+					required>
+				</textarea>
+				<small>Informe o motivo pelo qual a conta está sendo rejeitada (mínimo 8 caracteres).</small>
+			</div>
+
+			<div class="modal-actions">
+				<button type="button" class="btn btn-outline" (click)="fecharModalRejeicao()">Cancelar</button>
+				<button type="button" class="btn btn-danger" (click)="rejeitarConta()">Rejeitar Conta</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para solicitar exclusão -->
+	<div *ngIf="mostrarModalExclusao" class="modal-overlay" (click)="fecharModalExclusao()">
+		<div class="modal-content" (click)="$event.stopPropagation()">
+			<h3>Solicitar Exclusão</h3>
+			
+			<div class="form-group">
+				<label for="motivoExclusao">Motivo da Exclusão: *</label>
+				<textarea 
+					id="motivoExclusao" 
+					name="motivoExclusao"
+					[(ngModel)]="motivoExclusao"
+					rows="4"
+					placeholder="Digite o motivo da solicitação de exclusão..."
+					minlength="8"
+					required>
+				</textarea>
+				<small>Informe o motivo pelo qual a exclusão está sendo solicitada (mínimo 8 caracteres).</small>
+			</div>
+
+			<div class="modal-actions">
+				<button type="button" class="btn btn-outline" (click)="fecharModalExclusao()">Cancelar</button>
+				<button type="button" class="btn btn-danger" (click)="solicitarExclusao()">Solicitar Exclusão</button>
+			</div>
+		</div>
+	</div>
 </div>
