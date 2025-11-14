@@ -1,9 +1,8 @@
-:host {
+  :host {
   display: block;
   min-height: 100vh;
   padding-top: 2rem;
   padding-bottom: 4rem;
-  --input-width: 320px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
   color: #1f2937;
@@ -11,199 +10,158 @@
   background-color: #fef7cd;
 }
 
-app-root {
-  display: block;
-  min-height: 100vh;
-}
-
 .cadastro-section {
-  max-width: 800px;
-  margin: 4rem auto 6rem;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(4px);
-  padding: 2rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 6rem);
+  padding: 2rem 1rem;
 }
-
-.cadastro-section h2 {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #111827;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
 
 .cadastro-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  padding: 2rem 2.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
   width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.cadastro-form h2 {
+  text-align: center;
+  color: #111827;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+
+.cadastro-form label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151;
   margin-bottom: 0.5rem;
 }
 
-.form-group label {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 0.25rem;
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="tel"],
-.form-group input[type="password"],
-.form-group input[type="date"],
-.form-group select {
+.cadastro-form input[type="text"],
+.cadastro-form input[type="email"],
+.cadastro-form input[type="tel"],
+.cadastro-form input[type="date"],
+.cadastro-form input[type="password"],
+.cadastro-form input[type="number"],
+.cadastro-form select {
   width: 100%;
   padding: 0.5rem 0.75rem;
   border: 1px solid #d1d5db;
   border-radius: 0.375rem;
   font-size: 1rem;
-  background-color: #fff;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #ffffff;
+  margin-bottom: 1rem;
   box-sizing: border-box;
 }
 
-.form-group input:focus,
-.form-group select:focus {
+.cadastro-form input:focus,
+.cadastro-form select:focus {
   border-color: #d97706;
-  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
 }
 
-.form-group input[type="radio"],
-.form-group input[type="checkbox"] {
-  width: auto;
-  height: auto;
-  display: inline-block;
-  margin-right: 0.35rem;
-}
-
-.form-group input.small-input {
-  max-width: var(--input-width);
-  width: 100%;
-  height: 2.25rem;
-  padding: 0.45rem 0.7rem;
-  box-sizing: border-box;
-}
-
-.form-group .full-width {
-  width: 100%;
-}
-
-.cadastro-form input[type="radio"],
-.cadastro-form input[type="checkbox"] {
-  width: auto;
-  height: auto;
-  display: inline-block;
-  margin-right: 0.35rem;
-}
-
-.cadastro-form input.small-input {
-  max-width: var(--input-width);
-  width: 100%;
-  height: 2.25rem;
-  padding: 0.45rem 0.7rem;
-  box-sizing: border-box;
-}
-
-.cadastro-form input:focus {
-  border-color: #d97706;
-  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
-}
-
-.cadastro-form .full-width {
-  grid-column: span 2;
-}
-
-.sexo-group {
-  grid-column: span 2;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 0.5rem;
-}
-
-.sexo-group label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  color: #374151;
+.cadastro-form input[type="radio"] {
+  accent-color: #f59e0b;
 }
 
 .cadastro-buttons {
-  grid-column: span 2;
   display: flex;
-  justify-content: center; 
-  align-items: center;    
-  width: 100%;
-  margin-top: 2.5rem;
-  margin-bottom: 1rem;
-  gap: 1.5rem;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
-.cadastro-buttons .btn {
+.cadastro-buttons button {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  border-radius: 0.375rem;
   font-weight: 500;
+  border-radius: 0.375rem;
+  border: none;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  min-width: 120px;
-  text-align: center;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.cadastro-buttons button:hover {
+  transform: translateY(-2px);
 }
 
 .cadastro-buttons .btn-salvar {
   background-color: #10b981;
   color: white;
-  border: none;
 }
 
 .cadastro-buttons .btn-salvar:hover {
   background-color: #059669;
-  transform: scale(1.05);
 }
 
 .cadastro-buttons .btn-cancelar {
   background-color: #ef4444;
   color: white;
-  border: none;
 }
 
 .cadastro-buttons .btn-cancelar:hover {
   background-color: #dc2626;
-  transform: scale(1.05);
+}
+
+.btn-voltar {
+  background-color: #6b7280;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-voltar:hover {
+  background-color: #4b5563;
+  transform: translateY(-2px);
+}
+
+.info-msg {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #334155;
+  font-weight: 500;
+}
+
+.error-msg {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #dc2626;
+  font-weight: 600;
 }
 
 @media (max-width: 640px) {
   .cadastro-form {
-    grid-template-columns: 1fr;
-  }
-
-  .sexo-group {
-    flex-direction: column;
+    padding: 1.5rem;
   }
 
   .cadastro-buttons {
     flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+    align-items: stretch;
   }
 
-  .cadastro-form .form-group input,
-  .cadastro-form .form-group select,
-  .cadastro-form .form-group textarea,
-  .cadastro-form input.small-input {
-    max-width: 100%;
+  .cadastro-buttons button {
+    width: 100%;
+  }
+
+  .btn-voltar {
     width: 100%;
   }
 }

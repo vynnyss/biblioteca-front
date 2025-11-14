@@ -1,6 +1,13 @@
 
 
 <div class="lista-funcionarios-root">
+	<div class="header-actions">
+		<h2>Funcionários</h2>
+		<button class="btn btn-primary" type="button" (click)="cadastrarNovoFuncionario()">
+			+ Cadastrar Funcionário
+		</button>
+	</div>
+
 	<ng-container *ngIf="loadingAdmins || loadingFuncs">Carregando...</ng-container>
 	<ng-container *ngIf="error" class="error">{{ error }}</ng-container>
 

@@ -1,9 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { PessoaModel } from '../../../../../models/pessoa-model';
 import { PutService } from '../../../../../servicos/api/put-service';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
+import { DeleteService } from '../../../../../servicos/api/delete-service';
 import { DecodeToken } from '../../../../../models/decode-token';
 import { ListaEmprestimoModel } from '../../../../../models/lista-emprestimo-model';
 
@@ -40,10 +42,72 @@ export class DetalhesCliente {
   public mostrarModalExclusao = false;
   public motivoExclusao = '';
 
-  constructor(private putService: PutService, private getService: GetServicos) {}
+  public mostrarModalInativacao = false;
+  public motivoInativacao = '';
+
+  constructor(
+    private putService: PutService, 
+    private getService: GetServicos,
+    private deleteService: DeleteService,
+    private router: Router
+  ) {}
 
   public onClose() {
     this.close.emit();
+  }
+
+  public editarCliente() {
+    if (!this.cliente?.idPessoa) return;
+    this.router.navigate(['/atualizacao/pessoa'], { 
+      state: { idCliente: this.cliente.idPessoa } 
+    });
+  }
+
+  public inativarCliente() {
+    if (!this.cliente?.idPessoa) return;
+    this.abrirModalInativacao();
+  }
+
+  public abrirModalInativacao() {
+    this.mostrarModalInativacao = true;
+    this.motivoInativacao = '';
+  }
+
+  public fecharModalInativacao() {
+    this.mostrarModalInativacao = false;
+    this.motivoInativacao = '';
+  }
+
+  public confirmarInativacao() {
+    if (!this.cliente?.idPessoa) return;
+    
+    if (!this.motivoInativacao.trim()) {
+      alert('Por favor, informe o motivo da inativação.');
+      return;
+    }
+    
+    if (this.motivoInativacao.trim().length < 8) {
+      alert('O motivo deve ter no mínimo 8 caracteres.');
+      return;
+    }
+    
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+    
+    this.deleteService.inativarUsuario(this.cliente.idPessoa, this.motivoInativacao, token).subscribe({
+      next: () => {
+        alert('Cliente inativado com sucesso!');
+        this.fecharModalInativacao();
+        this.close.emit();
+      },
+      error: (err) => {
+        console.error('Erro ao inativar cliente:', err);
+        alert('Erro ao inativar cliente.');
+      }
+    });
   }
 
   public isBibliotecario(): boolean {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
 import { PessoaModel } from '../../../../../models/pessoa-model';
 
@@ -27,7 +28,7 @@ export class ListaFuncionarios implements OnInit {
   public statusFilter: string = '';
   public availableStatuses: string[] = [];
 
-  constructor(private svc: GetServicos) {}
+  constructor(private svc: GetServicos, private router: Router) {}
 
   ngOnInit(): void {
     this.loadAdministradores();
@@ -101,6 +102,10 @@ export class ListaFuncionarios implements OnInit {
     this.emailQuery = '';
     this.statusFilter = '';
     this.applyFilters();
+  }
+
+  public cadastrarNovoFuncionario(): void {
+    this.router.navigate(['/cadastro/funcionario']);
   }
 }
 

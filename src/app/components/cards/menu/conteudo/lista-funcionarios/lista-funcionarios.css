@@ -1,4 +1,38 @@
 :host { display: block; }
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-actions h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: #10b981;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #059669;
+  transform: translateY(-1px);
+}
+
 .clientes-table { width: 100%; border-collapse: collapse; }
 .clientes-table th, .clientes-table td { border: 1px solid #e6e6e6; padding: 8px; text-align: left; }
 .clientes-table thead { background: #fafafa; }
