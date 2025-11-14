@@ -24,11 +24,14 @@
 						<dd>{{ cliente.statusConta }}</dd>
 					</dl>
 					<div class="actions">
-						<button class="btn btn-primary" type="button">Editar cliente</button>
+						<button
+							*ngIf="cliente.statusConta !== 'INATIVA'"
+							class="btn btn-primary" type="button" (click)="editarCliente()">Editar cliente</button>
 						<button 
-							*ngIf="isAdministrador()" 
+							*ngIf="isAdministrador() && cliente.statusConta !== 'INATIVA'" 
 							class="btn btn-outline" 
-							type="button">
+							type="button"
+							(click)="inativarCliente()">
 							Inativar cliente
 						</button>
 					</div>
@@ -161,6 +164,32 @@
 			<div class="modal-actions">
 				<button type="button" class="btn btn-outline" (click)="fecharModalExclusao()">Cancelar</button>
 				<button type="button" class="btn btn-danger" (click)="solicitarExclusao()">Solicitar Exclusão</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para inativar cliente -->
+	<div *ngIf="mostrarModalInativacao" class="modal-overlay" (click)="fecharModalInativacao()">
+		<div class="modal-content" (click)="$event.stopPropagation()">
+			<h3>Inativar Cliente</h3>
+			
+			<div class="form-group">
+				<label for="motivoInativacao">Motivo da Inativação: *</label>
+				<textarea 
+					id="motivoInativacao" 
+					name="motivoInativacao"
+					[(ngModel)]="motivoInativacao"
+					rows="4"
+					placeholder="Digite o motivo da inativação do cliente..."
+					minlength="8"
+					required>
+				</textarea>
+				<small>Informe o motivo pelo qual o cliente está sendo inativado (mínimo 8 caracteres).</small>
+			</div>
+
+			<div class="modal-actions">
+				<button type="button" class="btn btn-outline" (click)="fecharModalInativacao()">Cancelar</button>
+				<button type="button" class="btn btn-danger" (click)="confirmarInativacao()">Inativar Cliente</button>
 			</div>
 		</div>
 	</div>

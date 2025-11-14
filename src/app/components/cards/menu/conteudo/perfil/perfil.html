@@ -2,18 +2,40 @@
 	<ng-container *ngIf="loading">Carregando dados do perfil...</ng-container>
 	<ng-container *ngIf="error" class="error">{{ error }}</ng-container>
 
-	<section *ngIf="pessoa" class="perfil-card">
-		<h3>{{ pessoa.nome }}</h3>
+	<div *ngIf="pessoa" class="perfil-container">
+		<div class="perfil-header">
+			<h2>{{ pessoa.nome }}</h2>
+			<button class="btn btn-primary" type="button" (click)="editarPerfil()">Editar Dados</button>
+		</div>
 
-		<dl>
-			<div class="row"><dt>Email</dt><dd>{{ pessoa.email.endereco }}</dd></div>
-			<div class="row"><dt>Telefone</dt><dd>{{ pessoa.telefone.numero }}</dd></div>
-			<div class="row"><dt>CPF</dt><dd>{{ pessoa.cpf.valor }}</dd></div>
-			<div class="row"><dt>Sexo</dt><dd>{{ pessoa.sexo }}</dd></div>
-			<div class="row"><dt>Função</dt><dd>{{ pessoa.funcao }}</dd></div>
-			<div class="row"><dt>Data de Nascimento</dt><dd>{{ pessoa.dtNascimento | date:'longDate' }}</dd></div>
-		</dl>
-	</section>
+		<div class="cards-container">
+			<!-- Card Dados Pessoais -->
+			<section class="perfil-card">
+				<h3>Dados Pessoais</h3>
+				<dl>
+					<div class="row"><dt>Email</dt><dd>{{ pessoa.email.endereco || '—' }}</dd></div>
+					<div class="row"><dt>Telefone</dt><dd>{{ pessoa.telefone.numero || '—' }}</dd></div>
+					<div class="row"><dt>CPF</dt><dd>{{ formatarCPF(pessoa.cpf.valor) }}</dd></div>
+					<div class="row"><dt>Sexo</dt><dd>{{ pessoa.sexo || '—' }}</dd></div>
+					<div class="row"><dt>Data de Nascimento</dt><dd>{{ pessoa.dtNascimento | date:'dd/MM/yyyy' }}</dd></div>
+				</dl>
+			</section>
+
+			<!-- Card Endereço -->
+			<section class="perfil-card">
+				<h3>Endereço</h3>
+				<dl>
+					<div class="row"><dt>Logradouro</dt><dd>{{ pessoa.endereco?.rua || '—' }}</dd></div>
+					<div class="row"><dt>Número</dt><dd>{{ pessoa.endereco?.numero || '—' }}</dd></div>
+					<div class="row"><dt>Complemento</dt><dd>{{ pessoa.endereco?.complemento || '—' }}</dd></div>
+					<div class="row"><dt>Bairro</dt><dd>{{ pessoa.endereco?.bairro || '—' }}</dd></div>
+					<div class="row"><dt>Cidade</dt><dd>{{ pessoa.endereco?.cidade || '—' }}</dd></div>
+					<div class="row"><dt>Estado</dt><dd>{{ pessoa.endereco?.estado || '—' }}</dd></div>
+					<div class="row"><dt>CEP</dt><dd>{{ pessoa.endereco?.cep || '—' }}</dd></div>
+				</dl>
+			</section>
+		</div>
+	</div>
 
 	<ng-container *ngIf="!loading && !pessoa && !error">
 		<p>Selecione um perfil para visualizar os dados.</p>

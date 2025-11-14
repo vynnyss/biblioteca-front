@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { PostService } from '../../../servicos/api/post-service';
 import { GetServicos } from '../../../servicos/api/get-servicos';
 import { Estado } from '../../../models/estado';
@@ -40,14 +41,44 @@ export class AtualizacaoPessoa implements OnInit {
   loading: boolean = false;
   loadError: string = '';
   origemCarga: string = '';
+  isEditandoOutroCliente: boolean = false;
+  private userRole: string = '';
 
   private postService = inject(PostService);
   private getServicos = inject(GetServicos);
+  private router = inject(Router);
+
+  public isCliente(): boolean {
+    return this.userRole === 'CLIENTE';
+  }
 
   ngOnInit(): void {
     // Carrega lista de estados para o dropdown
     this.carregarEstados();
 
+    // Carrega a role do usuário
+    this.carregarUserRole();
+
+    // Verifica se há um ID de cliente passado pela navegação
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras?.state || history.state;
+    const idCliente = state?.idCliente;
+
+    if (idCliente) {
+      // Modo edição de outro cliente
+      this.isEditandoOutroCliente = true;
+      const token = sessionStorage.getItem('authToken') || '';
+      if (!token) {
+        this.loadError = 'Sessão expirada. Faça login novamente.';
+        this.loading = false;
+        return;
+      }
+      this.carregarPorId(idCliente, token);
+      return;
+    }
+
+    // Modo edição do próprio usuário logado
+    this.isEditandoOutroCliente = false;
     this.loading = true;
     this.loadError = '';
     const token = sessionStorage.getItem('authToken') || '';
@@ -143,6 +174,39 @@ export class AtualizacaoPessoa implements OnInit {
     });
   }
 
+  private carregarUserRole(): void {
+    try {
+      // Primeiro tenta pelo decodedToken
+      const raw = sessionStorage.getItem('decodedToken');
+      console.log('[AtualizacaoPessoa] Raw decodedToken:', raw);
+      
+      if (raw) {
+        const decoded = JSON.parse(raw) as { role?: string };
+        this.userRole = decoded?.role ?? '';
+        console.log('[AtualizacaoPessoa] Role carregada via decodedToken:', this.userRole);
+        return;
+      }
+      
+      // Se não encontrou, tenta decodificar o authToken
+      const authToken = sessionStorage.getItem('authToken');
+      console.log('[AtualizacaoPessoa] Tentando authToken:', authToken ? 'existe' : 'não existe');
+      
+      if (authToken) {
+        const decoded = jwtDecode<DecodeToken>(authToken);
+        this.userRole = (decoded as any)?.role ?? '';
+        console.log('[AtualizacaoPessoa] Role carregada via authToken:', this.userRole);
+        return;
+      }
+      
+      console.log('[AtualizacaoPessoa] Nenhum token encontrado para carregar role');
+      this.userRole = '';
+      
+    } catch (e) {
+      console.error('[AtualizacaoPessoa] Erro ao carregar role do usuário:', e);
+      this.userRole = '';
+    }
+  }
+
   private carregarPorId(idUsuario: number, token: string): void {
     this.origemCarga = 'id';
     console.log(`[AtualizacaoPessoa] Carregando usuário por ID (${idUsuario}) tentativa singular...`);
@@ -191,10 +255,14 @@ export class AtualizacaoPessoa implements OnInit {
 
       const rawSexo = orig.sexo || orig.genero || '';
       let sexo = rawSexo;
-      const mapSexo: any = { FEMININO: 'F', MASCULINO: 'M', OUTRO: 'O' };
-      if (typeof rawSexo === 'string' && rawSexo.length > 1) {
-        const k = rawSexo.toUpperCase();
-        sexo = mapSexo[k] || rawSexo.charAt(0).toUpperCase();
+      // Mantém os valores completos para o select (MASCULINO, FEMININO, OUTRO)
+      if (typeof rawSexo === 'string' && rawSexo.length === 1) {
+        // Se vier como letra única (M, F, O), converte para nome completo
+        const mapSexo: any = { F: 'FEMININO', M: 'MASCULINO', O: 'OUTRO' };
+        sexo = mapSexo[rawSexo.toUpperCase()] || rawSexo;
+      } else if (typeof rawSexo === 'string' && rawSexo.length > 1) {
+        // Se já vier como nome completo, mantém em uppercase
+        sexo = rawSexo.toUpperCase();
       }
 
       const cpfRaw = orig.cpf?.valor || orig.cpf || orig.cpfNumero || '';
@@ -221,6 +289,12 @@ export class AtualizacaoPessoa implements OnInit {
       if (digits.length === 11) {
         this.user.cpf = digits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
       }
+    }
+
+    // Salva o ID do usuário sendo editado
+    const idPessoa = data?.idPessoa || data?.id;
+    if (idPessoa) {
+      sessionStorage.setItem('userId', String(idPessoa));
     }
 
     this.loading = false;
@@ -316,13 +390,9 @@ export class AtualizacaoPessoa implements OnInit {
         }
       }
 
-      const mapSexoParaBackend: any = {
-        'M': 'MASCULINO',
-        'F': 'FEMININO',
-        'O': 'OUTRO'
-      };
-      if (payload.sexo) {
-        payload.sexo = mapSexoParaBackend[payload.sexo] || payload.sexo;
+      // Sexo já vem no formato correto do select (MASCULINO, FEMININO, OUTRO)
+      if (payload.sexo && typeof payload.sexo === 'string') {
+        payload.sexo = payload.sexo.toUpperCase();
       }
 
       if (!payload.senha || String(payload.senha).trim() === '') {
@@ -348,6 +418,9 @@ export class AtualizacaoPessoa implements OnInit {
         next: (res) => {
           console.log('Usuário atualizado com sucesso:', res);
           alert('Dados atualizados com sucesso!');
+          if (this.isEditandoOutroCliente) {
+            this.router.navigate(['/menu-principal'], { state: { selectedCard: 'Clientes' } });
+          }
         },
         error: (err) => {
           console.error('Erro ao atualizar usuário:', err);
@@ -377,5 +450,23 @@ export class AtualizacaoPessoa implements OnInit {
 
   cancelar() {
     this.ngOnInit();
+  }
+
+  voltar() {
+    console.log('[AtualizacaoPessoa] Debug voltar() - userRole:', this.userRole, 'isCliente():', this.isCliente(), 'isEditandoOutroCliente:', this.isEditandoOutroCliente);
+    
+    if (this.isCliente()) {
+      // Se é um cliente (independente de como chegou aqui), volta para o perfil
+      console.log('[AtualizacaoPessoa] Cliente voltando para perfil');
+      this.router.navigate(['/menu-principal'], { state: { selectedCard: 'Dados cadastrais' } });
+    } else if (this.isEditandoOutroCliente) {
+      // Se é funcionário/admin editando outro cliente, volta para a lista de clientes
+      console.log('[AtualizacaoPessoa] Funcionário/Admin voltando para lista de clientes');
+      this.router.navigate(['/menu-principal'], { state: { selectedCard: 'Clientes' } });
+    } else {
+      // Outros casos (funcionário/admin editando próprio perfil)
+      console.log('[AtualizacaoPessoa] Funcionário/Admin voltando para menu principal');
+      this.router.navigate(['/menu-principal']);
+    }
   }
 }
