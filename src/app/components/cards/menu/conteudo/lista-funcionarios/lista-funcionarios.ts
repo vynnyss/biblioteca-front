@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
 import { PessoaModel } from '../../../../../models/pessoa-model';
+import { DecodeToken } from '../../../../../models/decode-token';
 
 @Component({
   selector: 'app-lista-funcionarios',
@@ -106,6 +107,22 @@ export class ListaFuncionarios implements OnInit {
 
   public cadastrarNovoFuncionario(): void {
     this.router.navigate(['/cadastro/funcionario']);
+  }
+
+  public isAdministrador(): boolean {
+    const raw = sessionStorage.getItem('decodedToken');
+    if (!raw) return false;
+    try {
+      const decoded: DecodeToken = JSON.parse(raw);
+      return decoded.role === 'ADMINISTRADOR';
+    } catch {
+      return false;
+    }
+  }
+
+  public editarFuncionario(idPessoa: number): void {
+    sessionStorage.setItem('userId', String(idPessoa));
+    this.router.navigate(['/atualizacao/funcionario']);
   }
 }
 
