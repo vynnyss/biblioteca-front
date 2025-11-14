@@ -19,6 +19,7 @@ import { Sexo } from './components/atualizacao/sexo/sexo';
 import { Telefone } from './components/atualizacao/telefone/telefone';
 import { AtualizacaoPessoa } from './components/atualizacao/atualizacao-pessoa/atualizacao-pessoa';
 import { AtualizacaoLivro } from './components/atualizacao/atualizacao-livro/atualizacao-livro';
+import { AtualizacaoFuncionario } from './components/atualizacao/atualizacao-funcionario/atualizacao-funcionario';
 
 
 export const routes: Routes = [
@@ -54,6 +55,10 @@ export const routes: Routes = [
     {
         path: "atualizacao/pessoa",
         component: AtualizacaoPessoa
+    },
+    {
+        path: "atualizacao/funcionario",
+        component: AtualizacaoFuncionario
     },
 
         {

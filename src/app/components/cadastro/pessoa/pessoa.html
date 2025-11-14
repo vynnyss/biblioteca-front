@@ -3,7 +3,17 @@
     <h2>Cadastre-se</h2>
 
     <label>Nome completo:</label><br>
-    <input type="text" name="nome" [(ngModel)]="user.nome" required><br>
+    <input 
+      type="text" 
+      name="nome" 
+      [(ngModel)]="user.nome" 
+      required
+      pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$"
+      #nomeInput="ngModel"
+    ><br>
+    <span *ngIf="nomeInput.invalid && nomeInput.touched" style="color: red; font-size: 0.85em;">
+      O nome deve conter apenas letras e espaços, sem caracteres especiais.
+    </span><br>
 
     <label>CPF:</label><br>
     <input
@@ -18,14 +28,13 @@
     <label>Data de Nascimento:</label><br>
     <input type="date" id="dtNascimento" name="dtNascimento" [(ngModel)]="user.dtNascimento">
 
-
-<label for="sexo">Sexo:</label><br>
-<select id="sexo" name="sexo" [(ngModel)]="user.sexo" required>
-  <option value="">Selecione</option>
-  <option value="MASCULINO">Masculino</option>
-  <option value="FEMININO">Feminino</option>
-  <option value="OUTRO">Outro</option>
-</select><br>
+    <label for="sexo">Sexo:</label><br>
+    <select id="sexo" name="sexo" [(ngModel)]="user.sexo" required>
+      <option value="">Selecione</option>
+      <option value="MASCULINO">Masculino</option>
+      <option value="FEMININO">Feminino</option>
+      <option value="OUTRO">Outro</option>
+    </select><br>
 
     <label>E-mail:</label><br>
     <input type="email" name="email" [(ngModel)]="user.email" required><br>
