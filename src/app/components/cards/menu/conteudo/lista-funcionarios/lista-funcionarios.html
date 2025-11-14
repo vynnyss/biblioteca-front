@@ -42,6 +42,7 @@
 					<th>Email</th>
 					<th>Telefone</th>
 					<th>Conta</th>
+					<th *ngIf="isAdministrador()">Ações</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -50,6 +51,13 @@
 					<td>{{ a.email.endereco || a.username }}</td>
 					<td>{{ a.telefone.numero }}</td>
 					<td>{{ a.statusConta }}</td>
+					<td *ngIf="isAdministrador()">
+						<button class="btn-icon" (click)="editarFuncionario(a.idPessoa)" title="Editar funcionário">
+							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -64,6 +72,7 @@
 					<th>Email</th>
 					<th>Telefone</th>
 					<th>Conta</th>
+					<th *ngIf="isAdministrador()">Ações</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -72,6 +81,13 @@
 					<td>{{ f.email.endereco || f.username }}</td>
 					<td>{{ f.telefone.numero }}</td>
 					<td>{{ f.statusConta }}</td>
+					<td *ngIf="isAdministrador()">
+						<button class="btn-icon" (click)="editarFuncionario(f.idPessoa)" title="Editar funcionário">
+							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+					</td>
 				</tr>
 			</tbody>
 		</table>

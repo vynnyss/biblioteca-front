@@ -40,3 +40,24 @@
 .error { color: #b00020; }
 
 .funcionarios-section { margin-top: 20px; }
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  transition: color 0.2s;
+}
+
+.btn-icon:hover {
+  color: #3b82f6;
+}
+
+.btn-icon svg {
+  width: 18px;
+  height: 18px;
+}
