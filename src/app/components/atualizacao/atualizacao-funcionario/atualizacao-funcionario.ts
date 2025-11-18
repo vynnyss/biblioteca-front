@@ -248,6 +248,7 @@ export class AtualizacaoFuncionario implements OnInit {
         else if (typeof rawIdEstado === 'string' && /^\d+$/.test(rawIdEstado)) payload.endereco.idEstado = Number(rawIdEstado);
         else if (typeof rawIdEstado !== 'number') payload.endereco.idEstado = null;
         if (payload.endereco.idEndereco == null) payload.endereco.idEndereco = 0;
+        if (!payload.endereco.complemento || payload.endereco.complemento.trim() === '') payload.endereco.complemento = null;
       }
       const mapSexoParaBackend: any = { 'M': 'MASCULINO', 'F': 'FEMININO', 'O': 'OUTRO' };
       if (payload.sexo) payload.sexo = mapSexoParaBackend[payload.sexo] || payload.sexo;

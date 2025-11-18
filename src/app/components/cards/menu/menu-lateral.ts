@@ -17,8 +17,8 @@ export class MenuLateral implements OnInit {
   public roleCards: string[] = [];
 
   public cardsCliente: string[] = ['Dados cadastrais', 'Emprestimos'];
-  public cardsFuncionario: string[] = ['Clientes', 'Emprestimos', 'Livros', 'Autores', 'Editoras', 'Funcionários'];
-  public cardsAdministrador: string[] = ['Clientes', 'Emprestimos', 'Livros', 'Autores', 'Editoras', 'Funcionários', 'Relatórios'];
+  public cardsFuncionario: string[] = ['Clientes', 'Emprestimos', 'Livros', 'Titulos', 'Autores', 'Editoras', 'Idiomas', 'Funcionários'];
+  public cardsAdministrador: string[] = ['Clientes', 'Emprestimos', 'Livros', 'Titulos', 'Autores', 'Editoras', 'Idiomas', 'Funcionários', 'Relatórios'];
 
   ngOnInit(): void {
     try {

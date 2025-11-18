@@ -52,4 +52,24 @@ export class PutService {
   atualizarNomeEditora(id: number, nome: string) {
     return this.http.put(`${this.apiEditoras}/${id}`, { "nome": nome });
   }
+
+  atualizarNomeIdioma(id: number, nome: string) {
+    const apiIdiomas = "http://localhost:8080/idiomas";
+    return this.http.put(`${apiIdiomas}/${id}`, { "nome": nome });
+  }
+
+  atualizarTitulo(id: number, dados: any) {
+    const apiTitulos = "http://localhost:8080/titulos";
+    return this.http.put(`${apiTitulos}/${id}`, dados);
+  }
+
+  atualizarExemplar(id: number, dados: any) {
+    const apiExemplares = "http://localhost:8080/exemplares";
+    return this.http.put(`${apiExemplares}/${id}`, dados);
+  }
+
+  atualizarEdicao(id: number, formData: FormData) {
+    const apiEdicoes = "http://localhost:8080/edicoes";
+    return this.http.put(`${apiEdicoes}/${id}`, formData);
+  }
 }

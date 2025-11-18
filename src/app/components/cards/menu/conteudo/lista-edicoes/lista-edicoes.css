@@ -1,37 +1,150 @@
 
 :host { display: block; }
-.table-edicoes { width: 100%; border-collapse: collapse; }
-.table-edicoes th, .table-edicoes td { border: 1px solid #e6e6e6; padding: 8px; text-align: left; }
-.table-edicoes thead { background: #fafafa; }
-.lista-edicoes h3 { margin-top: 0; }
-.error { color: #b00020; }
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-actions h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #111827;
+}
 
 .header-row {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.filters input,
+.filters select {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.filters input:focus,
+.filters select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .btn {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5rem;
-	padding: 0.5rem 1rem;
-	border-radius: 6px;
-	border: 1px solid #d1d5db;
-	background: white;
-	cursor: pointer;
-	font-size: 0.875rem;
-	text-decoration: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-outline {
+  background-color: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.btn-outline:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
 }
 
 .btn-primary {
-	background: linear-gradient(180deg, #2563eb, #1e40af);
-	color: white;
-	border-color: transparent;
+  background: linear-gradient(180deg, #2563eb, #1e40af);
+  color: white;
+  border: none;
 }
 
 .btn-primary:hover {
-	opacity: 0.9;
+  opacity: 0.9;
+}
+
+.table-edicoes {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-edicoes thead {
+  background: #f9fafb;
+}
+
+.table-edicoes th,
+.table-edicoes td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.table-edicoes th {
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.table-edicoes td {
+  color: #1f2937;
+  font-size: 14px;
+}
+
+.table-edicoes tbody tr:hover {
+  background-color: #f9fafb;
+  cursor: pointer;
+}
+
+.table-edicoes tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.lista-edicoes h3 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  color: #111827;
+}
+
+.error {
+  color: #dc2626;
+  font-weight: 500;
+  padding: 12px;
+  background-color: #fee2e2;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.lista-edicoes > p {
+  text-align: center;
+  color: #6b7280;
+  padding: 40px 20px;
 }

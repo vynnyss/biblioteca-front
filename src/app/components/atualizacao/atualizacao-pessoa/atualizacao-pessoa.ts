@@ -388,6 +388,9 @@ export class AtualizacaoPessoa implements OnInit {
         if (payload.endereco.idEndereco == null) {
           payload.endereco.idEndereco = 0;
         }
+        if (!payload.endereco.complemento || payload.endereco.complemento.trim() === '') {
+          payload.endereco.complemento = null;
+        }
       }
 
       // Sexo já vem no formato correto do select (MASCULINO, FEMININO, OUTRO)

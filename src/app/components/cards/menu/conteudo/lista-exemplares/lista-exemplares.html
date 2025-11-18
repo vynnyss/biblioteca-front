@@ -18,15 +18,26 @@
             <td>{{ getId(e) }}</td>
             <td>{{ getStatus(e) }}</td>
             <td>{{ getEstadoFisico(e) }}</td>
-            <td>
+            <td class="actions-cell">
               <button 
-                *ngIf="podeExcluir(e)" 
-                class="btn btn-danger btn-sm" 
+                class="btn-icon" 
                 type="button" 
-                (click)="solicitarExclusaoExemplar(e)">
-                Solicitar Exclusão
+                (click)="abrirModalEdicao(e)"
+                title="Editar exemplar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                </svg>
               </button>
-              <span *ngIf="!podeExcluir(e)">—</span>
+              <button 
+                class="btn-icon btn-icon-delete" 
+                type="button" 
+                (click)="inativarExemplar(e)"
+                title="Inativar exemplar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
             </td>
         </tr>
       </tbody>
@@ -36,4 +47,31 @@
   <ng-container *ngIf="!loading && (!exemplares || exemplares.length === 0)">
     <p>Nenhum exemplar encontrado para esta edição.</p>
   </ng-container>
+</div>
+
+<!-- Modal de Edição -->
+<div class="modal-overlay" *ngIf="mostrarModalEdicao" (click)="fecharModalEdicao()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Editar Exemplar #{{ exemplarEditando?.idExemplar }}</h3>
+    
+    <div class="form-group">
+      <label for="estadoFisicoEdit">Estado Físico: *</label>
+      <select 
+        id="estadoFisicoEdit" 
+        [(ngModel)]="estadoFisicoEditado"
+        class="form-control">
+        <option value="">Selecione o estado físico</option>
+        <option value="MUITO_RUIM">Muito Ruim</option>
+        <option value="RUIM">Ruim</option>
+        <option value="BOM">Bom</option>
+        <option value="OTIMO">Ótimo</option>
+        <option value="EXCELENTE">Excelente</option>
+      </select>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" type="button" (click)="fecharModalEdicao()">Cancelar</button>
+      <button class="btn btn-primary" type="button" (click)="salvarEdicao()">Salvar</button>
+    </div>
+  </div>
 </div>

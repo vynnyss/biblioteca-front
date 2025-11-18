@@ -108,7 +108,7 @@ export class Funcionario implements OnInit {
       endereco: {
         nomeLogradouro: this.user.endereco.nomeLogradouro.trim(),
         numero: this.user.endereco.numero.trim(),
-        complemento: this.user.endereco.complemento?.trim() || '',
+        complemento: this.user.endereco.complemento?.trim() || null,
         bairro: this.user.endereco.bairro.trim(),
         cep: this.user.endereco.cep.replace(/\D/g, ''),
         cidade: this.user.endereco.cidade.trim(),

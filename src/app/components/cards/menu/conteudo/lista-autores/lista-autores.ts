@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
 import { PutService } from '../../../../../servicos/api/put-service';
+import { DeleteService } from '../../../../../servicos/api/delete-service';
 import { AutorModel } from '../../../../../models/autor';
 
 @Component({
@@ -25,7 +26,11 @@ export class ListaAutores implements OnInit {
   public editandoId: number | null = null;
   public novoNome: string = '';
 
-  constructor(private serv: GetServicos, private putService: PutService) {}
+  constructor(
+    private serv: GetServicos, 
+    private putService: PutService,
+    private deleteService: DeleteService
+  ) {}
 
   ngOnInit(): void {
     this.serv.getApiUrlGetAutores().subscribe({
@@ -102,6 +107,24 @@ export class ListaAutores implements OnInit {
       error: (err) => {
         console.error('Erro ao atualizar nome do autor:', err);
         alert('Erro ao atualizar nome do autor.');
+      }
+    });
+  }
+
+  public inativarAutor(autor: AutorModel): void {
+    if (!autor?.idAutor) return;
+    const confirmar = confirm(`Deseja realmente inativar o autor "${autor.nome}"?`);
+    if (!confirmar) return;
+
+    this.deleteService.inativarAutor(autor.idAutor).subscribe({
+      next: () => {
+        alert('Autor inativado com sucesso!');
+        this.ngOnInit();
+      },
+      error: (err) => {
+        console.error('Erro ao inativar autor:', err);
+        const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao inativar autor.';
+        alert(msg);
       }
     });
   }

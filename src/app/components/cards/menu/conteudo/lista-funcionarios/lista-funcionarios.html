@@ -53,8 +53,14 @@
 					<td>{{ a.statusConta }}</td>
 					<td *ngIf="isAdministrador()">
 						<button class="btn-icon" (click)="editarFuncionario(a.idPessoa)" title="Editar funcionário">
-							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+						<button class="btn-icon btn-icon-delete" (click)="abrirModalInativar(a)" title="Inativar funcionário">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
 							</svg>
 						</button>
 					</td>
@@ -83,8 +89,14 @@
 					<td>{{ f.statusConta }}</td>
 					<td *ngIf="isAdministrador()">
 						<button class="btn-icon" (click)="editarFuncionario(f.idPessoa)" title="Editar funcionário">
-							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+						<button class="btn-icon btn-icon-delete" (click)="abrirModalInativar(f)" title="Inativar funcionário">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
 							</svg>
 						</button>
 					</td>
@@ -96,5 +108,25 @@
 	<ng-container *ngIf="!loadingAdmins && !loadingFuncs && (!administradores?.length && !funcionarios?.length)">
 		<p>Nenhum usuário encontrado.</p>
 	</ng-container>
+
+	<!-- Modal para inativar funcionário -->
+	<div class="modal-overlay" *ngIf="mostrarModalInativar" (click)="fecharModalInativar()">
+		<div class="modal-content" (click)="$event.stopPropagation()">
+			<h4>Inativar Funcionário</h4>
+			<p>Funcionário: <strong>{{ funcionarioInativando?.nome }}</strong></p>
+			<label>
+				Motivo da inativação: *
+				<textarea 
+					[(ngModel)]="motivoInativacao" 
+					placeholder="Digite o motivo da inativação"
+					class="textarea-motivo"
+					rows="4"></textarea>
+			</label>
+			<div class="modal-actions">
+				<button class="btn btn-outline" type="button" (click)="fecharModalInativar()">Cancelar</button>
+				<button class="btn btn-danger" type="button" (click)="confirmarInativacao()">Confirmar Inativação</button>
+			</div>
+		</div>
+	</div>
 </div>
 

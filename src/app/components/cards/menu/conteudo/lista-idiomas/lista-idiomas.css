@@ -82,31 +82,83 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #6b7280;
+  color: #3b82f6;
   transition: color 0.2s;
 }
 
 .btn-icon:hover {
-  color: #3b82f6;
+  color: #2563eb;
+}
+
+.btn-icon.btn-icon-delete {
+  color: #6b7280;
 }
 
 .btn-icon.btn-icon-delete:hover {
   color: #ef4444;
 }
 
-.btn-icon svg {
-  width: 18px;
-  height: 18px;
+.lista-idiomas h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #111827;
 }
 
-.btn-danger {
-  background-color: #ef4444;
-  color: white;
+.table-idiomas {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.btn-danger:hover {
-  background-color: #dc2626;
-  transform: translateY(-1px);
+.table-idiomas thead {
+  background: #f9fafb;
+}
+
+.table-idiomas th,
+.table-idiomas td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.table-idiomas th {
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.table-idiomas td {
+  color: #1f2937;
+  font-size: 14px;
+}
+
+.table-idiomas tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.table-idiomas tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.error {
+  color: #dc2626;
+  font-weight: 500;
+  padding: 12px;
+  background-color: #fee2e2;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.lista-idiomas > p {
+  text-align: center;
+  color: #6b7280;
+  padding: 40px 20px;
 }
 
 .modal-overlay {
@@ -133,7 +185,7 @@
 
 .modal-content h4 {
   margin-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   color: #111827;
   font-size: 1.25rem;
 }
@@ -146,19 +198,18 @@
   font-size: 0.9rem;
 }
 
-.modal-content .textarea-motivo {
+.modal-content .input-nome {
   width: 100%;
   padding: 0.625rem;
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
   font-size: 0.95rem;
-  font-family: inherit;
-  resize: vertical;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
 }
 
-.modal-content .textarea-motivo:focus {
+.modal-content .input-nome:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
@@ -168,70 +219,4 @@
   justify-content: flex-end;
   gap: 0.75rem;
   margin-top: 1.5rem;
-}
-
-.funcionarios-section {
-  margin-top: 20px;
-}
-
-.clientes-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.clientes-table thead {
-  background: #f9fafb;
-}
-
-.clientes-table th,
-.clientes-table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.clientes-table th {
-  font-weight: 600;
-  color: #374151;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.clientes-table td {
-  color: #1f2937;
-  font-size: 14px;
-}
-
-.clientes-table tbody tr:hover {
-  background-color: #f9fafb;
-}
-
-.clientes-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.lista-clientes-root h3 {
-  margin-top: 0;
-  font-size: 1.25rem;
-  color: #111827;
-}
-
-.error {
-  color: #dc2626;
-  font-weight: 500;
-  padding: 12px;
-  background-color: #fee2e2;
-  border-radius: 6px;
-  margin-bottom: 20px;
-}
-
-.lista-funcionarios-root > p {
-  text-align: center;
-  color: #6b7280;
-  padding: 40px 20px;
 }

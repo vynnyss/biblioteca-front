@@ -64,6 +64,8 @@
 .btn-outline:hover { background-color: #f3f4f6; transform: translateY(-1px); }
 .btn-primary { background-color: #10b981; color: white; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2); }
 .btn-primary:hover { background-color: #059669; transform: translateY(-1px); }
+.btn-danger { background-color: #ef4444; color: white; box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2); }
+.btn-danger:hover { background-color: #dc2626; transform: translateY(-1px); }
 
 /* Modal styles */
 .modal-overlay {
@@ -86,6 +88,12 @@
 	max-width: 500px;
 	width: 90%;
 	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content.modal-edicao {
+	max-width: 600px;
+	max-height: 85vh;
+	overflow-y: auto;
 }
 
 .modal-content h3 {

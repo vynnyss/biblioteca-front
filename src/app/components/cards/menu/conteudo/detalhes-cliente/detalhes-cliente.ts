@@ -19,6 +19,7 @@ import { ListaEmprestimoModel } from '../../../../../models/lista-emprestimo-mod
 export class DetalhesCliente {
   @Input() set cliente(value: PessoaModel | null) {
     this._cliente = value;
+//    console.log('DetalhesCliente: cliente input set to', value);
     if (value?.idPessoa) {
       this.carregarEmprestimos(value.idPessoa);
     } else {

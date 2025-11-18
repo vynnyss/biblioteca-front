@@ -1,14 +1,16 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
 import { PutService } from '../../../../../servicos/api/put-service';
+import { DeleteService } from '../../../../../servicos/api/delete-service';
 import { ExemplarModel } from '../../../../../models/exemplar-model';
 import { DecodeToken } from '../../../../../models/decode-token';
 
 @Component({
   selector: 'app-lista-exemplares',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './lista-exemplares.html',
   styleUrl: './lista-exemplares.css'
 })
@@ -20,7 +22,17 @@ export class ListaExemplares implements OnChanges {
   public loading = false;
   public error: string | null = null;
 
-  constructor(private serv: GetServicos, private putService: PutService) {}
+  // Modal de edição
+  public mostrarModalEdicao = false;
+  public exemplarEditando: ExemplarModel | null = null;
+  public estadoFisicoEditado: string = '';
+  public estadosFisicos: string[] = ['MUITO_RUIM', 'RUIM', 'BOM', 'OTIMO', 'EXCELENTE'];
+
+  constructor(
+    private serv: GetServicos, 
+    private putService: PutService,
+    private deleteService: DeleteService
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('edicaoId' in changes) {
@@ -97,6 +109,66 @@ export class ListaExemplares implements OnChanges {
       error: (err) => {
         console.error('Erro ao solicitar exclusão de exemplar:', err);
         alert('Erro ao solicitar exclusão do exemplar.');
+      }
+    });
+  }
+
+  public abrirModalEdicao(exemplar: ExemplarModel): void {
+    this.exemplarEditando = exemplar;
+    this.estadoFisicoEditado = exemplar.estadoFisico;
+    this.mostrarModalEdicao = true;
+  }
+
+  public fecharModalEdicao(): void {
+    this.mostrarModalEdicao = false;
+    this.exemplarEditando = null;
+    this.estadoFisicoEditado = '';
+  }
+
+  public salvarEdicao(): void {
+    if (!this.exemplarEditando) return;
+    if (!this.estadoFisicoEditado) {
+      alert('Por favor, selecione o estado físico.');
+      return;
+    }
+
+    const payload = {
+      estadoFisico: this.estadoFisicoEditado,
+      edicaoId: this.edicaoId
+    };
+
+    this.putService.atualizarExemplar(this.exemplarEditando.idExemplar, payload).subscribe({
+      next: () => {
+        alert('Exemplar atualizado com sucesso!');
+        this.fecharModalEdicao();
+        if (this.edicaoId) {
+          this.loadExemplares(this.edicaoId);
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao atualizar exemplar:', err);
+        const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao atualizar exemplar.';
+        alert(msg);
+      }
+    });
+  }
+
+  public inativarExemplar(exemplar: ExemplarModel): void {
+    if (!exemplar?.idExemplar) return;
+    const confirmar = confirm(`Deseja realmente inativar o exemplar #${exemplar.idExemplar}?`);
+    if (!confirmar) return;
+
+    this.deleteService.inativarExemplar(exemplar.idExemplar).subscribe({
+      next: () => {
+        alert('Exemplar inativado com sucesso!');
+        if (this.edicaoId) {
+          this.loadExemplares(this.edicaoId);
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao inativar exemplar:', err);
+        const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao inativar exemplar.';
+        alert(msg);
       }
     });
   }
