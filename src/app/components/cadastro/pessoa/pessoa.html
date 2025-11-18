@@ -2,18 +2,18 @@
   <form #formPessoa="ngForm" (ngSubmit)="onSubmit(formPessoa)">
     <h2>Cadastre-se</h2>
 
-    <label>Nome completo:</label><br>
-    <input 
-      type="text" 
-      name="nome" 
-      [(ngModel)]="user.nome" 
-      required
-      pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$"
-      #nomeInput="ngModel"
-    ><br>
-    <span *ngIf="nomeInput.invalid && nomeInput.touched" style="color: red; font-size: 0.85em;">
-      O nome deve conter apenas letras e espaços, sem caracteres especiais.
-    </span><br>
+<label>Nome completo:</label><br>
+<input 
+  type="text" 
+  name="nome" 
+  [(ngModel)]="user.nome" 
+  required
+  pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]+$"
+  #nomeInput="ngModel"
+><br>
+<span *ngIf="nomeInput.invalid && nomeInput.touched" style="color: red; font-size: 0.85em;">
+  O nome deve conter apenas letras e espaços, sem caracteres especiais.
+</span><br>
 
     <label>CPF:</label><br>
     <input
@@ -64,7 +64,7 @@
     </select><br>
 
     <label>CEP:</label><br>
-    <input type="text" name="cep" maxlength="9" placeholder="00000-000" [(ngModel)]="user.endereco.cep" required><br>
+    <input type="text" name="cep" maxlength="8" placeholder="00000-000" [(ngModel)]="user.endereco.cep" required><br>
 
     <label>Senha:</label><br>
     <input type="password" name="senha" [(ngModel)]="user.senha" required><br>
