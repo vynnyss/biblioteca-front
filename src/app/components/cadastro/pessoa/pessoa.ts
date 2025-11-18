@@ -58,18 +58,55 @@ export class Pessoa implements OnInit {
 
   mascaraCPF(event: any): void {
     const input = event.target as HTMLInputElement;
+    const cursorPos = input.selectionStart ?? 0;
+    const valorAnterior = input.value;
+    
     let valor = input.value.replace(/\D/g, '').slice(0, 11);
-    const pos = input.selectionStart ?? valor.length;
-
-    if (valor.length > 9)
+    
+    const digitosAntesCursor = valorAnterior.slice(0, cursorPos).replace(/\D/g, '').length;
+    
+    if (valor.length > 9) {
       valor = valor.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
-    else if (valor.length > 6)
+    } else if (valor.length > 6) {
       valor = valor.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
-    else if (valor.length > 3)
+    } else if (valor.length > 3) {
       valor = valor.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+    }
+    
+    let novaPosicao = 0;
+    let digitosContados = 0;
+    
+    for (let i = 0; i < valor.length && digitosContados < digitosAntesCursor; i++) {
+      if (/\d/.test(valor[i])) {
+        digitosContados++;
+      }
+      novaPosicao = i + 1;
+    }
+    
+    input.value = valor;
+    input.setSelectionRange(novaPosicao, novaPosicao);
+  }
+
+  mascaraCEP(event: any): void {
+    const input = event.target as HTMLInputElement;
+    let valor = input.value.replace(/\D/g, '').slice(0, 8);
+    let cursorPos = input.selectionStart ?? 0;
+    const valorAnterior = input.value;
+    
+    if (valor.length > 5) {
+      valor = valor.replace(/(\d{5})(\d{1,3})/, '$1-$2');
+    }
+
+    if (valorAnterior.length < valor.length && cursorPos === 6 && valor[5] === '-') {
+      cursorPos = 6; 
+    } else if (valorAnterior.length > valor.length) {
+      
+    } else if (valor.length > valorAnterior.length && cursorPos > 5) {
+      cursorPos++; 
+    }
 
     input.value = valor;
-    input.setSelectionRange(pos, pos);
+    input.setSelectionRange(cursorPos, cursorPos);
   }
 
   cancelar(): void {
