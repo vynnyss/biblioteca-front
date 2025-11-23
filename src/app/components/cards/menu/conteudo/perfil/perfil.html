@@ -25,12 +25,12 @@
 			<section class="perfil-card">
 				<h3>Endereço</h3>
 				<dl>
-					<div class="row"><dt>Logradouro</dt><dd>{{ pessoa.endereco?.rua || '—' }}</dd></div>
+					<div class="row"><dt>Logradouro</dt><dd>{{ pessoa.endereco?.nomeLogradouro || '—' }}</dd></div>
 					<div class="row"><dt>Número</dt><dd>{{ pessoa.endereco?.numero || '—' }}</dd></div>
 					<div class="row"><dt>Complemento</dt><dd>{{ pessoa.endereco?.complemento || '—' }}</dd></div>
 					<div class="row"><dt>Bairro</dt><dd>{{ pessoa.endereco?.bairro || '—' }}</dd></div>
 					<div class="row"><dt>Cidade</dt><dd>{{ pessoa.endereco?.cidade || '—' }}</dd></div>
-					<div class="row"><dt>Estado</dt><dd>{{ pessoa.endereco?.estado || '—' }}</dd></div>
+					<div class="row"><dt>Estado</dt><dd>{{ pessoa.endereco?.estado?.nome || '—' }}</dd></div>
 					<div class="row"><dt>CEP</dt><dd>{{ pessoa.endereco?.cep || '—' }}</dd></div>
 				</dl>
 			</section>

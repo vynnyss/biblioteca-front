@@ -1,5 +1,5 @@
-<div class="lista-autores">
-	<h3>Autores</h3>
+<div class="lista-idiomas">
+	<h3>Idiomas</h3>
 
 	<div class="filters">
 		<label>
@@ -18,8 +18,8 @@
 		<button class="btn btn-outline" type="button" (click)="clearFilters()">Limpar</button>
 	</div>
 
-	<div *ngIf="autores?.length; else empty">
-		<table class="table-autores">
+	<div *ngIf="idiomas.length; else empty">
+		<table class="table-idiomas">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -29,15 +29,15 @@
 				</tr>
 			</thead>
 			<tbody>
-                <tr *ngFor="let autor of autores">
-                    <td>{{ getId(autor) }}</td>
-                    <td>{{ getName(autor) }}</td>
-                    <td>{{ getStatus(autor) }}</td>
+                <tr *ngFor="let idioma of idiomas">
+                    <td>{{ getId(idioma) }}</td>
+                    <td>{{ getName(idioma) }}</td>
+                    <td>{{ getStatus(idioma) }}</td>
 					<td>
 						<button 
 							class="btn-icon" 
 							type="button" 
-							(click)="iniciarEdicao(autor)"
+							(click)="iniciarEdicao(idioma)"
 							title="Editar nome">
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
@@ -46,8 +46,8 @@
 						<button 
 							class="btn-icon btn-icon-delete" 
 							type="button" 
-							(click)="inativarAutor(autor)"
-							title="Inativar autor">
+							(click)="inativarIdioma(idioma)"
+							title="Inativar idioma">
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<polyline points="3 6 5 6 21 6"></polyline>
 								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -60,13 +60,13 @@
 	</div>
 
 	<ng-template #empty>
-		<p>Nenhum autor encontrado.</p>
+		<p>Nenhum idioma encontrado.</p>
 	</ng-template>
 
 	<!-- Modal de edição -->
 	<div class="modal-overlay" *ngIf="editandoId !== null" (click)="cancelarEdicao()">
 		<div class="modal-content" (click)="$event.stopPropagation()">
-			<h4>Editar Nome do Autor</h4>
+			<h4>Editar Nome do Idioma</h4>
 			<label>
 				Nome
 				<input 

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
 import { PutService } from '../../../../../servicos/api/put-service';
+import { DeleteService } from '../../../../../servicos/api/delete-service';
 import { EditoraModel } from '../../../../../models/editora-model';
 
 @Component({
@@ -25,7 +26,11 @@ export class ListaEditoras implements OnInit {
   public editandoId: number | null = null;
   public novoNome: string = '';
 
-  constructor(private serv: GetServicos, private putService: PutService) {}
+  constructor(
+    private serv: GetServicos, 
+    private putService: PutService,
+    private deleteService: DeleteService
+  ) {}
 
   ngOnInit(): void {
     this.serv.getApiUrlGetEditoras().subscribe({
@@ -102,6 +107,24 @@ export class ListaEditoras implements OnInit {
       error: (err) => {
         console.error('Erro ao atualizar nome da editora:', err);
         alert('Erro ao atualizar nome da editora.');
+      }
+    });
+  }
+
+  public inativarEditora(editora: EditoraModel): void {
+    if (!editora?.idEditora) return;
+    const confirmar = confirm(`Deseja realmente inativar a editora "${editora.nome}"?`);
+    if (!confirmar) return;
+
+    this.deleteService.inativarEditora(editora.idEditora).subscribe({
+      next: () => {
+        alert('Editora inativada com sucesso!');
+        this.ngOnInit();
+      },
+      error: (err) => {
+        console.error('Erro ao inativar editora:', err);
+        const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao inativar editora.';
+        alert(msg);
       }
     });
   }

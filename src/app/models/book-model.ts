@@ -9,6 +9,7 @@ export interface BookModel {
     tamanho: string;
     classificacao: string;
     dtPublicacao: string;
+    descricaoEdicao?: string;
     titulo: Title;
     editora: Publisher;
     idioma: Language;

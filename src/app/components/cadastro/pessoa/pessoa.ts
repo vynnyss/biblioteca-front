@@ -135,7 +135,7 @@ export class Pessoa implements OnInit {
       endereco: {
         nomeLogradouro: this.user.endereco.nomeLogradouro,
         numero: this.user.endereco.numero,
-        complemento: this.user.endereco.complemento,
+        complemento: this.user.endereco.complemento && this.user.endereco.complemento.trim() !== '' ? this.user.endereco.complemento : null,
         bairro: this.user.endereco.bairro,
         cep: cepLimpo,
         cidade: this.user.endereco.cidade,

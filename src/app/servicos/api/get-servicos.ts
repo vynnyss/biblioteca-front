@@ -9,6 +9,7 @@ import { ExemplarModel } from '../../models/exemplar-model';
 import { ListaEmprestimoModel } from '../../models/lista-emprestimo-model';
 import { EmprestimoModel } from '../../models/emprestimo-model';
 import { Estado } from '../../models/estado';
+import { Title } from '../../models/title';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ import { Estado } from '../../models/estado';
 export class GetServicos {
   constructor(private http: HttpClient) {}
   private apiUrlGetEdicoes = "http://localhost:8080/edicoes";
+  private apiUrlGetEdicoesAtivas = "http://localhost:8080/edicoes/ativos";
   private apiUrlGetAutores = "http://localhost:8080/autores";
   private apiUrlGetEditoras = "http://localhost:8080/editoras";
   private apiUrlGetExemplaresDaEdicao = "http://localhost:8080/exemplares/buscar-por-edicao";
@@ -27,6 +29,7 @@ export class GetServicos {
   private apiUrlGetClientes = "http://localhost:8080/usuarios/clientes";
   private apiUrlGetFuncionarios = "http://localhost:8080/usuarios/funcionarios";
   private apiUrlGetAdministradores = "http://localhost:8080/usuarios/administradores";
+  private apiUrlGetTitulos = "http://localhost:8080/titulos";
 
   getApiUrlGetAutores(): Observable<AutorModel[]> {
     return this.http.get<AutorModel[]>(this.apiUrlGetAutores);
@@ -34,6 +37,11 @@ export class GetServicos {
 
   getApiUrlGetEditoras(): Observable<EditoraModel[]> {
     return this.http.get<EditoraModel[]>(this.apiUrlGetEditoras);
+  }
+
+  getApiUrlGetIdiomas(): Observable<any[]> {
+    const apiUrlGetIdiomas = "http://localhost:8080/idiomas";
+    return this.http.get<any[]>(apiUrlGetIdiomas);
   }
 
   getApiUrlGetExemplaresDaEdicao(id : number): Observable<ExemplarModel[]> {
@@ -73,6 +81,10 @@ export class GetServicos {
     return this.http.get<BookModel[]>(this.apiUrlGetEdicoes);
   }
 
+  getApiUrlGetEdicoesAtivas(): Observable<BookModel[]> {
+    return this.http.get<BookModel[]>(this.apiUrlGetEdicoesAtivas);
+  }
+
   getPessoaPorEmail(email: string): Observable<PessoaModel> {
     const apiUrlGetPessoaPorEmail = `http://localhost:8080/usuarios/buscar-por-email`;
     const params = new HttpParams().set('email', email);
@@ -81,5 +93,9 @@ export class GetServicos {
 
   getEstados(): Observable<Estado[]> {
     return this.http.get<Estado[]>(this.apiUrlGetEstados);
+  }
+
+  getApiUrlGetTitulos(): Observable<Title[]> {
+    return this.http.get<Title[]>(this.apiUrlGetTitulos);
   }
 }

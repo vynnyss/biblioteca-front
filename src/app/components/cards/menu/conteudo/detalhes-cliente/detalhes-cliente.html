@@ -52,7 +52,7 @@
 					<h5>Endereço</h5>
 					<dl>
 						<dt>Rua</dt>
-						<dd>{{ cliente.endereco?.rua || '—' }}</dd>
+						<dd>{{ cliente.endereco?.nomeLogradouro || '—' }}</dd>
 
 						<dt>Número</dt>
 						<dd>{{ cliente.endereco?.numero || '—' }}</dd>
@@ -64,7 +64,7 @@
 						<dd>{{ cliente.endereco?.bairro || '—' }}</dd>
 
 						<dt>Cidade / Estado</dt>
-						<dd>{{ (cliente.endereco?.cidade || '—') + ' / ' + (cliente.endereco?.estado || '—') }}</dd>
+						<dd>{{ (cliente.endereco?.cidade || '—') + ' / ' + (cliente.endereco?.estado?.nome || '—') }}</dd>
 
 						<dt>CEP</dt>
 						<dd>{{ cliente.endereco?.cep || '—' }}</dd>

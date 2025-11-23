@@ -14,7 +14,7 @@ export class Home implements OnInit {
   constructor(private getServicos: GetServicos) {}
 
   ngOnInit(): void {
-    this.getServicos.getApiUrlGetEdicoes().subscribe((data) => {
+    this.getServicos.getApiUrlGetEdicoesAtivas().subscribe((data) => {
       console.log('Home: loaded books', data);
       this.books = data;
     });

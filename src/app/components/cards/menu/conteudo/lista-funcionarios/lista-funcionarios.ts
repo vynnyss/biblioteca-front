@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
+import { DeleteService } from '../../../../../servicos/api/delete-service';
 import { PessoaModel } from '../../../../../models/pessoa-model';
 import { DecodeToken } from '../../../../../models/decode-token';
 
@@ -29,7 +30,16 @@ export class ListaFuncionarios implements OnInit {
   public statusFilter: string = '';
   public availableStatuses: string[] = [];
 
-  constructor(private svc: GetServicos, private router: Router) {}
+  // Modal inativar
+  public mostrarModalInativar: boolean = false;
+  public funcionarioInativando: PessoaModel | null = null;
+  public motivoInativacao: string = '';
+
+  constructor(
+    private svc: GetServicos, 
+    private router: Router,
+    private deleteService: DeleteService
+  ) {}
 
   ngOnInit(): void {
     this.loadAdministradores();
@@ -123,6 +133,44 @@ export class ListaFuncionarios implements OnInit {
   public editarFuncionario(idPessoa: number): void {
     sessionStorage.setItem('userId', String(idPessoa));
     this.router.navigate(['/atualizacao/funcionario']);
+  }
+
+  public abrirModalInativar(funcionario: PessoaModel): void {
+    this.funcionarioInativando = funcionario;
+    this.motivoInativacao = '';
+    this.mostrarModalInativar = true;
+  }
+
+  public fecharModalInativar(): void {
+    this.mostrarModalInativar = false;
+    this.funcionarioInativando = null;
+    this.motivoInativacao = '';
+  }
+
+  public confirmarInativacao(): void {
+    if (!this.funcionarioInativando?.idPessoa) return;
+    if (!this.motivoInativacao.trim()) {
+      alert('Por favor, informe o motivo da inativação.');
+      return;
+    }
+
+    const token = sessionStorage.getItem('authToken') || '';
+    this.deleteService.inativarUsuario(
+      this.funcionarioInativando.idPessoa, 
+      this.motivoInativacao.trim(),
+      token
+    ).subscribe({
+      next: () => {
+        alert('Funcionário inativado com sucesso!');
+        this.fecharModalInativar();
+        this.ngOnInit();
+      },
+      error: (err) => {
+        console.error('Erro ao inativar funcionário:', err);
+        const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao inativar funcionário.';
+        alert(msg);
+      }
+    });
   }
 }
 

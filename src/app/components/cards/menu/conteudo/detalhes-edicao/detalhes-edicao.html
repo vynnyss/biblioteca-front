@@ -39,7 +39,9 @@
 
 			<div style="margin-top:1rem; display: flex; gap: 1rem;">
 				<button class="btn btn-outline" type="button" (click)="onClose()">← Voltar</button>
+				<button class="btn btn-primary" type="button" (click)="abrirModalEdicao()">✏️ Editar Edição</button>
 				<button class="btn btn-primary" type="button" (click)="abrirModalNovoExemplar()">+ Adicionar Exemplares</button>
+				<button class="btn btn-danger" type="button" (click)="inativarEdicao()">🗑️ Inativar Edição</button>
 			</div>
 		</section>
 
@@ -81,6 +83,142 @@
 			<div class="modal-actions">
 				<button type="button" class="btn btn-outline" (click)="fecharModalExemplar()">Cancelar</button>
 				<button type="button" class="btn btn-primary" (click)="salvarNovoExemplar()">Salvar</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para editar edição -->
+	<div *ngIf="mostrarModalEdicao" class="modal-overlay" (click)="fecharModalEdicao()">
+		<div class="modal-content modal-edicao" (click)="$event.stopPropagation()">
+			<h3>Editar Edição</h3>
+			
+			<div class="form-group">
+				<label for="titulo">Título: *</label>
+				<select 
+					id="titulo" 
+					name="titulo" 
+					[(ngModel)]="edicaoEditada.idTitulo"
+					required>
+					<option value="">Selecione um título</option>
+					<option *ngFor="let titulo of titulos" [value]="titulo.idTitulo">
+						{{ titulo.nome }}
+					</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="dataPublicacao">Data de Publicação: *</label>
+				<input
+					type="date"
+					id="dataPublicacao"
+					name="dataPublicacao"
+					[(ngModel)]="edicaoEditada.dataPublicacao"
+					required
+				/>
+			</div>
+
+			<div class="form-group">
+				<label for="editora">Editora: *</label>
+				<select 
+					id="editora" 
+					name="editora" 
+					[(ngModel)]="edicaoEditada.idEditora"
+					required>
+					<option value="">Selecione uma editora</option>
+					<option *ngFor="let editora of editoras" [value]="editora.idEditora || editora.id">
+						{{ editora.nome }}
+					</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="idioma">Idioma: *</label>
+				<select 
+					id="idioma" 
+					name="idioma" 
+					[(ngModel)]="edicaoEditada.idIdioma"
+					required>
+					<option value="">Selecione um idioma</option>
+					<option *ngFor="let idioma of idiomas" [value]="idioma.idIdioma || idioma.id">
+						{{ idioma.nome }}
+					</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="qtdPaginas">Quantidade de Páginas: *</label>
+				<input 
+					type="number" 
+					id="qtdPaginas" 
+					name="qtdPaginas" 
+					[(ngModel)]="edicaoEditada.qtdPaginas" 
+					min="1"
+					placeholder="Ex: 320" 
+					required 
+				/>
+			</div>
+
+			<div class="form-group">
+				<label for="tipoCapa">Tipo de Capa: *</label>
+				<select id="tipoCapa" name="tipoCapa" [(ngModel)]="edicaoEditada.tipoCapa" required>
+					<option value="">Selecione o tipo de capa</option>
+					<option value="dura">Capa dura</option>
+					<option value="flexivel">Capa mole/flexível</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="tamanho">Tamanho do Livro: *</label>
+				<select id="tamanho" name="tamanho" [(ngModel)]="edicaoEditada.tamanho" required>
+					<option value="">Selecione o tamanho</option>
+					<option value="pequeno">Pequeno</option>
+					<option value="medio">Médio</option>
+					<option value="grande">Grande</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="classificacao">Classificação Indicativa: *</label>
+				<select id="classificacao" name="classificacao" [(ngModel)]="edicaoEditada.classificacao" required>
+					<option value="">Selecione a classificação</option>
+					<option value="l">Livre (L)</option>
+					<option value="C10">10 anos</option>
+					<option value="C12">12 anos</option>
+					<option value="C14">14 anos</option>
+					<option value="C16">16 anos</option>
+					<option value="C18">18 anos</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="descricaoEdicao">Descrição da Edição: *</label>
+				<input 
+					type="text" 
+					id="descricaoEdicao" 
+					name="descricaoEdicao" 
+					[(ngModel)]="edicaoEditada.descricaoEdicao"
+					placeholder="Ex: 1ª edição, Revisada, Ampliada..."
+					maxlength="60"
+					required 
+				/>
+				<small>Máximo 60 caracteres</small>
+			</div>
+
+			<div class="form-group">
+				<label for="imagemEdicao">Imagem do livro:</label>
+				<input 
+					type="file" 
+					id="imagemEdicao" 
+					name="imagemEdicao" 
+					accept="image/*"
+					(change)="onImagemEdicaoChange($event)" 
+				/>
+				<small>Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 5MB. Deixe em branco para manter a imagem atual.</small>
+			</div>
+
+			<div class="modal-actions">
+				<button type="button" class="btn btn-outline" (click)="fecharModalEdicao()">Cancelar</button>
+				<button type="button" class="btn btn-primary" (click)="salvarEdicao()">Salvar Alterações</button>
 			</div>
 		</div>
 	</div>
