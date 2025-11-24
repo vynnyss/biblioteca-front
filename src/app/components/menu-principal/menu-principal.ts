@@ -49,8 +49,18 @@ export class MenuPrincipal implements OnInit {
     // Verifica se há um estado passado pela navegação
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras?.state || history.state;
+    console.log('[MenuPrincipal] Estado recebido:', state);
+    console.log('[MenuPrincipal] Role do usuário:', this.role);
+    
     if (state?.selectedCard) {
+      console.log('[MenuPrincipal] Selecionando card:', state.selectedCard);
       this.selectCard(state.selectedCard);
+    } else {
+      console.log('[MenuPrincipal] Nenhum card selecionado, definindo padrão baseado na role');
+      // Define um card padrão baseado na role
+      if (this.role === 'CLIENTE') {
+        this.selectCard('Dados cadastrais');
+      }
     }
   }
 

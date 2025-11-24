@@ -45,8 +45,8 @@
         <div class="container">
             <div class="books-header">
                 <h3 id="books-count" class="books-count">Livros encontrados</h3>
-                <button id="clear-search" class="btn btn-outline hidden">
-                    Clear Search
+                <button id="clear-search" class="btn btn-outline hidden" (click)="clearSearch()">
+                    Limpar Busca
                 </button>
             </div>
             <div id="books-grid" class="books-grid">
@@ -54,6 +54,40 @@
                     <app-book [data]="livro"></app-book>
                 }
             </div>
+            
+            <!-- Pagination Controls -->
+            @if (totalPaginas > 1) {
+                <div class="pagination-controls">
+                    <button 
+                        class="btn-pagination" 
+                        (click)="paginaAnterior()" 
+                        [disabled]="paginaAtual === 0"
+                        title="Página anterior">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+
+                    @for (pagina of getPaginasVisiveis(); track pagina) {
+                        <button 
+                            class="btn-pagination" 
+                            [class.active]="pagina === paginaAtual"
+                            (click)="irParaPagina(pagina)">
+                            {{ pagina + 1 }}
+                        </button>
+                    }
+
+                    <button 
+                        class="btn-pagination" 
+                        (click)="proximaPagina()" 
+                        [disabled]="paginaAtual === totalPaginas - 1"
+                        title="Próxima página">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            }
         </div>
 
     </section>

@@ -135,7 +135,13 @@ export class Funcionario implements OnInit {
     console.log('🔍 Tipo do email:', typeof payload.email);
     console.log('🔍 Length do email:', payload.email.length);
 
-    this.api.postFuncionario(payload).subscribe({
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('❌ Token de autenticação não encontrado. Faça login novamente.');
+      return;
+    }
+
+    this.api.postFuncionario(payload, token).subscribe({
       next: (res) => {
         console.log('✅ Servidor respondeu:', res);
         alert('Funcionário cadastrado com sucesso!');

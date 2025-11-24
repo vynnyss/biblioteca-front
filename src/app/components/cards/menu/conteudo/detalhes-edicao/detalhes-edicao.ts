@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { BookModel } from '../../../../../models/book-model';
 import { ListaExemplares } from '../lista-exemplares/lista-exemplares';
 import { PostService } from '../../../../../servicos/api/post-service';
+import { GetServicos } from '../../../../../servicos/api/get-servicos';
 import { PutService } from '../../../../../servicos/api/put-service';
 import { DeleteService } from '../../../../../servicos/api/delete-service';
 import { Title } from '../../../../../models/title';
@@ -18,6 +19,7 @@ import { Title } from '../../../../../models/title';
 })
 export class DetalhesEdicao {
   private apiService = inject(PostService);
+  private getService = inject(GetServicos);
   private putService = inject(PutService);
   private deleteService = inject(DeleteService);
   private http = inject(HttpClient);
@@ -168,10 +170,16 @@ export class DetalhesEdicao {
   }
 
   carregarTitulos(): void {
-    const token = sessionStorage.getItem('authToken') || undefined;
-    this.apiService.getTitulos(token).subscribe({
-      next: (titulos) => {
-        this.titulos = titulos || [];
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('[DetalhesEdicao] Token não encontrado');
+      alert('Token de autenticação não encontrado.');
+      return;
+    }
+    
+    this.getService.getApiUrlGetTitulos(token, 0, 1000).subscribe({
+      next: (response: any) => {
+        this.titulos = response?.conteudo || [];
       },
       error: (err) => {
         console.error('[DetalhesEdicao] Erro ao carregar títulos:', err);
@@ -306,11 +314,17 @@ export class DetalhesEdicao {
       formData.append('imagem', this.edicaoEditada.imagemFile, this.edicaoEditada.imagemFile.name);
     }
 
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+
     console.log('[DetalhesEdicao] Atualizando edição:', this.edicao.idEdicao);
     console.log('[DetalhesEdicao] Dados da edição:', edicaoData);
     console.log('[DetalhesEdicao] Imagem:', this.edicaoEditada.imagemFile ? this.edicaoEditada.imagemFile.name : 'Nenhuma');
     
-    this.putService.atualizarEdicao(this.edicao.idEdicao, formData).subscribe({
+    this.putService.atualizarEdicao(this.edicao.idEdicao, formData, token).subscribe({
       next: (edicaoAtualizada: any) => {
         console.log('[DetalhesEdicao] Edição atualizada com sucesso:', edicaoAtualizada);
         alert('Edição atualizada com sucesso!');

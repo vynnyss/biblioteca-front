@@ -22,8 +22,35 @@ export class DetalhesEmprestimos {
   public emprestimo: EmprestimoModel | null = null;
   public loading = false;
   public error: string | null = null;
+  public userRole: string = '';
 
-  constructor(private serv: GetServicos, private putService: PutService) {}
+  constructor(private serv: GetServicos, private putService: PutService) {
+    this.loadUserRole();
+  }
+
+  private loadUserRole() {
+    try {
+      const raw = sessionStorage.getItem('decodedToken');
+      if (raw) {
+        const decoded = JSON.parse(raw) as { role?: string };
+        this.userRole = decoded?.role ?? '';
+      }
+    } catch (e) {
+      console.error('Erro ao ler decodedToken:', e);
+      this.userRole = '';
+    }
+  }
+
+  public isCliente(): boolean {
+    return this.userRole === 'CLIENTE';
+  }
+
+  public temMultaPendente(): boolean {
+    if (!this.emprestimo?.multa) return false;
+    return (this.emprestimo.multa.valor > 0) && 
+           (this.emprestimo.multa.statusPagamento === 'PENDENTE' || 
+            this.emprestimo.multa.statusPagamento === 'EM_ATRASO');
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('idEmprestimo' in changes) {
@@ -40,7 +67,16 @@ export class DetalhesEmprestimos {
     this.loading = true;
     this.error = null;
     this.emprestimo = null;
-    this.serv.getApiUrlGetEmprestimosPorID(id).subscribe({
+
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token não encontrado');
+      this.error = 'Token de autenticação não encontrado.';
+      this.loading = false;
+      return;
+    }
+
+    this.serv.getApiUrlGetEmprestimosPorID(id, token).subscribe({
       next: (res: EmprestimoModel) => {
         this.emprestimo = res;
         this.loading = false;
@@ -55,7 +91,12 @@ export class DetalhesEmprestimos {
 
   public registrarSeparacao() {
     if (!this.emprestimo?.idEmprestimo) return;
-    this.putService.registrarSeparacao(this.emprestimo.idEmprestimo).subscribe({
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+    this.putService.registrarSeparacao(this.emprestimo.idEmprestimo, token).subscribe({
       next: () => {
         alert('Separação registrada com sucesso!');
         this.load(this.emprestimo!.idEmprestimo);
@@ -69,7 +110,12 @@ export class DetalhesEmprestimos {
 
   public registrarRetirada() {
     if (!this.emprestimo?.idEmprestimo) return;
-    this.putService.registrarRetirada(this.emprestimo.idEmprestimo).subscribe({
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+    this.putService.registrarRetirada(this.emprestimo.idEmprestimo, token).subscribe({
       next: () => {
         alert('Retirada registrada com sucesso!');
         this.load(this.emprestimo!.idEmprestimo);
@@ -83,7 +129,12 @@ export class DetalhesEmprestimos {
 
   public registrarDevolucao() {
     if (!this.emprestimo?.idEmprestimo) return;
-    this.putService.registrarDevolucao(this.emprestimo.idEmprestimo).subscribe({
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+    this.putService.registrarDevolucao(this.emprestimo.idEmprestimo, token).subscribe({
       next: () => {
         alert('Devolução registrada com sucesso!');
         this.load(this.emprestimo!.idEmprestimo);
@@ -91,6 +142,28 @@ export class DetalhesEmprestimos {
       error: (err) => {
         console.error('Erro ao registrar devolução:', err);
         alert('Erro ao registrar devolução.');
+      }
+    });
+  }
+
+  public pagarMulta() {
+    if (!this.emprestimo?.idEmprestimo) return;
+    
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('❌ Token de autenticação não encontrado. Faça login novamente.');
+      return;
+    }
+
+    this.putService.pagarMulta(this.emprestimo.idEmprestimo, token).subscribe({
+      next: () => {
+        alert('✅ Multa paga com sucesso!');
+        this.load(this.emprestimo!.idEmprestimo);
+      },
+      error: (err) => {
+        console.error('Erro ao pagar multa:', err);
+        const errorMsg = err?.error?.mensagem || err?.message || 'Erro ao processar pagamento da multa';
+        alert(`❌ Erro ao pagar multa: ${errorMsg}`);
       }
     });
   }

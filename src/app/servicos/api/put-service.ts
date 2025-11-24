@@ -17,59 +17,81 @@ export class PutService {
 
   constructor(private http: HttpClient) {}
 
-  registrarSeparacao(id: number) {
-    return this.http.put(`${this.apiRegistrarSeparacao}/${id}`, {});
+  registrarSeparacao(id: number, token: string) {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${this.apiRegistrarSeparacao}/${id}`, {}, { headers });
   }
 
-  registrarRetirada(id: number) {
-    return this.http.put(`${this.apiRegistrarRetirada}/${id}`, {});
+  registrarRetirada(id: number, token: string) {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${this.apiRegistrarRetirada}/${id}`, {}, { headers });
   }
 
-  registrarDevolucao(id: number) {
-    return this.http.put(`${this.apiRegistrarDevolucao}/${id}`, {});
+  registrarDevolucao(id: number, token: string) {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${this.apiRegistrarDevolucao}/${id}`, {}, { headers });
   }
 
-  aprovarConta(id: number) {
-    return this.http.put(`${this.apiAprovarConta}/${id}`, {});
+  aprovarConta(id: number, token: string) {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${this.apiAprovarConta}/${id}`, {}, { headers });
   }
 
-  rejeitarConta(id: number, motivo: string) {
-    return this.http.put(`${this.apiRejeitarConta}/${id}`, { motivo });
+  rejeitarConta(id: number, motivo: string, token: string) {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${this.apiRejeitarConta}/${id}`, { motivo }, { headers });
   }
 
-  solicitarExclusaoConta(id: number, motivo: string) {
-    return this.http.put(`${this.apiSolicitarExclusao}/${id}`, { motivo });
+  solicitarExclusaoConta(id: number, motivo: string, token: string) {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${this.apiSolicitarExclusao}/${id}`, { motivo }, { headers });
   }
 
-  solicitarExclusaoExemplar(id: number) {
-    return this.http.put(`${this.apiSolicitarExclusaoExemplar}/${id}`, {});
+  solicitarExclusaoExemplar(id: number, motivo: string, token: string) {
+    const headers = { 
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+    return this.http.put(`${this.apiSolicitarExclusaoExemplar}/${id}`, { motivo }, { headers });
   }
 
-  atualizarNomeAutor(id: number, nome: string) {
-    return this.http.put(`${this.apiAutores}/${id}`, { "nome": nome });
+  atualizarNomeAutor(id: number, nome: string, token: string) {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${this.apiAutores}/${id}`, { "nome": nome }, { headers });
   }
 
-  atualizarNomeEditora(id: number, nome: string) {
-    return this.http.put(`${this.apiEditoras}/${id}`, { "nome": nome });
+  atualizarNomeEditora(id: number, nome: string, token: string) {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${this.apiEditoras}/${id}`, { "nome": nome }, { headers });
   }
 
-  atualizarNomeIdioma(id: number, nome: string) {
+  atualizarNomeIdioma(id: number, nome: string, token: string) {
     const apiIdiomas = "http://localhost:8080/idiomas";
-    return this.http.put(`${apiIdiomas}/${id}`, { "nome": nome });
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${apiIdiomas}/${id}`, { "nome": nome }, { headers });
   }
 
-  atualizarTitulo(id: number, dados: any) {
+  atualizarTitulo(id: number, dados: any, token: string) {
     const apiTitulos = "http://localhost:8080/titulos";
-    return this.http.put(`${apiTitulos}/${id}`, dados);
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${apiTitulos}/${id}`, dados, { headers });
   }
 
-  atualizarExemplar(id: number, dados: any) {
+  atualizarExemplar(id: number, dados: any, token: string) {
     const apiExemplares = "http://localhost:8080/exemplares";
-    return this.http.put(`${apiExemplares}/${id}`, dados);
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${apiExemplares}/${id}`, dados, { headers });
   }
 
-  atualizarEdicao(id: number, formData: FormData) {
+  atualizarEdicao(id: number, formData: FormData, token: string) {
     const apiEdicoes = "http://localhost:8080/edicoes";
-    return this.http.put(`${apiEdicoes}/${id}`, formData);
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${apiEdicoes}/${id}`, formData, { headers });
+  }
+
+  pagarMulta(id: number, token: string) {
+    const apiPagarMulta = "http://localhost:8080/emprestimos/pagar-multa";
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${apiPagarMulta}/${id}`, {}, { headers });
   }
 }

@@ -44,28 +44,44 @@ export class Carrinho implements OnInit {
 
     if (!email) {
       console.warn('email do usuário não encontrado. Não foi possível finalizar pedido.');
+      alert('❌ Erro: não foi possível identificar o usuário. Faça login novamente.');
       return;
     }
 
-    this.getServicos.getPessoaPorEmail(email).subscribe({
+    if (this.mockBooks.length === 0) {
+      alert('ℹ️ Seu carrinho está vazio. Adicione livros antes de finalizar o pedido.');
+      return;
+    }
+
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('❌ Token de autenticação não encontrado. Faça login novamente.');
+      return;
+    }
+
+    this.getServicos.getPessoaPorEmail(email, token).subscribe({
       next: (p) => {
         const emprestimo: Emprestimo = {
           idPessoa: p.idPessoa,
           idsEdicao: this.mockBooks.map(b => (b as any).idEdicao).filter(Boolean) as number[]
         };
         console.log('Objeto Emprestimo criado:', emprestimo);
-        this.postService.postEmprestimo(emprestimo).subscribe({
+        this.postService.postEmprestimo(emprestimo, token).subscribe({
           next: (response) => {
             console.log('Empréstimo realizado com sucesso:', response);
+            alert('✅ Pedido finalizado com sucesso! Seus livros foram reservados.');
             this.clearSessionCart();
           },
           error: (err) => {
             console.error('Erro ao realizar empréstimo:', err);
+            const errorMsg = err?.error?.mensagem || err?.message || 'Erro ao processar o empréstimo';
+            alert(`❌ Erro ao finalizar pedido: ${errorMsg}`);
           }
         });
       },
       error: (err) => {
         console.error('Erro ao buscar pessoa para finalizar pedido:', err);
+        alert('❌ Erro ao buscar dados do usuário. Tente novamente ou faça login novamente.');
       }
     });
   }

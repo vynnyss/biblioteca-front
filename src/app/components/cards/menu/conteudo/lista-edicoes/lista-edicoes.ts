@@ -28,9 +28,17 @@ export class ListaEdicoes implements OnInit {
   constructor(private serv: GetServicos) {}
 
   ngOnInit(): void {
-    this.serv.getApiUrlGetEdicoes().subscribe({
-      next: (list: BookModel[]) => {
-        this.allEdicoes = list || [];
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token não encontrado');
+      this.allEdicoes = [];
+      this.edicoes = [];
+      return;
+    }
+
+    this.serv.getApiUrlGetEdicoes(token, 0, 1000).subscribe({
+      next: (response: any) => {
+        this.allEdicoes = response?.conteudo || [];
         this.availableStatuses = Array.from(new Set(this.allEdicoes.map(e => e.statusAtivo))).filter(s => !!s);
         this.applyFilters();
       },

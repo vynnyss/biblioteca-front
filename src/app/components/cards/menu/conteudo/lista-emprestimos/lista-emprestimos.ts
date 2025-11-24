@@ -28,6 +28,7 @@ export class ListaEmprestimos implements OnInit {
 
   private userRole: string = '';
   private userIdPessoa: number | null = null;
+  private userEmail: string = '';
 
   public isCliente(): boolean {
     return this.userRole === 'CLIENTE';
@@ -43,24 +44,7 @@ export class ListaEmprestimos implements OnInit {
         const decoded = JSON.parse(raw) as { role?: string; idPessoa?: number; email?: string; sub?: string };
         this.userRole = decoded?.role ?? '';
         this.userIdPessoa = decoded?.idPessoa ?? null;
-
-        // Se for CLIENTE mas não tem idPessoa, busca pelo email
-        if (this.userRole === 'CLIENTE' && !this.userIdPessoa) {
-          const email = decoded?.email ?? decoded?.sub ?? sessionStorage.getItem('username');
-          if (email) {
-            this.serv.getPessoaPorEmail(email).subscribe({
-              next: (pessoa) => {
-                this.userIdPessoa = pessoa.idPessoa;
-                this.load();
-              },
-              error: (err) => {
-                console.error('Erro ao buscar pessoa por email:', err);
-                this.load();
-              }
-            });
-            return; // Aguarda buscar pessoa antes de carregar empréstimos
-          }
-        }
+        this.userEmail = decoded?.email ?? decoded?.sub ?? sessionStorage.getItem('username') ?? '';
       }
     } catch (e) {
       console.error('Erro ao ler decodedToken:', e);
@@ -73,11 +57,20 @@ export class ListaEmprestimos implements OnInit {
     this.loading = true;
     this.error = null;
 
-    // Se for CLIENTE, busca apenas seus empréstimos
-    if (this.userRole === 'CLIENTE' && this.userIdPessoa) {
-      this.serv.getApiUrlGetEmprestimosPorPessoa(this.userIdPessoa).subscribe({
-        next: (list: ListaEmprestimoModel[]) => {
-          this.allEmprestimos = list || [];
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token não encontrado');
+      this.error = 'Token de autenticação não encontrado.';
+      this.loading = false;
+      return;
+    }
+
+    // Se for CLIENTE, busca empréstimos por email com paginação
+    if (this.userRole === 'CLIENTE' && this.userEmail) {
+      this.serv.getEmprestimosPorEmail(this.userEmail, token, 0, 50).subscribe({
+        next: (response: any) => {
+          // Resposta paginada do backend
+          this.allEmprestimos = response.conteudo || [];
           this.availableStatuses = Array.from(new Set(this.allEmprestimos.map(x => x.status))).filter(s => !!s);
           this.applyFilters();
           this.loading = false;
@@ -90,9 +83,9 @@ export class ListaEmprestimos implements OnInit {
       });
     } else {
       // Se não for CLIENTE, busca todos os empréstimos
-      this.serv.getApiUrlGetEmprestimos().subscribe({
-        next: (list: ListaEmprestimoModel[]) => {
-          this.allEmprestimos = list || [];
+      this.serv.getApiUrlGetEmprestimos(token, 0, 1000).subscribe({
+        next: (response: any) => {
+          this.allEmprestimos = response?.conteudo || [];
           this.availableStatuses = Array.from(new Set(this.allEmprestimos.map(x => x.status))).filter(s => !!s);
           this.applyFilters();
           this.loading = false;
@@ -112,6 +105,7 @@ export class ListaEmprestimos implements OnInit {
 
   public clearDetails() {
     this.selectedId = null;
+    this.load(); // Recarrega a lista de empréstimos
   }
 
   public applyFilters() {

@@ -48,9 +48,18 @@ export class ListaFuncionarios implements OnInit {
 
   private loadAdministradores(): void {
     this.loadingAdmins = true;
-    this.svc.getApiUrlGetAdministradores().subscribe({
-      next: (list: PessoaModel[]) => {
-        this.allAdministradores = list || [];
+
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token não encontrado');
+      this.error = 'Token de autenticação não encontrado.';
+      this.loadingAdmins = false;
+      return;
+    }
+
+    this.svc.getApiUrlGetAdministradores(token, 0, 1000).subscribe({
+      next: (response: any) => {
+        this.allAdministradores = response?.conteudo || [];
         this.updateAvailableStatuses();
         this.applyFilters();
         this.loadingAdmins = false;
@@ -65,9 +74,18 @@ export class ListaFuncionarios implements OnInit {
 
   private loadFuncionarios(): void {
     this.loadingFuncs = true;
-    this.svc.getApiUrlGetFuncionarios().subscribe({
-      next: (list: PessoaModel[]) => {
-        this.allFuncionarios = list || [];
+
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token não encontrado');
+      this.error = 'Token de autenticação não encontrado.';
+      this.loadingFuncs = false;
+      return;
+    }
+
+    this.svc.getApiUrlGetFuncionarios(token, 0, 1000).subscribe({
+      next: (response: any) => {
+        this.allFuncionarios = response?.conteudo || [];
         this.updateAvailableStatuses();
         this.applyFilters();
         this.loadingFuncs = false;

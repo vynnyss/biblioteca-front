@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BookModel } from '../../models/book-model';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { PessoaModel } from '../../models/pessoa-model';
 import { AutorModel } from '../../models/autor';
 import { EditoraModel } from '../../models/editora-model';
@@ -23,7 +24,7 @@ export class GetServicos {
   private apiUrlGetExemplaresDaEdicao = "http://localhost:8080/exemplares/buscar-por-edicao";
 
   private apiUrlGetEmprestimos = "http://localhost:8080/emprestimos";
-  private apiUrlGetEstados = "http://localhost:8080/estados";
+  private apiUrlGetEstados = "http://localhost:8080/estados/ativos";
   private apiUrlGetEmprestimosPorPessoa = "http://localhost:8080/emprestimos/buscar-por-pessoa";
 
   private apiUrlGetClientes = "http://localhost:8080/usuarios/clientes";
@@ -31,71 +32,137 @@ export class GetServicos {
   private apiUrlGetAdministradores = "http://localhost:8080/usuarios/administradores";
   private apiUrlGetTitulos = "http://localhost:8080/titulos";
 
-  getApiUrlGetAutores(): Observable<AutorModel[]> {
-    return this.http.get<AutorModel[]>(this.apiUrlGetAutores);
+  getApiUrlGetAutores(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(this.apiUrlGetAutores, { headers, params });
   }
 
-  getApiUrlGetEditoras(): Observable<EditoraModel[]> {
-    return this.http.get<EditoraModel[]>(this.apiUrlGetEditoras);
+  getApiUrlGetEditoras(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(this.apiUrlGetEditoras, { headers, params });
   }
 
-  getApiUrlGetIdiomas(): Observable<any[]> {
+  getApiUrlGetIdiomas(token: string): Observable<any[]> {
     const apiUrlGetIdiomas = "http://localhost:8080/idiomas";
-    return this.http.get<any[]>(apiUrlGetIdiomas);
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.get<any[]>(apiUrlGetIdiomas, { headers });
   }
 
-  getApiUrlGetExemplaresDaEdicao(id : number): Observable<ExemplarModel[]> {
-    return this.http.get<ExemplarModel[]>(`${this.apiUrlGetExemplaresDaEdicao}/${id}`);
+  getApiUrlGetExemplaresDaEdicao(id : number, token: string): Observable<ExemplarModel[]> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.get<ExemplarModel[]>(`${this.apiUrlGetExemplaresDaEdicao}/${id}`, { headers });
   }
 
-  getApiUrlGetEmprestimos(): Observable<ListaEmprestimoModel[]> {
-    return this.http.get<ListaEmprestimoModel[]>(this.apiUrlGetEmprestimos);
+  getApiUrlGetEmprestimos(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(this.apiUrlGetEmprestimos, { headers, params });
   }
 
-  getApiUrlGetEmprestimosPorID(id : number): Observable<EmprestimoModel> {
-    return this.http.get<EmprestimoModel>(`${this.apiUrlGetEmprestimos}/${id}`);
+  getApiUrlGetEmprestimosPorID(id : number, token: string): Observable<EmprestimoModel> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.get<EmprestimoModel>(`${this.apiUrlGetEmprestimos}/${id}`, { headers });
   }
 
-  getApiUrlGetEmprestimosPorPessoa(idPessoa: number): Observable<ListaEmprestimoModel[]> {
-    const token = sessionStorage.getItem('authToken');
-    let headers = new HttpHeaders();
-    if (token) {
-      headers = headers.set('Authorization', `Bearer ${token}`);
-    }
-    return this.http.get<ListaEmprestimoModel[]>(`${this.apiUrlGetEmprestimosPorPessoa}/${idPessoa}`, { headers });
+  getApiUrlGetEmprestimosPorPessoa(idPessoa: number, token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(`${this.apiUrlGetEmprestimosPorPessoa}/${idPessoa}`, { headers, params });
   }
 
-  getApiUrlGetFuncionarios(): Observable<PessoaModel[]> {
-    return this.http.get<PessoaModel[]>(this.apiUrlGetFuncionarios);
+  getEmprestimosPorEmail(email: string, token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const apiUrlGetEmprestimosPorEmail = "http://localhost:8080/emprestimos/buscar-por-email";
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('email', email)
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(apiUrlGetEmprestimosPorEmail, { headers, params });
   }
 
-  getApiUrlGetAdministradores(): Observable<PessoaModel[]> {
-    return this.http.get<PessoaModel[]>(this.apiUrlGetAdministradores);
+  getApiUrlGetFuncionarios(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(this.apiUrlGetFuncionarios, { headers, params });
   }
 
-  getApiUrlGetClientes(): Observable<PessoaModel[]> {
-    return this.http.get<PessoaModel[]>(this.apiUrlGetClientes);
+  getApiUrlGetAdministradores(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(this.apiUrlGetAdministradores, { headers, params });
   }
 
-  getApiUrlGetEdicoes(): Observable<BookModel[]> {
-    return this.http.get<BookModel[]>(this.apiUrlGetEdicoes);
+  getApiUrlGetClientes(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(this.apiUrlGetClientes, { headers, params });
   }
 
-  getApiUrlGetEdicoesAtivas(): Observable<BookModel[]> {
-    return this.http.get<BookModel[]>(this.apiUrlGetEdicoesAtivas);
+  getApiUrlGetEdicoes(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(this.apiUrlGetEdicoes, { headers, params });
   }
 
-  getPessoaPorEmail(email: string): Observable<PessoaModel> {
+  getApiUrlGetEdicoesAtivas(pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(this.apiUrlGetEdicoesAtivas, { params });
+  }
+
+  getPessoaPorEmail(email: string, token: string): Observable<PessoaModel> {
     const apiUrlGetPessoaPorEmail = `http://localhost:8080/usuarios/buscar-por-email`;
     const params = new HttpParams().set('email', email);
-    return this.http.get<PessoaModel>(apiUrlGetPessoaPorEmail, { params });
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.get<PessoaModel>(apiUrlGetPessoaPorEmail, { params, headers });
   }
 
   getEstados(): Observable<Estado[]> {
     return this.http.get<Estado[]>(this.apiUrlGetEstados);
   }
 
-  getApiUrlGetTitulos(): Observable<Title[]> {
-    return this.http.get<Title[]>(this.apiUrlGetTitulos);
+  getApiUrlGetTitulos(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(this.apiUrlGetTitulos, { headers, params });
+  }
+
+  filtrarEdicoes(termo: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const apiUrlFiltrar = "http://localhost:8080/edicoes/filtrar";
+    const params = new HttpParams()
+      .set('q', termo)
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(apiUrlFiltrar, { params });
+  }
+
+  getApiUrlGetCategorias(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const apiUrlGetCategorias = "http://localhost:8080/categorias";
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(apiUrlGetCategorias, { headers, params });
   }
 }
