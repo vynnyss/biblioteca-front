@@ -35,8 +35,9 @@ export class PostService {
     return this.http.post<any>(`${this.apiUrlRegistro}`, payload)
   }
   
-  postEmprestimo(payload: Emprestimo): Observable<any> {
-    return this.http.post<any>(`${this.apiUrlEmprestimo}`, payload);
+  postEmprestimo(payload: Emprestimo, token: string): Observable<any> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.post<any>(`${this.apiUrlEmprestimo}`, payload, { headers });
   }
 
   putUsuario(id: number, payload: any, token: string): Observable<any> {
@@ -47,46 +48,28 @@ export class PostService {
     return this.http.put<any>(`${this.apiUrlUsuarios}/${id}`, payload, { headers });
   }
 
-  postFuncionario(dados: any) {
-    return this.http.post(`${this.apiUrlUsuarios}`, dados, { responseType: 'text' });
+  postFuncionario(dados: any, token: string) {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.post(`${this.apiUrlUsuarios}`, dados, { headers, responseType: 'text' });
   }
 
   postCadastro(url: string, body: any): Observable<any> {
     return this.http.post(url, body);
   }
+
   getUsuarioPorId(id: number, token: string): Observable<any> {
     const headers = { Authorization: `Bearer ${token}` };
     return this.http.get(`${this.apiUrlUsuarios}/${id}`, { headers });
   }
-
-
-  getUsuarioMe(token: string): Observable<any> {
-    const headers = { Authorization: `Bearer ${token}` };
-    return this.http.get(`${this.apiUrlUsuarios}/me`, { headers });
-  }
-
 
   getUsuarioPorIdSingular(id: number, token: string): Observable<any> {
     const headers = { Authorization: `Bearer ${token}` };
     return this.http.get(`${this.apiUrlUsuario}/${id}`, { headers });
   }
 
-
-  getUsuarioPorEmail(email: string, token: string): Observable<any> {
-    const headers = { Authorization: `Bearer ${token}` };
-    return this.http.get(`${this.apiUrlUsuarios}/email/${email}`, { headers });
-  }
-
-
   listarUsuarios(token: string): Observable<any[]> {
     const headers = { Authorization: `Bearer ${token}` };
     return this.http.get<any[]>(`${this.apiUrlUsuarios}`, { headers });
-  }
-
-
-  getTitulos(token?: string): Observable<any[]> {
-    const options = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-    return this.http.get<any[]>(`${this.apiUrlTitulos}`, options);
   }
 
   postTitulo(titulo: any, token?: string): Observable<any> {
@@ -95,6 +78,38 @@ export class PostService {
       headers['Authorization'] = `Bearer ${token}`;
     }
     return this.http.post<any>(`${this.apiUrlTitulos}`, titulo, { headers });
+  }
+
+  postAutor(payload: any, token: string): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+    return this.http.post<any>('http://localhost:8080/autores', payload, { headers });
+  }
+
+  postEditora(payload: any, token: string): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+    return this.http.post<any>('http://localhost:8080/editoras', payload, { headers });
+  }
+
+  postIdioma(payload: any, token: string): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+    return this.http.post<any>('http://localhost:8080/idiomas', payload, { headers });
+  }
+
+  postCategoria(payload: any, token: string): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+    return this.http.post<any>('http://localhost:8080/categorias', payload, { headers });
   }
 
   postLivro(livro: any, token?: string): Observable<any> {

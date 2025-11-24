@@ -32,7 +32,14 @@ export class Perfil implements OnChanges {
     this.error = null;
     this.loading = true;
 
-    this.svc.getPessoaPorEmail(email).subscribe({
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      this.error = 'Token de autenticação não encontrado.';
+      this.loading = false;
+      return;
+    }
+
+    this.svc.getPessoaPorEmail(email, token).subscribe({
       next: (p: PessoaModel) => {
         this.pessoa = p;
         this.loading = false;

@@ -28,6 +28,11 @@ export class ListaExemplares implements OnChanges {
   public estadoFisicoEditado: string = '';
   public estadosFisicos: string[] = ['MUITO_RUIM', 'RUIM', 'BOM', 'OTIMO', 'EXCELENTE'];
 
+  // Modal de exclusão (para BIBLIOTECARIO)
+  public mostrarModalExclusao = false;
+  public exemplarParaExcluir: ExemplarModel | null = null;
+  public motivoExclusao = '';
+
   constructor(
     private serv: GetServicos, 
     private putService: PutService,
@@ -53,7 +58,17 @@ export class ListaExemplares implements OnChanges {
   private loadExemplares(id: number) {
     this.loading = true;
     this.error = null;
-    this.serv.getApiUrlGetExemplaresDaEdicao(id).subscribe({
+
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token não encontrado');
+      this.error = 'Token de autenticação não encontrado.';
+      this.exemplares = [];
+      this.loading = false;
+      return;
+    }
+
+    this.serv.getApiUrlGetExemplaresDaEdicao(id, token).subscribe({
       next: (list: ExemplarModel[]) => {
         this.exemplares = list || [];
         console.log('ListaExemplares: loaded exemplares', this.exemplares);
@@ -85,30 +100,68 @@ export class ListaExemplares implements OnChanges {
     if (!raw) return false;
     try {
       const decoded: DecodeToken = JSON.parse(raw);
-      return decoded.role === 'BIBLIOTECARIO' || decoded.role === 'FUNCIONARIO';
+      return decoded.role === 'BIBLIOTECARIO';
+    } catch {
+      return false;
+    }
+  }
+
+  public isAdministrador(): boolean {
+    const raw = sessionStorage.getItem('decodedToken');
+    if (!raw) return false;
+    try {
+      const decoded: DecodeToken = JSON.parse(raw);
+      return decoded.role === 'ADMINISTRADOR';
     } catch {
       return false;
     }
   }
 
   public podeExcluir(item: ExemplarModel): boolean {
-    return this.isBibliotecario();
+    return this.isBibliotecario() || this.isAdministrador();
   }
 
-  public solicitarExclusaoExemplar(item: ExemplarModel) {
-    if (!item?.idExemplar) return;
-    if (!confirm('Deseja realmente solicitar a exclusão deste exemplar?')) return;
-    this.putService.solicitarExclusaoExemplar(item.idExemplar).subscribe({
+  public abrirModalExclusao(item: ExemplarModel): void {
+    this.exemplarParaExcluir = item;
+    this.motivoExclusao = '';
+    this.mostrarModalExclusao = true;
+  }
+
+  public fecharModalExclusao(): void {
+    this.mostrarModalExclusao = false;
+    this.exemplarParaExcluir = null;
+    this.motivoExclusao = '';
+  }
+
+  public confirmarSolicitacaoExclusao(): void {
+    if (!this.exemplarParaExcluir?.idExemplar) return;
+    if (!this.motivoExclusao.trim()) {
+      alert('Por favor, informe o motivo da exclusão.');
+      return;
+    }
+    if (this.motivoExclusao.trim().length < 8) {
+      alert('O motivo deve ter no mínimo 8 caracteres.');
+      return;
+    }
+
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+
+    this.putService.solicitarExclusaoExemplar(this.exemplarParaExcluir.idExemplar, this.motivoExclusao.trim(), token).subscribe({
       next: () => {
         alert('Solicitação de exclusão enviada com sucesso!');
-        // Recarregar lista para atualizar status
+        this.fecharModalExclusao();
         if (this.edicaoId) {
           this.loadExemplares(this.edicaoId);
         }
       },
       error: (err) => {
         console.error('Erro ao solicitar exclusão de exemplar:', err);
-        alert('Erro ao solicitar exclusão do exemplar.');
+        const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao solicitar exclusão do exemplar.';
+        alert(msg);
       }
     });
   }
@@ -132,12 +185,18 @@ export class ListaExemplares implements OnChanges {
       return;
     }
 
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+
     const payload = {
       estadoFisico: this.estadoFisicoEditado,
       edicaoId: this.edicaoId
     };
 
-    this.putService.atualizarExemplar(this.exemplarEditando.idExemplar, payload).subscribe({
+    this.putService.atualizarExemplar(this.exemplarEditando.idExemplar, payload, token).subscribe({
       next: () => {
         alert('Exemplar atualizado com sucesso!');
         this.fecharModalEdicao();
@@ -153,23 +212,33 @@ export class ListaExemplares implements OnChanges {
     });
   }
 
-  public inativarExemplar(exemplar: ExemplarModel): void {
+  public handleExclusaoOuInativacao(exemplar: ExemplarModel): void {
     if (!exemplar?.idExemplar) return;
-    const confirmar = confirm(`Deseja realmente inativar o exemplar #${exemplar.idExemplar}?`);
-    if (!confirmar) return;
 
-    this.deleteService.inativarExemplar(exemplar.idExemplar).subscribe({
-      next: () => {
-        alert('Exemplar inativado com sucesso!');
-        if (this.edicaoId) {
-          this.loadExemplares(this.edicaoId);
+    // BIBLIOTECARIO: solicita exclusão com motivo
+    if (this.isBibliotecario()) {
+      this.abrirModalExclusao(exemplar);
+      return;
+    }
+
+    // ADMINISTRADOR: inativa diretamente
+    if (this.isAdministrador()) {
+      const confirmar = confirm(`Deseja realmente inativar o exemplar #${exemplar.idExemplar}?`);
+      if (!confirmar) return;
+
+      this.deleteService.inativarExemplar(exemplar.idExemplar).subscribe({
+        next: () => {
+          alert('Exemplar inativado com sucesso!');
+          if (this.edicaoId) {
+            this.loadExemplares(this.edicaoId);
+          }
+        },
+        error: (err) => {
+          console.error('Erro ao inativar exemplar:', err);
+          const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao inativar exemplar.';
+          alert(msg);
         }
-      },
-      error: (err) => {
-        console.error('Erro ao inativar exemplar:', err);
-        const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao inativar exemplar.';
-        alert(msg);
-      }
-    });
+      });
+    }
   }
 }

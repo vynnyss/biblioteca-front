@@ -33,9 +33,17 @@ export class ListaAutores implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.serv.getApiUrlGetAutores().subscribe({
-      next: (list: AutorModel[]) => {
-        this.allAutores = list || [];
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token não encontrado');
+      this.allAutores = [];
+      this.autores = [];
+      return;
+    }
+
+    this.serv.getApiUrlGetAutores(token, 0, 1000).subscribe({
+      next: (response: any) => {
+        this.allAutores = response?.conteudo || [];
         this.availableStatuses = Array.from(new Set(this.allAutores.map(a => a.statusAtivo))).filter(s => !!s);
         this.applyFilters();
       },
@@ -96,7 +104,12 @@ export class ListaAutores implements OnInit {
       alert('Nome não pode estar vazio.');
       return;
     }
-    this.putService.atualizarNomeAutor(this.editandoId, this.novoNome.trim()).subscribe({
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+    this.putService.atualizarNomeAutor(this.editandoId, this.novoNome.trim(), token).subscribe({
       next: () => {
         alert('Nome atualizado com sucesso!');
         this.editandoId = null;

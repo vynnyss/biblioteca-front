@@ -5,6 +5,7 @@ export interface ExemplarModel {
     idExemplar: number,
     status: string,
     estadoFisico: string,
-    edicao: BookModel
+    edicao: BookModel,
+    motivoSolicitacaoExclusao?: string
 
 }

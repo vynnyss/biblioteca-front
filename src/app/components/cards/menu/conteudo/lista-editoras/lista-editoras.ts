@@ -33,9 +33,17 @@ export class ListaEditoras implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.serv.getApiUrlGetEditoras().subscribe({
-      next: (list: EditoraModel[]) => {
-        this.allEditoras = list || [];
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token não encontrado');
+      this.allEditoras = [];
+      this.editoras = [];
+      return;
+    }
+
+    this.serv.getApiUrlGetEditoras(token, 0, 1000).subscribe({
+      next: (response: any) => {
+        this.allEditoras = response?.conteudo || [];
         this.availableStatuses = Array.from(new Set(this.allEditoras.map(e => e.statusAtivo))).filter(s => !!s);
         this.applyFilters();
       },
@@ -96,7 +104,12 @@ export class ListaEditoras implements OnInit {
       alert('Nome não pode estar vazio.');
       return;
     }
-    this.putService.atualizarNomeEditora(this.editandoId, this.novoNome.trim()).subscribe({
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+    this.putService.atualizarNomeEditora(this.editandoId, this.novoNome.trim(), token).subscribe({
       next: () => {
         alert('Nome atualizado com sucesso!');
         this.editandoId = null;

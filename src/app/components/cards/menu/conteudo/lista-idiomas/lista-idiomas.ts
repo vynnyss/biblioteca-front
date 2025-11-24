@@ -32,7 +32,15 @@ export class ListaIdiomas implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.serv.getApiUrlGetIdiomas().subscribe({
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token não encontrado');
+      this.allIdiomas = [];
+      this.idiomas = [];
+      return;
+    }
+
+    this.serv.getApiUrlGetIdiomas(token).subscribe({
       next: (list: any[]) => {
         this.allIdiomas = list || [];
         this.availableStatuses = Array.from(new Set(this.allIdiomas.map(i => i.statusAtivo))).filter(s => !!s);
@@ -95,7 +103,12 @@ export class ListaIdiomas implements OnInit {
       alert('Nome não pode estar vazio.');
       return;
     }
-    this.putService.atualizarNomeIdioma(this.editandoId, this.novoNome.trim()).subscribe({
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+    this.putService.atualizarNomeIdioma(this.editandoId, this.novoNome.trim(), token).subscribe({
       next: () => {
         alert('Nome atualizado com sucesso!');
         this.editandoId = null;

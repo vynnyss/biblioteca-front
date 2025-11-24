@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { PostService } from '../../../servicos/api/post-service';
+import { GetServicos } from '../../../servicos/api/get-servicos';
 import { Title } from '../../../models/title';
 
 @Component({
@@ -14,6 +15,7 @@ import { Title } from '../../../models/title';
 })
 export class Livro implements OnInit {
   private apiService = inject(PostService);
+  private getService = inject(GetServicos);
   private http = inject(HttpClient);
   
   titulos: Title[] = [];
@@ -89,11 +91,18 @@ export class Livro implements OnInit {
 
   carregarTitulos(): void {
     this.carregandoTitulos = true;
-    const token = sessionStorage.getItem('authToken') || undefined;
+    const token = sessionStorage.getItem('authToken');
     
-    this.apiService.getTitulos(token).subscribe({
-      next: (titulos) => {
-        this.titulos = titulos || [];
+    if (!token) {
+      console.error('[Livro] Token não encontrado');
+      this.carregandoTitulos = false;
+      alert('Token de autenticação não encontrado.');
+      return;
+    }
+    
+    this.getService.getApiUrlGetTitulos(token, 0, 1000).subscribe({
+      next: (response: any) => {
+        this.titulos = response?.conteudo || [];
         this.carregandoTitulos = false;
         console.log('[Livro] Títulos carregados:', this.titulos);
       },
@@ -109,11 +118,16 @@ export class Livro implements OnInit {
     this.carregandoAutores = true;
     const token = sessionStorage.getItem('authToken');
     
-    this.http.get<any[]>('http://localhost:8080/autores', {
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-    }).subscribe({
-      next: (autores: any) => {
-        this.autores = Array.isArray(autores) ? autores : [];
+    if (!token) {
+      console.error('[Livro] Token não encontrado');
+      this.carregandoAutores = false;
+      alert('Token de autenticação não encontrado.');
+      return;
+    }
+    
+    this.getService.getApiUrlGetAutores(token, 0, 1000).subscribe({
+      next: (response: any) => {
+        this.autores = response?.conteudo || [];
         this.carregandoAutores = false;
         console.log('[Livro] Autores carregados:', this.autores);
       },
@@ -129,11 +143,16 @@ export class Livro implements OnInit {
     this.carregandoEditoras = true;
     const token = sessionStorage.getItem('authToken');
     
-    this.http.get<any[]>('http://localhost:8080/editoras', {
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-    }).subscribe({
-      next: (editoras: any) => {
-        this.editoras = Array.isArray(editoras) ? editoras : [];
+    if (!token) {
+      console.error('[Livro] Token não encontrado');
+      this.carregandoEditoras = false;
+      alert('Token de autenticação não encontrado.');
+      return;
+    }
+    
+    this.getService.getApiUrlGetEditoras(token, 0, 1000).subscribe({
+      next: (response: any) => {
+        this.editoras = response?.conteudo || [];
         this.carregandoEditoras = false;
         console.log('[Livro] Editoras carregadas:', this.editoras);
       },
@@ -149,9 +168,14 @@ export class Livro implements OnInit {
     this.carregandoIdiomas = true;
     const token = sessionStorage.getItem('authToken');
     
-    this.http.get<any[]>('http://localhost:8080/idiomas', {
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-    }).subscribe({
+    if (!token) {
+      console.error('[Livro] Token não encontrado');
+      this.carregandoIdiomas = false;
+      alert('Token de autenticação não encontrado.');
+      return;
+    }
+    
+    this.getService.getApiUrlGetIdiomas(token).subscribe({
       next: (idiomas: any) => {
         this.idiomas = Array.isArray(idiomas) ? idiomas : [];
         this.carregandoIdiomas = false;
@@ -169,11 +193,16 @@ export class Livro implements OnInit {
     this.carregandoCategorias = true;
     const token = sessionStorage.getItem('authToken');
     
-    this.http.get<any[]>('http://localhost:8080/categorias', {
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-    }).subscribe({
-      next: (categorias: any) => {
-        this.categorias = Array.isArray(categorias) ? categorias : [];
+    if (!token) {
+      console.error('[Livro] Token não encontrado');
+      this.carregandoCategorias = false;
+      alert('Token de autenticação não encontrado.');
+      return;
+    }
+    
+    this.getService.getApiUrlGetCategorias(token, 0, 1000).subscribe({
+      next: (response: any) => {
+        this.categorias = response?.conteudo || [];
         this.carregandoCategorias = false;
         console.log('[Livro] Categorias carregadas:', this.categorias);
       },
@@ -409,10 +438,16 @@ export class Livro implements OnInit {
       return;
     }
 
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('Token de autentica\u00e7\u00e3o n\u00e3o encontrado.');
+      return;
+    }
+
     const payload = { nome };
     console.log('[Livro] Cadastrando novo autor:', payload);
     
-    this.apiService.postCadastro('http://localhost:8080/autores', payload).subscribe({
+    this.apiService.postAutor(payload, token).subscribe({
       next: (autorNovo: any) => {
         console.log('[Livro] Autor cadastrado com sucesso:', autorNovo);
         alert('Autor cadastrado com sucesso!');
@@ -448,10 +483,16 @@ export class Livro implements OnInit {
       return;
     }
 
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('Token de autentica\u00e7\u00e3o n\u00e3o encontrado.');
+      return;
+    }
+
     const payload = { nome };
     console.log('[Livro] Cadastrando nova editora:', payload);
     
-    this.apiService.postCadastro('http://localhost:8080/editoras', payload).subscribe({
+    this.apiService.postEditora(payload, token).subscribe({
       next: (editoraNova: any) => {
         console.log('[Livro] Editora cadastrada com sucesso:', editoraNova);
         alert('Editora cadastrada com sucesso!');
@@ -488,10 +529,16 @@ export class Livro implements OnInit {
       return;
     }
 
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('Token de autentica\u00e7\u00e3o n\u00e3o encontrado.');
+      return;
+    }
+
     const payload = { nome };
     console.log('[Livro] Cadastrando novo idioma:', payload);
     
-    this.apiService.postCadastro('http://localhost:8080/idiomas', payload).subscribe({
+    this.apiService.postIdioma(payload, token).subscribe({
       next: (idiomaNovo: any) => {
         console.log('[Livro] Idioma cadastrado com sucesso:', idiomaNovo);
         alert('Idioma cadastrado com sucesso!');
@@ -528,10 +575,16 @@ export class Livro implements OnInit {
       return;
     }
 
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('Token de autentica\u00e7\u00e3o n\u00e3o encontrado.');
+      return;
+    }
+
     const payload = { nome };
     console.log('[Livro] Cadastrando nova categoria:', payload);
     
-    this.apiService.postCadastro('http://localhost:8080/categorias', payload).subscribe({
+    this.apiService.postCategoria(payload, token).subscribe({
       next: (categoriaNova: any) => {
         console.log('[Livro] Categoria cadastrada com sucesso:', categoriaNova);
         alert('Categoria cadastrada com sucesso!');

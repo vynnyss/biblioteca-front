@@ -434,9 +434,18 @@ export class AtualizacaoPessoa implements OnInit {
       this.postService.putUsuario(idUsuario, payload, token).subscribe({
         next: (res) => {
           console.log('Usuário atualizado com sucesso:', res);
+          console.log('[AtualizacaoPessoa] Debug após save - isCliente():', this.isCliente(), 'isEditandoOutroCliente:', this.isEditandoOutroCliente, 'userRole:', this.userRole);
           alert('Dados atualizados com sucesso!');
-          if (this.isEditandoOutroCliente) {
+          
+          // Se for funcionário/admin editando outro cliente, volta para lista de Clientes
+          if (this.isEditandoOutroCliente && (this.userRole === 'FUNCIONARIO' || this.userRole === 'ADMINISTRADOR')) {
+            console.log('[AtualizacaoPessoa] Navegando para Clientes (funcionário/admin editando outro)');
             this.router.navigate(['/menu-principal'], { state: { selectedCard: 'Clientes' } });
+          } 
+          // Caso padrão: volta para menu-principal sem card específico
+          else {
+            console.log('[AtualizacaoPessoa] Navegando para menu-principal (sem card específico)');
+            this.router.navigate(['/menu-principal']);
           }
         },
         error: (err) => {

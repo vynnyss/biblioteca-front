@@ -60,9 +60,24 @@ export class ListaTitulos implements OnInit {
 
   private loadTitulos(): void {
     this.loading = true;
-    this.svc.getApiUrlGetTitulos().subscribe({
-      next: (list: Title[]) => {
-        this.allTitulos = list || [];
+
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token não encontrado');
+      this.error = 'Token de autenticação não encontrado.';
+      this.loading = false;
+      return;
+    }
+
+    this.svc.getApiUrlGetTitulos(token, 0, 50).subscribe({
+      next: (response: any) => {
+        // Se a resposta vier com paginação
+        if (response.conteudo) {
+          this.allTitulos = response.conteudo || [];
+        } else {
+          // Se vier como array direto (retrocompatibilidade)
+          this.allTitulos = response || [];
+        }
         this.applyFilters();
         this.loading = false;
       },
@@ -200,6 +215,12 @@ export class ListaTitulos implements OnInit {
       return;
     }
 
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+
     const payload = {
       nome,
       descricao,
@@ -207,7 +228,7 @@ export class ListaTitulos implements OnInit {
       idsCategorias: this.tituloEditado.idsCategorias
     };
 
-    this.putService.atualizarTitulo(this.tituloEditando.idTitulo, payload).subscribe({
+    this.putService.atualizarTitulo(this.tituloEditando.idTitulo, payload, token).subscribe({
       next: () => {
         alert('Título atualizado com sucesso!');
         console.log('Título atualizado, payload:', payload);

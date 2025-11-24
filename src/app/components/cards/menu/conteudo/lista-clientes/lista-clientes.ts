@@ -34,9 +34,18 @@ export class ListaClientes implements OnInit {
   private loadClientes(): void {
     this.loading = true;
     this.error = null;
-    this.svc.getApiUrlGetClientes().subscribe({
-      next: (list: PessoaModel[]) => {
-        this.allClientes = list || [];
+
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token não encontrado');
+      this.error = 'Token de autenticação não encontrado.';
+      this.loading = false;
+      return;
+    }
+
+    this.svc.getApiUrlGetClientes(token, 0, 1000).subscribe({
+      next: (response: any) => {
+        this.allClientes = response?.conteudo || [];
         this.availableStatuses = ['INATIVA','REJEITADA','EM_ANALISE_APROVACAO','EM_ANALISE_EXCLUSAO','ATIVA'];
         this.applyFilters();
         this.loading = false;

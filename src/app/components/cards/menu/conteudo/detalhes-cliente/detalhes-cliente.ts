@@ -135,7 +135,12 @@ export class DetalhesCliente {
 
   public aprovarConta() {
     if (!this.cliente?.idPessoa) return;
-    this.putService.aprovarConta(this.cliente.idPessoa).subscribe({
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+    this.putService.aprovarConta(this.cliente.idPessoa, token).subscribe({
       next: () => {
         alert('Conta aprovada com sucesso!');
         this.close.emit();
@@ -168,7 +173,13 @@ export class DetalhesCliente {
       return;
     }
     
-    this.putService.rejeitarConta(this.cliente.idPessoa, this.motivoRejeicao).subscribe({
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+    
+    this.putService.rejeitarConta(this.cliente.idPessoa, this.motivoRejeicao, token).subscribe({
       next: () => {
         alert('Conta rejeitada com sucesso!');
         this.fecharModalRejeicao();
@@ -202,7 +213,13 @@ export class DetalhesCliente {
       return;
     }
     
-    this.putService.solicitarExclusaoConta(this.cliente.idPessoa, this.motivoExclusao).subscribe({
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+    
+    this.putService.solicitarExclusaoConta(this.cliente.idPessoa, this.motivoExclusao, token).subscribe({
       next: () => {
         alert('Solicitação de exclusão enviada com sucesso!');
         this.fecharModalExclusao();
@@ -219,10 +236,18 @@ export class DetalhesCliente {
     this.loadingEmprestimos = true;
     this.errorEmprestimos = null;
     this.emprestimos = [];
+
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      console.error('Token não encontrado');
+      this.errorEmprestimos = 'Token de autenticação não encontrado.';
+      this.loadingEmprestimos = false;
+      return;
+    }
     
-    this.getService.getApiUrlGetEmprestimosPorPessoa(idPessoa).subscribe({
-      next: (lista) => {
-        this.emprestimos = lista || [];
+    this.getService.getApiUrlGetEmprestimosPorPessoa(idPessoa, token, 0, 1000).subscribe({
+      next: (response: any) => {
+        this.emprestimos = response?.conteudo || [];
         this.loadingEmprestimos = false;
       },
       error: (err) => {

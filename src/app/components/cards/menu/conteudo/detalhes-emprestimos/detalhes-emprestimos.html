@@ -2,11 +2,16 @@
 	<button class="btn btn-outline" type="button" (click)="onClose()">← Voltar</button>
 	<h3>Detalhes do Empréstimo</h3>
 
-	<!-- Ações rápidas para o empréstimo (sem comportamento implementado ainda) -->
-	<div class="emprestimo-actions">
+	<!-- Ações para funcionários/administradores -->
+	<div class="emprestimo-actions" *ngIf="!isCliente()">
 		<button class="btn btn-primary" type="button" (click)="registrarRetirada()">Registrar Retirada</button>
 		<button class="btn btn-success" type="button" (click)="registrarDevolucao()">Registrar Devolução</button>
 		<button class="btn btn-outline" type="button" (click)="registrarSeparacao()">Registrar Separação</button>
+	</div>
+
+	<!-- Ação para cliente com multa pendente -->
+	<div class="emprestimo-actions" *ngIf="isCliente() && temMultaPendente()">
+		<button class="btn btn-warning" type="button" (click)="pagarMulta()">Pagar Multa</button>
 	</div>
 
 	<div *ngIf="loading">Carregando detalhes do empréstimo...</div>
