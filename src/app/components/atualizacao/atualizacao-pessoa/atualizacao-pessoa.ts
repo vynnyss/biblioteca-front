@@ -228,6 +228,7 @@ export class AtualizacaoPessoa implements OnInit {
   }
 
   private aplicarDados(data: any, fonte: string) {
+    console.log(`[AtualizacaoPessoa] Aplicando dados do usuário via ${fonte}:`, data);
     const adaptar = (orig: any) => {
       const enderecoOrig = orig?.endereco || {};
       console.log('[AtualizacaoPessoa] Raw endereco recebido do backend:', enderecoOrig);

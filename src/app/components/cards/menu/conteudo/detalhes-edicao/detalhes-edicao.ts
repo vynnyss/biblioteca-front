@@ -41,6 +41,14 @@ export class DetalhesEdicao {
   editoras: any[] = [];
   idiomas: any[] = [];
   
+  // Busca e filtragem
+  termoBuscaTitulo = '';
+  termoBuscaEditora = '';
+  termoBuscaIdioma = '';
+  titulosFiltrados: Title[] = [];
+  editorasFiltradas: any[] = [];
+  idiomasFiltrados: any[] = [];
+  
   edicaoEditada = {
     idTitulo: null as number | null,
     idEditora: null as number | null,
@@ -169,6 +177,39 @@ export class DetalhesEdicao {
     };
   }
 
+  filtrarTitulos(): void {
+    const termo = this.termoBuscaTitulo.toLowerCase().trim();
+    if (!termo) {
+      this.titulosFiltrados = [...this.titulos];
+      return;
+    }
+    this.titulosFiltrados = this.titulos.filter(t => 
+      t.nome?.toLowerCase().includes(termo)
+    );
+  }
+
+  filtrarEditoras(): void {
+    const termo = this.termoBuscaEditora.toLowerCase().trim();
+    if (!termo) {
+      this.editorasFiltradas = [...this.editoras];
+      return;
+    }
+    this.editorasFiltradas = this.editoras.filter(e => 
+      e.nome?.toLowerCase().includes(termo)
+    );
+  }
+
+  filtrarIdiomas(): void {
+    const termo = this.termoBuscaIdioma.toLowerCase().trim();
+    if (!termo) {
+      this.idiomasFiltrados = [...this.idiomas];
+      return;
+    }
+    this.idiomasFiltrados = this.idiomas.filter(i => 
+      i.nome?.toLowerCase().includes(termo)
+    );
+  }
+
   carregarTitulos(): void {
     const token = sessionStorage.getItem('authToken');
     if (!token) {
@@ -180,6 +221,7 @@ export class DetalhesEdicao {
     this.getService.getApiUrlGetTitulos(token, 0, 1000).subscribe({
       next: (response: any) => {
         this.titulos = response?.conteudo || [];
+        this.titulosFiltrados = [...this.titulos];
       },
       error: (err) => {
         console.error('[DetalhesEdicao] Erro ao carregar títulos:', err);
@@ -190,11 +232,13 @@ export class DetalhesEdicao {
 
   carregarEditoras(): void {
     const token = sessionStorage.getItem('authToken');
-    this.http.get<any[]>('http://localhost:8080/editoras', {
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+    this.http.get<any>('http://localhost:8080/editoras/ativos', {
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+      params: { pagina: '0', tamanho: '1000' }
     }).subscribe({
-      next: (editoras: any) => {
-        this.editoras = Array.isArray(editoras) ? editoras : [];
+      next: (response: any) => {
+        this.editoras = response?.conteudo || [];
+        this.editorasFiltradas = [...this.editoras];
       },
       error: (err) => {
         console.error('[DetalhesEdicao] Erro ao carregar editoras:', err);
@@ -210,6 +254,7 @@ export class DetalhesEdicao {
     }).subscribe({
       next: (idiomas: any) => {
         this.idiomas = Array.isArray(idiomas) ? idiomas : [];
+        this.idiomasFiltrados = [...this.idiomas];
       },
       error: (err) => {
         console.error('[DetalhesEdicao] Erro ao carregar idiomas:', err);
@@ -349,7 +394,13 @@ export class DetalhesEdicao {
     const confirmar = confirm(`Deseja realmente inativar a edição "${this.edicao.titulo?.nome}"?`);
     if (!confirmar) return;
 
-    this.deleteService.inativarEdicao(this.edicao.idEdicao).subscribe({
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('Token de autenticação não encontrado.');
+      return;
+    }
+
+    this.deleteService.inativarEdicao(this.edicao.idEdicao, token).subscribe({
       next: () => {
         console.log('[DetalhesEdicao] Edição inativada com sucesso');
         alert('Edição inativada com sucesso!');

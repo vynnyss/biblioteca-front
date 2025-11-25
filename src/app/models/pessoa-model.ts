@@ -27,4 +27,5 @@ export interface PessoaModel {
   accountNonExpired: boolean;
   credentialsNonExpired: boolean;
   accountNonLocked: boolean;
+  motivoSolicitacaoExclusao?: string | null;
 }

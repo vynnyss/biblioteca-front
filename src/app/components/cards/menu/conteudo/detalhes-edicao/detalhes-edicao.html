@@ -93,6 +93,18 @@
 			<h3>Editar Edição</h3>
 			
 			<div class="form-group">
+				<label for="buscaTitulo">Buscar Título:</label>
+				<input 
+					id="buscaTitulo" 
+					type="text"
+					name="buscaTitulo"
+					[(ngModel)]="termoBuscaTitulo"
+					(ngModelChange)="filtrarTitulos()"
+					class="form-control"
+					placeholder="Digite para buscar...">
+			</div>
+
+			<div class="form-group">
 				<label for="titulo">Título: *</label>
 				<select 
 					id="titulo" 
@@ -100,7 +112,7 @@
 					[(ngModel)]="edicaoEditada.idTitulo"
 					required>
 					<option value="">Selecione um título</option>
-					<option *ngFor="let titulo of titulos" [value]="titulo.idTitulo">
+					<option *ngFor="let titulo of titulosFiltrados" [value]="titulo.idTitulo">
 						{{ titulo.nome }}
 					</option>
 				</select>
@@ -118,6 +130,18 @@
 			</div>
 
 			<div class="form-group">
+				<label for="buscaEditora">Buscar Editora:</label>
+				<input 
+					id="buscaEditora" 
+					type="text"
+					name="buscaEditora"
+					[(ngModel)]="termoBuscaEditora"
+					(ngModelChange)="filtrarEditoras()"
+					class="form-control"
+					placeholder="Digite para buscar...">
+			</div>
+
+			<div class="form-group">
 				<label for="editora">Editora: *</label>
 				<select 
 					id="editora" 
@@ -125,10 +149,22 @@
 					[(ngModel)]="edicaoEditada.idEditora"
 					required>
 					<option value="">Selecione uma editora</option>
-					<option *ngFor="let editora of editoras" [value]="editora.idEditora || editora.id">
+					<option *ngFor="let editora of editorasFiltradas" [value]="editora.idEditora || editora.id">
 						{{ editora.nome }}
 					</option>
 				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="buscaIdioma">Buscar Idioma:</label>
+				<input 
+					id="buscaIdioma" 
+					type="text"
+					name="buscaIdioma"
+					[(ngModel)]="termoBuscaIdioma"
+					(ngModelChange)="filtrarIdiomas()"
+					class="form-control"
+					placeholder="Digite para buscar...">
 			</div>
 
 			<div class="form-group">
@@ -139,7 +175,7 @@
 					[(ngModel)]="edicaoEditada.idIdioma"
 					required>
 					<option value="">Selecione um idioma</option>
-					<option *ngFor="let idioma of idiomas" [value]="idioma.idIdioma || idioma.id">
+					<option *ngFor="let idioma of idiomasFiltrados" [value]="idioma.idIdioma || idioma.id">
 						{{ idioma.nome }}
 					</option>
 				</select>

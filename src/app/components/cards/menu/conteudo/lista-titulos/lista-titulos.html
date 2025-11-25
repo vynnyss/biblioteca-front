@@ -80,9 +80,16 @@
 			<textarea [(ngModel)]="tituloEditado.descricao" placeholder="Descrição do título" rows="3"></textarea>
 		</label>
 
+		<label>Buscar Autor</label>
+		<input 
+			type="text" 
+			[(ngModel)]="termoBuscaAutor" 
+			(ngModelChange)="filtrarAutores()"
+			placeholder="Digite para buscar autor..." />
+
 		<label>Autores</label>
 		<div class="checkbox-group">
-			<label *ngFor="let autor of autores" class="checkbox-label">
+			<label *ngFor="let autor of autoresFiltrados" class="checkbox-label">
 				<input 
 					type="checkbox" 
 					[checked]="isAutorSelecionadoEdicao(autor.idAutor)"
@@ -91,9 +98,16 @@
 			</label>
 		</div>
 
+		<label>Buscar Categoria</label>
+		<input 
+			type="text" 
+			[(ngModel)]="termoBuscaCategoria" 
+			(ngModelChange)="filtrarCategorias()"
+			placeholder="Digite para buscar categoria..." />
+
 		<label>Categorias</label>
 		<div class="checkbox-group">
-			<label *ngFor="let categoria of categorias" class="checkbox-label">
+			<label *ngFor="let categoria of categoriasFiltradas" class="checkbox-label">
 				<input 
 					type="checkbox" 
 					[checked]="isCategoriaSelecionadaEdicao(categoria.idCategoria)"

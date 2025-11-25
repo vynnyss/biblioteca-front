@@ -32,6 +32,12 @@ export class PutService {
     return this.http.put(`${this.apiRegistrarDevolucao}/${id}`, {}, { headers });
   }
 
+  registrarPerda(id: number, token: string) {
+    const apiRegistrarPerda = "http://localhost:8080/emprestimos/registrar-perda";
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${apiRegistrarPerda}/${id}`, {}, { headers });
+  }
+
   aprovarConta(id: number, token: string) {
     const headers = { 'Authorization': `Bearer ${token}` };
     return this.http.put(`${this.apiAprovarConta}/${id}`, {}, { headers });
@@ -93,5 +99,17 @@ export class PutService {
     const apiPagarMulta = "http://localhost:8080/emprestimos/pagar-multa";
     const headers = { 'Authorization': `Bearer ${token}` };
     return this.http.put(`${apiPagarMulta}/${id}`, {}, { headers });
+  }
+
+  perdoarMulta(id: number, token: string) {
+    const apiPerdoarMulta = "http://localhost:8080/multas/perdoar-multa";
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${apiPerdoarMulta}/${id}`, {}, { headers });
+  }
+
+  rejeitarExclusaoConta(id: number, token: string) {
+    const apiRejeitarExclusao = "http://localhost:8080/usuarios/em-analise-exclusao/rejeitar-exclusao-conta";
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${apiRejeitarExclusao}/${id}`, {}, { headers });
   }
 }

@@ -128,7 +128,13 @@ export class ListaIdiomas implements OnInit {
     const confirmar = confirm(`Deseja realmente inativar o idioma "${idioma.nome}"?`);
     if (!confirmar) return;
 
-    this.deleteService.inativarIdioma(idioma.idIdioma).subscribe({
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('Token de autenticação não encontrado.');
+      return;
+    }
+
+    this.deleteService.inativarIdioma(idioma.idIdioma, token).subscribe({
       next: () => {
         alert('Idioma inativado com sucesso!');
         this.ngOnInit();

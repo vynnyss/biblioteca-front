@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
 import { ListaEmprestimoModel } from '../../../../../models/lista-emprestimo-model';
 import { DetalhesEmprestimos } from '../detalhes-emprestimos/detalhes-emprestimos';
+import { AuthHelper } from '../../../../../servicos/utils/auth-helper';
 
 @Component({
   selector: 'app-lista-emprestimos',
@@ -77,6 +78,7 @@ export class ListaEmprestimos implements OnInit {
         },
         error: (err: any) => {
           console.error('Erro ao carregar emprestimos do cliente:', err);
+          if (AuthHelper.checkAndHandleExpiredToken(err)) return;
           this.error = 'Erro ao carregar empréstimos.';
           this.loading = false;
         }
@@ -92,6 +94,7 @@ export class ListaEmprestimos implements OnInit {
         },
         error: (err: any) => {
           console.error('Erro ao carregar emprestimos:', err);
+          if (AuthHelper.checkAndHandleExpiredToken(err)) return;
           this.error = 'Erro ao carregar empréstimos.';
           this.loading = false;
         }
@@ -123,10 +126,10 @@ export class ListaEmprestimos implements OnInit {
       items = items.filter(i => !(i.multa && (i.multa.valor || 0) > 0));
     }
 
-    // pessoa query: match idPessoa as string (partial) or exact
+    // pessoa query: match idPessoa as string (exact)
     const q = (this.pessoaQuery || '').trim().toLowerCase();
     if (q) {
-      items = items.filter(i => String(i.idPessoa).toLowerCase().indexOf(q) !== -1);
+      items = items.filter(i => String(i.idPessoa).toLowerCase() === q);
     }
 
     this.emprestimos = items;

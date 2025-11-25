@@ -6,8 +6,11 @@ import { PessoaModel } from '../../../../../models/pessoa-model';
 import { PutService } from '../../../../../servicos/api/put-service';
 import { GetServicos } from '../../../../../servicos/api/get-servicos';
 import { DeleteService } from '../../../../../servicos/api/delete-service';
+import { PostService } from '../../../../../servicos/api/post-service';
 import { DecodeToken } from '../../../../../models/decode-token';
 import { ListaEmprestimoModel } from '../../../../../models/lista-emprestimo-model';
+import { Emprestimo } from '../../../../../models/emprestimo';
+import { AuthHelper } from '../../../../../servicos/utils/auth-helper';
 
 @Component({
   selector: 'app-detalhes-cliente',
@@ -46,10 +49,18 @@ export class DetalhesCliente {
   public mostrarModalInativacao = false;
   public motivoInativacao = '';
 
+  public mostrarModalEmprestimo = false;
+  public edicoesAtivas: any[] = [];
+  public edicoesSelecionadas: number[] = [];
+  public loadingEdicoes = false;
+  public termoBuscaEdicao = '';
+  public edicoesFiltradas: any[] = [];
+
   constructor(
     private putService: PutService, 
     private getService: GetServicos,
     private deleteService: DeleteService,
+    private postService: PostService,
     private router: Router
   ) {}
 
@@ -106,6 +117,7 @@ export class DetalhesCliente {
       },
       error: (err) => {
         console.error('Erro ao inativar cliente:', err);
+        if (AuthHelper.checkAndHandleExpiredToken(err)) return;
         alert('Erro ao inativar cliente.');
       }
     });
@@ -208,8 +220,8 @@ export class DetalhesCliente {
       alert('Por favor, informe o motivo da exclusão.');
       return;
     }
-    if (this.motivoExclusao.trim().length < 8) {
-      alert('O motivo deve ter no mínimo 8 caracteres.');
+    if (this.motivoExclusao.trim().length < 10) {
+      alert('O motivo deve ter no mínimo 10 caracteres.');
       return;
     }
     
@@ -228,6 +240,123 @@ export class DetalhesCliente {
       error: (err) => {
         console.error('Erro ao solicitar exclusão:', err);
         alert('Erro ao solicitar exclusão da conta.');
+      }
+    });
+  }
+
+  public rejeitarExclusao() {
+    if (!this.cliente?.idPessoa) return;
+    
+    if (!confirm('Deseja realmente rejeitar a solicitação de exclusão deste cliente?')) {
+      return;
+    }
+    
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+    
+    this.putService.rejeitarExclusaoConta(this.cliente.idPessoa, token).subscribe({
+      next: () => {
+        alert('Solicitação de exclusão rejeitada com sucesso!');
+        this.close.emit();
+      },
+      error: (err) => {
+        console.error('Erro ao rejeitar exclusão:', err);
+        alert('Erro ao rejeitar a solicitação de exclusão.');
+      }
+    });
+  }
+
+  public abrirModalEmprestimo() {
+    this.mostrarModalEmprestimo = true;
+    this.edicoesSelecionadas = [];
+    this.termoBuscaEdicao = '';
+    this.carregarEdicoesAtivas();
+  }
+
+  public fecharModalEmprestimo() {
+    this.mostrarModalEmprestimo = false;
+    this.edicoesSelecionadas = [];
+    this.edicoesAtivas = [];
+    this.edicoesFiltradas = [];
+    this.termoBuscaEdicao = '';
+  }
+
+  private carregarEdicoesAtivas() {
+    this.loadingEdicoes = true;
+    this.getService.getApiUrlGetEdicoesAtivas(0, 1000).subscribe({
+      next: (response: any) => {
+        this.edicoesAtivas = response?.conteudo || [];
+        this.edicoesFiltradas = [...this.edicoesAtivas];
+        this.loadingEdicoes = false;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar edições ativas:', err);
+        alert('Erro ao carregar edições ativas.');
+        this.loadingEdicoes = false;
+      }
+    });
+  }
+
+  public filtrarEdicoes() {
+    const termo = this.termoBuscaEdicao.toLowerCase().trim();
+    if (!termo) {
+      this.edicoesFiltradas = [...this.edicoesAtivas];
+      return;
+    }
+    
+    this.edicoesFiltradas = this.edicoesAtivas.filter(edicao => {
+      const titulo = edicao.titulo?.nome?.toLowerCase() || '';
+      const editora = edicao.editora?.nome?.toLowerCase() || '';
+      const ano = edicao.anoPublicacao?.toString() || '';
+      return titulo.includes(termo) || editora.includes(termo) || ano.includes(termo);
+    });
+  }
+
+  public toggleSelecaoEdicao(idEdicao: number) {
+    const index = this.edicoesSelecionadas.indexOf(idEdicao);
+    if (index > -1) {
+      this.edicoesSelecionadas.splice(index, 1);
+    } else {
+      this.edicoesSelecionadas.push(idEdicao);
+    }
+  }
+
+  public isEdicaoSelecionada(idEdicao: number): boolean {
+    return this.edicoesSelecionadas.includes(idEdicao);
+  }
+
+  public realizarEmprestimo() {
+    if (!this.cliente?.idPessoa) return;
+    
+    if (this.edicoesSelecionadas.length === 0) {
+      alert('Por favor, selecione pelo menos uma edição.');
+      return;
+    }
+    
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+    
+    const emprestimo: Emprestimo = {
+      idsEdicao: this.edicoesSelecionadas,
+      idPessoa: this.cliente.idPessoa
+    };
+    
+    this.postService.postEmprestimo(emprestimo, token).subscribe({
+      next: () => {
+        alert('Empréstimo realizado com sucesso!');
+        this.fecharModalEmprestimo();
+        this.carregarEmprestimos(this.cliente!.idPessoa);
+      },
+      error: (err) => {
+        console.error('Erro ao realizar empréstimo:', err);
+        const mensagem = err.error?.mensagem || err.mensagem || err.message || 'Erro desconhecido ao realizar empréstimo.';
+        alert(mensagem);
       }
     });
   }
