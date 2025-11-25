@@ -129,7 +129,13 @@ export class ListaEditoras implements OnInit {
     const confirmar = confirm(`Deseja realmente inativar a editora "${editora.nome}"?`);
     if (!confirmar) return;
 
-    this.deleteService.inativarEditora(editora.idEditora).subscribe({
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('Token de autenticação não encontrado.');
+      return;
+    }
+
+    this.deleteService.inativarEditora(editora.idEditora, token).subscribe({
       next: () => {
         alert('Editora inativada com sucesso!');
         this.ngOnInit();

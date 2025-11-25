@@ -129,7 +129,13 @@ export class ListaAutores implements OnInit {
     const confirmar = confirm(`Deseja realmente inativar o autor "${autor.nome}"?`);
     if (!confirmar) return;
 
-    this.deleteService.inativarAutor(autor.idAutor).subscribe({
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('Token de autenticação não encontrado.');
+      return;
+    }
+
+    this.deleteService.inativarAutor(autor.idAutor, token).subscribe({
       next: () => {
         alert('Autor inativado com sucesso!');
         this.ngOnInit();

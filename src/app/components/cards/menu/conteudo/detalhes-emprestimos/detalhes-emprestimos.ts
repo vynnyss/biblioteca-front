@@ -52,6 +52,26 @@ export class DetalhesEmprestimos {
             this.emprestimo.multa.statusPagamento === 'EM_ATRASO');
   }
 
+  public isDevolvido(): boolean {
+    return this.emprestimo?.status === 'DEVOLVIDO';
+  }
+
+  public isPerdido(): boolean {
+    return this.emprestimo?.status === 'EXEMPLAR_PERDIDO';
+  }
+
+  public isCancelado(): boolean {
+    return this.emprestimo?.status === 'CANCELADO';
+  }
+
+  public isAdministrador(): boolean {
+    return this.userRole === 'ADMINISTRADOR';
+  }
+
+  public temMulta(): boolean {
+    return this.emprestimo?.multa?.valor != null && this.emprestimo.multa.valor > 0 && this.emprestimo.multa.statusPagamento == 'PENDENTE';
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if ('idEmprestimo' in changes) {
       const id = this.idEmprestimo;
@@ -78,6 +98,7 @@ export class DetalhesEmprestimos {
 
     this.serv.getApiUrlGetEmprestimosPorID(id, token).subscribe({
       next: (res: EmprestimoModel) => {
+        console.log("resposta: ", res)
         this.emprestimo = res;
         this.loading = false;
       },
@@ -146,6 +167,31 @@ export class DetalhesEmprestimos {
     });
   }
 
+  public registrarPerda() {
+    if (!this.emprestimo?.idEmprestimo) return;
+    
+    const confirmar = confirm('Confirma o registro de perda deste livro? Uma multa será aplicada ao usuário.');
+    if (!confirmar) return;
+
+    const token = sessionStorage.getItem('authToken') || '';
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+
+    this.putService.registrarPerda(this.emprestimo.idEmprestimo, token).subscribe({
+      next: () => {
+        alert('Perda registrada com sucesso! Multa aplicada ao usuário.');
+        this.load(this.emprestimo!.idEmprestimo);
+      },
+      error: (err) => {
+        console.error('Erro ao registrar perda:', err);
+        const errorMsg = err?.error?.mensagem || err?.message || 'Erro ao registrar perda';
+        alert(`Erro ao registrar perda: ${errorMsg}`);
+      }
+    });
+  }
+
   public pagarMulta() {
     if (!this.emprestimo?.idEmprestimo) return;
     
@@ -164,6 +210,31 @@ export class DetalhesEmprestimos {
         console.error('Erro ao pagar multa:', err);
         const errorMsg = err?.error?.mensagem || err?.message || 'Erro ao processar pagamento da multa';
         alert(`❌ Erro ao pagar multa: ${errorMsg}`);
+      }
+    });
+  }
+
+  public perdoarMulta() {
+    if (!this.emprestimo?.multa?.idMulta) return;
+    
+    const confirmar = confirm('Confirma o perdão desta multa?');
+    if (!confirmar) return;
+
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('Sessão expirada. Faça login novamente.');
+      return;
+    }
+
+    this.putService.perdoarMulta(this.emprestimo.multa.idMulta, token).subscribe({
+      next: () => {
+        alert('Multa perdoada com sucesso!');
+        this.load(this.emprestimo!.idEmprestimo);
+      },
+      error: (err) => {
+        console.error('Erro ao perdoar multa:', err);
+        const errorMsg = err?.error?.mensagem || err?.message || 'Erro ao perdoar multa';
+        alert(`Erro ao perdoar multa: ${errorMsg}`);
       }
     });
   }

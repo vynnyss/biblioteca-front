@@ -43,6 +43,12 @@ export class ListaTitulos implements OnInit {
   // listas para seleção
   public autores: Author[] = [];
   public categorias: Category[] = [];
+  
+  // Busca e filtragem no modal
+  public termoBuscaAutor = '';
+  public termoBuscaCategoria = '';
+  public autoresFiltrados: Author[] = [];
+  public categoriasFiltradas: Category[] = [];
 
   constructor(
     private svc: GetServicos, 
@@ -123,9 +129,14 @@ export class ListaTitulos implements OnInit {
   }
 
   private carregarAutores(): void {
-    this.http.get<Author[]>('http://localhost:8080/autores').subscribe({
-      next: (autores) => {
-        this.autores = autores || [];
+    const token = sessionStorage.getItem('authToken');
+    this.http.get<any>('http://localhost:8080/autores/ativos', {
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+      params: { pagina: '0', tamanho: '1000' }
+    }).subscribe({
+      next: (response: any) => {
+        this.autores = response?.conteudo || [];
+        this.autoresFiltrados = [...this.autores];
       },
       error: (err) => {
         console.error('Erro ao carregar autores', err);
@@ -134,9 +145,14 @@ export class ListaTitulos implements OnInit {
   }
 
   private carregarCategorias(): void {
-    this.http.get<Category[]>('http://localhost:8080/categorias').subscribe({
-      next: (categorias) => {
-        this.categorias = categorias || [];
+    const token = sessionStorage.getItem('authToken');
+    this.http.get<any>('http://localhost:8080/categorias/ativos', {
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+      params: { pagina: '0', tamanho: '1000' }
+    }).subscribe({
+      next: (response: any) => {
+        this.categorias = response?.conteudo || [];
+        this.categoriasFiltradas = [...this.categorias];
       },
       error: (err) => {
         console.error('Erro ao carregar categorias', err);
@@ -152,7 +168,33 @@ export class ListaTitulos implements OnInit {
       idsAutores: titulo.autores?.map(a => a.idAutor) || [],
       idsCategorias: titulo.categorias?.map(c => c.idCategoria) || []
     };
+    this.termoBuscaAutor = '';
+    this.termoBuscaCategoria = '';
+    this.autoresFiltrados = [...this.autores];
+    this.categoriasFiltradas = [...this.categorias];
     this.mostrarModalEdicao = true;
+  }
+
+  public filtrarAutores(): void {
+    const termo = this.termoBuscaAutor.toLowerCase().trim();
+    if (!termo) {
+      this.autoresFiltrados = [...this.autores];
+      return;
+    }
+    this.autoresFiltrados = this.autores.filter(a => 
+      a.nome?.toLowerCase().includes(termo)
+    );
+  }
+
+  public filtrarCategorias(): void {
+    const termo = this.termoBuscaCategoria.toLowerCase().trim();
+    if (!termo) {
+      this.categoriasFiltradas = [...this.categorias];
+      return;
+    }
+    this.categoriasFiltradas = this.categorias.filter(c => 
+      c.nome?.toLowerCase().includes(termo)
+    );
   }
 
   public fecharModalEdicao(): void {
@@ -247,7 +289,13 @@ export class ListaTitulos implements OnInit {
     const confirmar = confirm(`Deseja realmente excluir o título "${titulo.nome}"?`);
     if (!confirmar) return;
 
-    this.deleteService.deletarTitulo(titulo.idTitulo).subscribe({
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      alert('Token de autenticação não encontrado.');
+      return;
+    }
+
+    this.deleteService.deletarTitulo(titulo.idTitulo, token).subscribe({
       next: () => {
         alert('Título excluído com sucesso!');
         this.loadTitulos();

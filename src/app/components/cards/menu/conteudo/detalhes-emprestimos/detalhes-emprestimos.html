@@ -3,15 +3,21 @@
 	<h3>Detalhes do Empréstimo</h3>
 
 	<!-- Ações para funcionários/administradores -->
-	<div class="emprestimo-actions" *ngIf="!isCliente()">
+	<div class="emprestimo-actions" *ngIf="!isCliente() && !isDevolvido() && !isPerdido() && !isCancelado()">
+		<button class="btn btn-outline" type="button" (click)="registrarSeparacao()">Registrar Separação</button>
 		<button class="btn btn-primary" type="button" (click)="registrarRetirada()">Registrar Retirada</button>
 		<button class="btn btn-success" type="button" (click)="registrarDevolucao()">Registrar Devolução</button>
-		<button class="btn btn-outline" type="button" (click)="registrarSeparacao()">Registrar Separação</button>
+		<button class="btn btn-danger" type="button" (click)="registrarPerda()">Registrar Perda</button>
 	</div>
 
 	<!-- Ação para cliente com multa pendente -->
 	<div class="emprestimo-actions" *ngIf="isCliente() && temMultaPendente()">
 		<button class="btn btn-warning" type="button" (click)="pagarMulta()">Pagar Multa</button>
+	</div>
+
+	<!-- Ação para administrador perdoar multa -->
+	<div class="emprestimo-actions" *ngIf="isAdministrador() && temMulta()">
+		<button class="btn btn-warning" type="button" (click)="perdoarMulta()">Perdoar Multa</button>
 	</div>
 
 	<div *ngIf="loading">Carregando detalhes do empréstimo...</div>
@@ -66,8 +72,11 @@
 			<div class="section-card">
 				<h5>Dados do Exemplar</h5>
 				<dl>
-				<dt>ID</dt>
+				<dt>ID do Exemplar</dt>
 				<dd>{{ emprestimo.exemplar.idExemplar || '—' }}</dd>
+
+				<dt>ID da Edição</dt>
+				<dd>{{ emprestimo.exemplar.edicao.idEdicao || '—' }}</dd>
 
 				<dt>Status</dt>
 				<dd>{{ emprestimo.exemplar.status || '—' }}</dd>

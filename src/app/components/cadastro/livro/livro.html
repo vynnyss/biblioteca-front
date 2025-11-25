@@ -7,9 +7,18 @@
       <small *ngIf="tituloSelecionado && tituloSelecionado !== ''" style="display: block; color: #f97316; font-size: 11px; margin-bottom: 4px;">
         ⚠️ Autores definidos pelo título selecionado. Para alterar, remova a seleção do título.
       </small>
+      <input 
+        type="text" 
+        placeholder="🔍 Buscar autor..."
+        [(ngModel)]="termoBuscaAutor"
+        (ngModelChange)="filtrarAutores()"
+        [disabled]="!!(tituloSelecionado && tituloSelecionado !== '')"
+        name="buscaAutor"
+        style="margin-bottom: 8px; width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+      />
       <div class="checkbox-list-form" [class.disabled]="tituloSelecionado && tituloSelecionado !== ''">
         <div 
-          *ngFor="let autor of autores" 
+          *ngFor="let autor of autoresFiltrados" 
           class="checkbox-item"
           [class.selected]="isAutorSelecionado(autor.idAutor || autor.id)"
           [class.disabled]="tituloSelecionado && tituloSelecionado !== ''"
@@ -45,9 +54,18 @@
       <small *ngIf="tituloSelecionado && tituloSelecionado !== ''" style="display: block; color: #f97316; font-size: 11px; margin-bottom: 4px;">
         ⚠️ Categorias definidas pelo título selecionado. Para alterar, remova a seleção do título.
       </small>
+      <input 
+        type="text" 
+        placeholder="🔍 Buscar categoria..."
+        [(ngModel)]="termoBuscaCategoria"
+        (ngModelChange)="filtrarCategorias()"
+        [disabled]="!!(tituloSelecionado && tituloSelecionado !== '')"
+        name="buscaCategoria"
+        style="margin-bottom: 8px; width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+      />
       <div class="checkbox-list-form" [class.disabled]="tituloSelecionado && tituloSelecionado !== ''">
         <div 
-          *ngFor="let categoria of categorias" 
+          *ngFor="let categoria of categoriasFiltradas" 
           class="checkbox-item"
           [class.selected]="isCategoriaSelecionada(categoria.idCategoria || categoria.id)"
           [class.disabled]="tituloSelecionado && tituloSelecionado !== ''"
@@ -112,6 +130,14 @@
 
     <div class="form-group">
       <label for="editora">Editora:</label>
+      <input 
+        type="text" 
+        placeholder="🔍 Buscar editora..."
+        [(ngModel)]="termoBuscaEditora"
+        (ngModelChange)="filtrarEditoras()"
+        name="buscaEditora"
+        style="margin-bottom: 8px; width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+      />
       <select 
         id="editora" 
         name="editora" 
@@ -119,7 +145,7 @@
         (change)="onEditoraChange($any($event.target).value)"
         required>
         <option value="">Selecione uma editora</option>
-        <option *ngFor="let editora of editoras" [value]="editora.idEditora || editora.id">
+        <option *ngFor="let editora of editorasFiltradas" [value]="editora.idEditora || editora.id">
           {{ editora.nome }}
         </option>
         <option value="novo" style="font-weight: bold; color: #8b5cf6;">
@@ -133,6 +159,14 @@
 
     <div class="form-group">
       <label for="idioma">Idioma:</label>
+      <input 
+        type="text" 
+        placeholder="🔍 Buscar idioma..."
+        [(ngModel)]="termoBuscaIdioma"
+        (ngModelChange)="filtrarIdiomas()"
+        name="buscaIdioma"
+        style="margin-bottom: 8px; width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+      />
       <select 
         id="idioma" 
         name="idioma" 
@@ -140,7 +174,7 @@
         (change)="onIdiomaChange($any($event.target).value)"
         required>
         <option value="">Selecione um idioma</option>
-        <option *ngFor="let idioma of idiomas" [value]="idioma.idIdioma || idioma.id">
+        <option *ngFor="let idioma of idiomasFiltrados" [value]="idioma.idIdioma || idioma.id">
           {{ idioma.nome }}
         </option>
         <option value="novo" style="font-weight: bold; color: #dc2626;">
@@ -250,9 +284,17 @@
 
       <div class="form-group">
         <label>Autores: * <small style="color: #666;">(selecione um ou mais)</small></label>
+        <input 
+          type="text" 
+          placeholder="🔍 Buscar autor..."
+          [(ngModel)]="termoBuscaAutorTitulo"
+          (ngModelChange)="filtrarAutoresTitulo()"
+          name="buscaAutorTitulo"
+          style="margin-bottom: 8px; width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+        />
         <div class="checkbox-list">
           <div 
-            *ngFor="let autor of autores" 
+            *ngFor="let autor of autoresFiltradosTitulo" 
             class="checkbox-item"
             [class.selected]="isAutorSelecionadoNoTitulo(autor.idAutor || autor.id)"
             (click)="toggleAutorNoTitulo(autor.idAutor || autor.id)">
@@ -271,9 +313,17 @@
 
       <div class="form-group">
         <label>Categorias: * <small style="color: #666;">(selecione uma ou mais)</small></label>
+        <input 
+          type="text" 
+          placeholder="🔍 Buscar categoria..."
+          [(ngModel)]="termoBuscaCategoriaTitulo"
+          (ngModelChange)="filtrarCategoriasTitulo()"
+          name="buscaCategoriaTitulo"
+          style="margin-bottom: 8px; width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+        />
         <div class="checkbox-list">
           <div 
-            *ngFor="let categoria of categorias" 
+            *ngFor="let categoria of categoriasFiltradasTitulo" 
             class="checkbox-item"
             [class.selected]="isCategoriaSelecionadaNoTitulo(categoria.idCategoria || categoria.id)"
             (click)="toggleCategoriaNoTitulo(categoria.idCategoria || categoria.id)">

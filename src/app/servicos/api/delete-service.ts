@@ -18,33 +18,51 @@ export class DeleteService {
     return this.http.delete(`${this.apiUrl}/${id}`, { headers, body });
   }
 
-  deletarTitulo(id: number): Observable<any> {
+  deletarTitulo(id: number, token: string): Observable<any> {
     const apiTitulos = "http://localhost:8080/titulos";
-    return this.http.delete(`${apiTitulos}/${id}`);
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.delete(`${apiTitulos}/${id}`, { headers });
   }
 
-  inativarExemplar(id: number): Observable<any> {
+  inativarExemplar(id: number, token: string): Observable<any> {
     const apiExemplares = "http://localhost:8080/exemplares";
-    return this.http.delete(`${apiExemplares}/${id}`);
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.delete(`${apiExemplares}/${id}`, { headers });
   }
 
-  inativarEdicao(id: number): Observable<any> {
+  inativarEdicao(id: number, token: string): Observable<any> {
     const apiEdicoes = "http://localhost:8080/edicoes";
-    return this.http.delete(`${apiEdicoes}/${id}`);
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.delete(`${apiEdicoes}/${id}`, { headers });
   }
 
-  inativarAutor(id: number): Observable<any> {
+  inativarAutor(id: number, token: string): Observable<any> {
     const apiAutores = "http://localhost:8080/autores";
-    return this.http.delete(`${apiAutores}/${id}`);
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.delete(`${apiAutores}/${id}`, { headers });
   }
 
-  inativarEditora(id: number): Observable<any> {
+  inativarEditora(id: number, token: string): Observable<any> {
     const apiEditoras = "http://localhost:8080/editoras";
-    return this.http.delete(`${apiEditoras}/${id}`);
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.delete(`${apiEditoras}/${id}`, { headers });
   }
 
-  inativarIdioma(id: number): Observable<any> {
+  inativarIdioma(id: number, token: string): Observable<any> {
     const apiIdiomas = "http://localhost:8080/idiomas";
-    return this.http.delete(`${apiIdiomas}/${id}`);
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.delete(`${apiIdiomas}/${id}`, { headers });
   }
 }

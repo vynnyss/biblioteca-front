@@ -226,7 +226,13 @@ export class ListaExemplares implements OnChanges {
       const confirmar = confirm(`Deseja realmente inativar o exemplar #${exemplar.idExemplar}?`);
       if (!confirmar) return;
 
-      this.deleteService.inativarExemplar(exemplar.idExemplar).subscribe({
+      const token = sessionStorage.getItem('authToken');
+      if (!token) {
+        alert('Token de autenticação não encontrado.');
+        return;
+      }
+
+      this.deleteService.inativarExemplar(exemplar.idExemplar, token).subscribe({
         next: () => {
           alert('Exemplar inativado com sucesso!');
           if (this.edicaoId) {

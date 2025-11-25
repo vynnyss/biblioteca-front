@@ -20,7 +20,9 @@ export class GetServicos {
   private apiUrlGetEdicoes = "http://localhost:8080/edicoes";
   private apiUrlGetEdicoesAtivas = "http://localhost:8080/edicoes/ativos";
   private apiUrlGetAutores = "http://localhost:8080/autores";
+  private apiUrlGetAutoresAtivos = "http://localhost:8080/autores/ativos";
   private apiUrlGetEditoras = "http://localhost:8080/editoras";
+  private apiUrlGetEditorasAtivas = "http://localhost:8080/editoras/ativos";
   private apiUrlGetExemplaresDaEdicao = "http://localhost:8080/exemplares/buscar-por-edicao";
 
   private apiUrlGetEmprestimos = "http://localhost:8080/emprestimos";
@@ -31,6 +33,7 @@ export class GetServicos {
   private apiUrlGetFuncionarios = "http://localhost:8080/usuarios/funcionarios";
   private apiUrlGetAdministradores = "http://localhost:8080/usuarios/administradores";
   private apiUrlGetTitulos = "http://localhost:8080/titulos";
+  private apiUrlGetTitulosAtivos = "http://localhost:8080/titulos/ativos";
 
   getApiUrlGetAutores(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
     const headers = { 'Authorization': `Bearer ${token}` };
@@ -38,6 +41,14 @@ export class GetServicos {
       .set('pagina', pagina.toString())
       .set('tamanho', tamanho.toString());
     return this.http.get<any>(this.apiUrlGetAutores, { headers, params });
+  }
+
+  getApiUrlGetAutoresAtivos(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(this.apiUrlGetAutoresAtivos, { headers, params });
   }
 
   getApiUrlGetEditoras(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
@@ -48,8 +59,22 @@ export class GetServicos {
     return this.http.get<any>(this.apiUrlGetEditoras, { headers, params });
   }
 
+  getApiUrlGetEditorasAtivas(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(this.apiUrlGetEditoras, { headers, params });
+  }
+
   getApiUrlGetIdiomas(token: string): Observable<any[]> {
     const apiUrlGetIdiomas = "http://localhost:8080/idiomas";
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.get<any[]>(apiUrlGetIdiomas, { headers });
+  }
+
+  getApiUrlGetIdiomasAtivos(token: string): Observable<any[]> {
+    const apiUrlGetIdiomas = "http://localhost:8080/idiomas/ativos";
     const headers = { 'Authorization': `Bearer ${token}` };
     return this.http.get<any[]>(apiUrlGetIdiomas, { headers });
   }
@@ -148,6 +173,14 @@ export class GetServicos {
     return this.http.get<any>(this.apiUrlGetTitulos, { headers, params });
   }
 
+  getApiUrlGetTitulosAtivos(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(this.apiUrlGetTitulosAtivos, { headers, params });
+  }
+
   filtrarEdicoes(termo: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
     const apiUrlFiltrar = "http://localhost:8080/edicoes/filtrar";
     const params = new HttpParams()
@@ -159,6 +192,15 @@ export class GetServicos {
 
   getApiUrlGetCategorias(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
     const apiUrlGetCategorias = "http://localhost:8080/categorias";
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('tamanho', tamanho.toString());
+    return this.http.get<any>(apiUrlGetCategorias, { headers, params });
+  }
+
+  getApiUrlGetCategoriasAtivas(token: string, pagina: number = 0, tamanho: number = 50): Observable<any> {
+    const apiUrlGetCategorias = "http://localhost:8080/categorias/ativos";
     const headers = { 'Authorization': `Bearer ${token}` };
     const params = new HttpParams()
       .set('pagina', pagina.toString())

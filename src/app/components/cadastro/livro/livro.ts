@@ -5,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { PostService } from '../../../servicos/api/post-service';
 import { GetServicos } from '../../../servicos/api/get-servicos';
 import { Title } from '../../../models/title';
+import { AuthHelper } from '../../../servicos/utils/auth-helper';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-livro',
@@ -17,6 +19,7 @@ export class Livro implements OnInit {
   private apiService = inject(PostService);
   private getService = inject(GetServicos);
   private http = inject(HttpClient);
+  private location = inject(Location);
   
   titulos: Title[] = [];
   tituloSelecionado: number | string = '';
@@ -24,24 +27,38 @@ export class Livro implements OnInit {
   carregandoTitulos: boolean = false;
   
   autores: any[] = [];
+  autoresFiltrados: any[] = [];
+  termoBuscaAutor: string = '';
   autoresSelecionados: number[] = [];
   mostrarModalAutor: boolean = false;
   carregandoAutores: boolean = false;
   
   editoras: any[] = [];
+  editorasFiltradas: any[] = [];
+  termoBuscaEditora: string = '';
   editoraSelecionada: number | string = '';
   mostrarModalEditora: boolean = false;
   carregandoEditoras: boolean = false;
   
   idiomas: any[] = [];
+  idiomasFiltrados: any[] = [];
+  termoBuscaIdioma: string = '';
   idiomaSelecionado: number | string = '';
   mostrarModalIdioma: boolean = false;
   carregandoIdiomas: boolean = false;
   
   categorias: any[] = [];
+  categoriasFiltradas: any[] = [];
+  termoBuscaCategoria: string = '';
   categoriasSelecionadas: number[] = [];
   mostrarModalCategoria: boolean = false;
   carregandoCategorias: boolean = false;
+  
+  // Busca para modal de novo título
+  termoBuscaAutorTitulo: string = '';
+  termoBuscaCategoriaTitulo: string = '';
+  autoresFiltradosTitulo: any[] = [];
+  categoriasFiltradasTitulo: any[] = [];
   
   // Campos de estado físico e edição removidos (não enviados ao backend)
   
@@ -100,7 +117,7 @@ export class Livro implements OnInit {
       return;
     }
     
-    this.getService.getApiUrlGetTitulos(token, 0, 1000).subscribe({
+    this.getService.getApiUrlGetTitulosAtivos(token, 0, 1000).subscribe({
       next: (response: any) => {
         this.titulos = response?.conteudo || [];
         this.carregandoTitulos = false;
@@ -109,6 +126,7 @@ export class Livro implements OnInit {
       error: (err) => {
         console.error('[Livro] Erro ao carregar títulos:', err);
         this.carregandoTitulos = false;
+        if (AuthHelper.checkAndHandleExpiredToken(err)) return;
         alert('Erro ao carregar lista de títulos.');
       }
     });
@@ -125,15 +143,17 @@ export class Livro implements OnInit {
       return;
     }
     
-    this.getService.getApiUrlGetAutores(token, 0, 1000).subscribe({
+    this.getService.getApiUrlGetAutoresAtivos(token, 0, 1000).subscribe({
       next: (response: any) => {
         this.autores = response?.conteudo || [];
+        this.autoresFiltrados = [...this.autores];
         this.carregandoAutores = false;
         console.log('[Livro] Autores carregados:', this.autores);
       },
       error: (err) => {
         console.error('[Livro] Erro ao carregar autores:', err);
         this.carregandoAutores = false;
+        if (AuthHelper.checkAndHandleExpiredToken(err)) return;
         alert('Erro ao carregar lista de autores.');
       }
     });
@@ -150,15 +170,17 @@ export class Livro implements OnInit {
       return;
     }
     
-    this.getService.getApiUrlGetEditoras(token, 0, 1000).subscribe({
+    this.getService.getApiUrlGetEditorasAtivas(token, 0, 1000).subscribe({
       next: (response: any) => {
         this.editoras = response?.conteudo || [];
+        this.editorasFiltradas = [...this.editoras];
         this.carregandoEditoras = false;
         console.log('[Livro] Editoras carregadas:', this.editoras);
       },
       error: (err) => {
         console.error('[Livro] Erro ao carregar editoras:', err);
         this.carregandoEditoras = false;
+        if (AuthHelper.checkAndHandleExpiredToken(err)) return;
         alert('Erro ao carregar lista de editoras.');
       }
     });
@@ -175,15 +197,17 @@ export class Livro implements OnInit {
       return;
     }
     
-    this.getService.getApiUrlGetIdiomas(token).subscribe({
+    this.getService.getApiUrlGetIdiomasAtivos(token).subscribe({
       next: (idiomas: any) => {
         this.idiomas = Array.isArray(idiomas) ? idiomas : [];
+        this.idiomasFiltrados = [...this.idiomas];
         this.carregandoIdiomas = false;
         console.log('[Livro] Idiomas carregados:', this.idiomas);
       },
       error: (err) => {
         console.error('[Livro] Erro ao carregar idiomas:', err);
         this.carregandoIdiomas = false;
+        if (AuthHelper.checkAndHandleExpiredToken(err)) return;
         alert('Erro ao carregar lista de idiomas.');
       }
     });
@@ -200,15 +224,17 @@ export class Livro implements OnInit {
       return;
     }
     
-    this.getService.getApiUrlGetCategorias(token, 0, 1000).subscribe({
+    this.getService.getApiUrlGetCategoriasAtivas(token, 0, 1000).subscribe({
       next: (response: any) => {
         this.categorias = response?.conteudo || [];
+        this.categoriasFiltradas = [...this.categorias];
         this.carregandoCategorias = false;
         console.log('[Livro] Categorias carregadas:', this.categorias);
       },
       error: (err) => {
         console.error('[Livro] Erro ao carregar categorias:', err);
         this.carregandoCategorias = false;
+        if (AuthHelper.checkAndHandleExpiredToken(err)) return;
         alert('Erro ao carregar lista de categorias.');
       }
     });
@@ -334,9 +360,79 @@ export class Livro implements OnInit {
     }
   }
 
+  filtrarAutores(): void {
+    const termo = this.termoBuscaAutor.toLowerCase().trim();
+    if (!termo) {
+      this.autoresFiltrados = [...this.autores];
+      return;
+    }
+    this.autoresFiltrados = this.autores.filter(autor =>
+      autor.nome?.toLowerCase().includes(termo)
+    );
+  }
+
+  filtrarEditoras(): void {
+    const termo = this.termoBuscaEditora.toLowerCase().trim();
+    if (!termo) {
+      this.editorasFiltradas = [...this.editoras];
+      return;
+    }
+    this.editorasFiltradas = this.editoras.filter(editora =>
+      editora.nome?.toLowerCase().includes(termo)
+    );
+  }
+
+  filtrarIdiomas(): void {
+    const termo = this.termoBuscaIdioma.toLowerCase().trim();
+    if (!termo) {
+      this.idiomasFiltrados = [...this.idiomas];
+      return;
+    }
+    this.idiomasFiltrados = this.idiomas.filter(idioma =>
+      idioma.nome?.toLowerCase().includes(termo)
+    );
+  }
+
+  filtrarCategorias(): void {
+    const termo = this.termoBuscaCategoria.toLowerCase().trim();
+    if (!termo) {
+      this.categoriasFiltradas = [...this.categorias];
+      return;
+    }
+    this.categoriasFiltradas = this.categorias.filter(categoria =>
+      categoria.nome?.toLowerCase().includes(termo)
+    );
+  }
+
+  filtrarAutoresTitulo(): void {
+    const termo = this.termoBuscaAutorTitulo.toLowerCase().trim();
+    if (!termo) {
+      this.autoresFiltradosTitulo = [...this.autores];
+      return;
+    }
+    this.autoresFiltradosTitulo = this.autores.filter(autor =>
+      autor.nome?.toLowerCase().includes(termo)
+    );
+  }
+
+  filtrarCategoriasTitulo(): void {
+    const termo = this.termoBuscaCategoriaTitulo.toLowerCase().trim();
+    if (!termo) {
+      this.categoriasFiltradasTitulo = [...this.categorias];
+      return;
+    }
+    this.categoriasFiltradasTitulo = this.categorias.filter(categoria =>
+      categoria.nome?.toLowerCase().includes(termo)
+    );
+  }
+
   abrirModalNovoTitulo(): void {
     this.mostrarModalTitulo = true;
     this.novoTitulo = { nome: '', descricao: '', idsCategorias: [], idsAutores: [] };
+    this.termoBuscaAutorTitulo = '';
+    this.termoBuscaCategoriaTitulo = '';
+    this.autoresFiltradosTitulo = [...this.autores];
+    this.categoriasFiltradasTitulo = [...this.categorias];
   }
 
   fecharModalTitulo(): void {
@@ -695,10 +791,7 @@ export class Livro implements OnInit {
             alert('Sessão expirada ou não autenticada. Entre novamente para continuar.');
             return;
           }
-          if (err?.status === 403) {
-            alert('Você não tem permissão para cadastrar livros. Faça login com uma conta autorizada.');
-            return;
-          }
+          if (AuthHelper.checkAndHandleExpiredToken(err)) return;
           const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao cadastrar livro. Tente novamente.';
           alert(msg);
         }
@@ -710,23 +803,7 @@ export class Livro implements OnInit {
 
   cancelar(): void {
     if (confirm('Deseja realmente cancelar? Os dados não salvos serão perdidos.')) {
-      this.livro = {
-        idTitulo: null,
-        idEditora: null,
-        idIdioma: null,
-        descricaoEdicao: '',
-        dataPublicacao: '',
-        qtdPaginas: null,
-        tipoCapa: '',
-        tamanho: '',
-        classificacao: '',
-        imagemFile: null
-      };
-      this.tituloSelecionado = '';
-      this.autoresSelecionados = [];
-      this.editoraSelecionada = '';
-      this.idiomaSelecionado = '';
-      this.categoriasSelecionadas = [];
+      this.location.back();
     }
   }
 }
