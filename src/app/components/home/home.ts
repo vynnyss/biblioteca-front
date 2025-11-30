@@ -17,7 +17,7 @@ export class Home implements OnInit, AfterViewInit {
   
   // Pagination state
   public paginaAtual: number = 0;
-  public tamanhoPagina: number = 8;
+  public tamanhoPagina: number = 16;
   public totalPaginas: number = 0;
   public totalElementos: number = 0;
   private isSearchActive: boolean = false;

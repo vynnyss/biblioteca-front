@@ -87,10 +87,17 @@ export class Funcionario implements OnInit {
     input.setSelectionRange(novaPosicao, novaPosicao);
   }
 
+  mascaraTelefone(event: any): void {
+    const input = event.target as HTMLInputElement;
+    let valor = input.value.replace(/\D/g, '').slice(0, 11);
+    input.value = valor;
+  }
+
   cancelar(): void {
     const confirmar = confirm('Deseja realmente cancelar o cadastro? Todos os dados serão perdidos.');
     if (confirmar) {
-      this.router.navigate(['/home']);
+      // Navega de volta para a página anterior
+      this.router.navigate(['/menu-principal']);
     }
   }
 
@@ -145,7 +152,7 @@ export class Funcionario implements OnInit {
       next: (res) => {
         console.log('✅ Servidor respondeu:', res);
         alert('Funcionário cadastrado com sucesso!');
-        this.router.navigate(['/home']);
+        this.router.navigate(['/menu-principal']);
       },
       error: (err) => {
         console.error('❌ Erro completo:', err);

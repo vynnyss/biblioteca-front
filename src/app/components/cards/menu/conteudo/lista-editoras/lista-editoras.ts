@@ -16,11 +16,18 @@ import { EditoraModel } from '../../../../../models/editora-model';
 export class ListaEditoras implements OnInit {
   public editoras: EditoraModel[] = [];
   private allEditoras: EditoraModel[] = [];
+  public userRole: string = '';
 
   // filters
   public nameQuery: string = '';
   public statusFilter: string = '';
   public availableStatuses: string[] = [];
+
+  // Pagination state
+  public paginaAtual: number = 0;
+  public tamanhoPagina: number = 50;
+  public totalPaginas: number = 0;
+  public totalElementos: number = 0;
 
   // edição
   public editandoId: number | null = null;
@@ -33,6 +40,7 @@ export class ListaEditoras implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadUserRole();
     const token = sessionStorage.getItem('authToken');
     if (!token) {
       console.error('Token não encontrado');
@@ -41,9 +49,11 @@ export class ListaEditoras implements OnInit {
       return;
     }
 
-    this.serv.getApiUrlGetEditoras(token, 0, 1000).subscribe({
+    this.serv.getApiUrlGetEditoras(token, this.paginaAtual, this.tamanhoPagina).subscribe({
       next: (response: any) => {
         this.allEditoras = response?.conteudo || [];
+        this.totalPaginas = response.totalPaginas || 0;
+        this.totalElementos = response.totalElementos || 0;
         this.availableStatuses = Array.from(new Set(this.allEditoras.map(e => e.statusAtivo))).filter(s => !!s);
         this.applyFilters();
       },
@@ -146,5 +156,61 @@ export class ListaEditoras implements OnInit {
         alert(msg);
       }
     });
+  }
+
+  private loadUserRole(): void {
+    try {
+      const raw = sessionStorage.getItem('decodedToken');
+      if (raw) {
+        const decoded = JSON.parse(raw) as { role?: string };
+        this.userRole = decoded?.role ?? '';
+      }
+    } catch (e) {
+      console.error('Erro ao ler decodedToken:', e);
+      this.userRole = '';
+    }
+  }
+
+  public isAdministrador(): boolean {
+    return this.userRole === 'ADMINISTRADOR';
+  }
+
+  // Pagination methods
+  public irParaPagina(pagina: number): void {
+    if (pagina >= 0 && pagina < this.totalPaginas) {
+      this.paginaAtual = pagina;
+      this.ngOnInit();
+    }
+  }
+
+  public paginaAnterior(): void {
+    if (this.paginaAtual > 0) {
+      this.paginaAtual--;
+      this.ngOnInit();
+    }
+  }
+
+  public proximaPagina(): void {
+    if (this.paginaAtual < this.totalPaginas - 1) {
+      this.paginaAtual++;
+      this.ngOnInit();
+    }
+  }
+
+  public getPaginasVisiveis(): number[] {
+    const maxPaginas = 5;
+    const metade = Math.floor(maxPaginas / 2);
+    let inicio = Math.max(0, this.paginaAtual - metade);
+    let fim = Math.min(this.totalPaginas, inicio + maxPaginas);
+    
+    if (fim - inicio < maxPaginas) {
+      inicio = Math.max(0, fim - maxPaginas);
+    }
+    
+    const paginas: number[] = [];
+    for (let i = inicio; i < fim; i++) {
+      paginas.push(i);
+    }
+    return paginas;
   }
 }

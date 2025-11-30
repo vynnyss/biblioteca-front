@@ -37,7 +37,7 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>Pessoa</th>
+            <th *ngIf="!isCliente()">Pessoa</th>
             <th>Status</th>
             <th>Multa</th>
             <th>Ações</th>
@@ -46,13 +46,33 @@
         <tbody>
           <tr *ngFor="let e of emprestimos">
             <td>{{ e.idEmprestimo }}</td>
-            <td>{{ e.idPessoa }}</td>
+            <td *ngIf="!isCliente()">{{ e.idPessoa }}</td>
             <td>{{ e.status }}</td>
             <td>{{ (e.multa.valor && e.multa.valor > 0) ? e.multa.valor : 'Sem Multa' }} {{ (e.multa.statusPagamento && e.multa.statusPagamento !== 'NAO_APLICAVEL') ? ('(' + e.multa.statusPagamento + ')') : '' }}</td>
             <td><button class="btn btn-outline" type="button" (click)="showDetails(e.idEmprestimo)">Detalhes</button></td>
           </tr>
         </tbody>
       </table>
+
+      <!-- Pagination Controls -->
+      <div class="pagination-controls" *ngIf="totalPaginas > 1">
+        <button class="btn-pagination" (click)="paginaAnterior()" [disabled]="paginaAtual === 0">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button *ngFor="let pagina of getPaginasVisiveis()" 
+                class="btn-pagination" 
+                [class.active]="pagina === paginaAtual"
+                (click)="irParaPagina(pagina)">
+          {{ pagina + 1 }}
+        </button>
+        <button class="btn-pagination" (click)="proximaPagina()" [disabled]="paginaAtual === totalPaginas - 1">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
     </div>
   </section>
 

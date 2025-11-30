@@ -783,7 +783,7 @@ export class Livro implements OnInit {
           console.log('[Livro] Livro cadastrado com sucesso:', res);
           alert('Livro cadastrado com sucesso!');
           form.resetForm();
-          this.cancelar();
+          this.location.back();
         },
         error: (err) => {
           console.error('[Livro] Erro ao cadastrar livro:', err);
@@ -792,7 +792,11 @@ export class Livro implements OnInit {
             return;
           }
           if (AuthHelper.checkAndHandleExpiredToken(err)) return;
-          const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao cadastrar livro. Tente novamente.';
+          const backend = err.error;
+          let msg =
+            typeof backend === 'string'
+              ? backend
+              : backend?.mensagem || backend?.message || JSON.stringify(backend);
           alert(msg);
         }
       });

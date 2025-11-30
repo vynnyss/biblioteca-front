@@ -27,6 +27,12 @@ export class ListaEmprestimos implements OnInit {
   public pessoaQuery: string = '';
   public availableStatuses: string[] = [];
 
+  // Pagination state
+  public paginaAtual: number = 0;
+  public tamanhoPagina: number = 50;
+  public totalPaginas: number = 0;
+  public totalElementos: number = 0;
+
   private userRole: string = '';
   private userIdPessoa: number | null = null;
   private userEmail: string = '';
@@ -68,10 +74,12 @@ export class ListaEmprestimos implements OnInit {
 
     // Se for CLIENTE, busca empréstimos por email com paginação
     if (this.userRole === 'CLIENTE' && this.userEmail) {
-      this.serv.getEmprestimosPorEmail(this.userEmail, token, 0, 50).subscribe({
+      this.serv.getEmprestimosPorEmail(this.userEmail, token, this.paginaAtual, this.tamanhoPagina).subscribe({
         next: (response: any) => {
           // Resposta paginada do backend
           this.allEmprestimos = response.conteudo || [];
+          this.totalPaginas = response.totalPaginas || 0;
+          this.totalElementos = response.totalElementos || 0;
           this.availableStatuses = Array.from(new Set(this.allEmprestimos.map(x => x.status))).filter(s => !!s);
           this.applyFilters();
           this.loading = false;
@@ -85,9 +93,11 @@ export class ListaEmprestimos implements OnInit {
       });
     } else {
       // Se não for CLIENTE, busca todos os empréstimos
-      this.serv.getApiUrlGetEmprestimos(token, 0, 1000).subscribe({
+      this.serv.getApiUrlGetEmprestimos(token, this.paginaAtual, this.tamanhoPagina).subscribe({
         next: (response: any) => {
           this.allEmprestimos = response?.conteudo || [];
+          this.totalPaginas = response.totalPaginas || 0;
+          this.totalElementos = response.totalElementos || 0;
           this.availableStatuses = Array.from(new Set(this.allEmprestimos.map(x => x.status))).filter(s => !!s);
           this.applyFilters();
           this.loading = false;
@@ -140,5 +150,44 @@ export class ListaEmprestimos implements OnInit {
     this.multaFilter = 'all';
     this.pessoaQuery = '';
     this.applyFilters();
+  }
+
+  // Pagination methods
+  public irParaPagina(pagina: number): void {
+    if (pagina >= 0 && pagina < this.totalPaginas) {
+      this.paginaAtual = pagina;
+      this.load();
+    }
+  }
+
+  public paginaAnterior(): void {
+    if (this.paginaAtual > 0) {
+      this.paginaAtual--;
+      this.load();
+    }
+  }
+
+  public proximaPagina(): void {
+    if (this.paginaAtual < this.totalPaginas - 1) {
+      this.paginaAtual++;
+      this.load();
+    }
+  }
+
+  public getPaginasVisiveis(): number[] {
+    const maxPaginas = 5;
+    const metade = Math.floor(maxPaginas / 2);
+    let inicio = Math.max(0, this.paginaAtual - metade);
+    let fim = Math.min(this.totalPaginas, inicio + maxPaginas);
+    
+    if (fim - inicio < maxPaginas) {
+      inicio = Math.max(0, fim - maxPaginas);
+    }
+    
+    const paginas: number[] = [];
+    for (let i = inicio; i < fim; i++) {
+      paginas.push(i);
+    }
+    return paginas;
   }
 }

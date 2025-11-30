@@ -187,7 +187,7 @@ export class DetalhesEmprestimos {
       error: (err) => {
         console.error('Erro ao registrar perda:', err);
         const errorMsg = err?.error?.mensagem || err?.message || 'Erro ao registrar perda';
-        alert(`Erro ao registrar perda: ${errorMsg}`);
+        alert(errorMsg);
       }
     });
   }
@@ -209,7 +209,7 @@ export class DetalhesEmprestimos {
       error: (err) => {
         console.error('Erro ao pagar multa:', err);
         const errorMsg = err?.error?.mensagem || err?.message || 'Erro ao processar pagamento da multa';
-        alert(`❌ Erro ao pagar multa: ${errorMsg}`);
+        alert(errorMsg);
       }
     });
   }
@@ -234,7 +234,7 @@ export class DetalhesEmprestimos {
       error: (err) => {
         console.error('Erro ao perdoar multa:', err);
         const errorMsg = err?.error?.mensagem || err?.message || 'Erro ao perdoar multa';
-        alert(`Erro ao perdoar multa: ${errorMsg}`);
+        alert(errorMsg);
       }
     });
   }

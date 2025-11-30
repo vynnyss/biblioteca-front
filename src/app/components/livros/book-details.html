@@ -45,6 +45,17 @@
                 </button>
             </div>
             
+            <h2 class="section-title">Detalhes da Edição</h2>
+            <div class="edition-details">
+                <p><strong>Descrição da Edição:</strong> {{ livro.descricaoEdicao || 'Não informado' }}</p>
+                <p><strong>Editora:</strong> {{ livro.editora?.nome || 'Não informado' }}</p>
+                <p><strong>Idioma:</strong> {{ livro.idioma?.nome || 'Não informado' }}</p>
+                <p><strong>Quantidade de Páginas:</strong> {{ livro.qtdPaginas || 'Não informado' }}</p>
+                <p><strong>Tipo de Capa:</strong> {{ formatTipoCapa() }}</p>
+                <p><strong>Tamanho:</strong> {{ formatTamanho() }}</p>
+                <p><strong>Classificação Indicativa:</strong> {{ formatClassificacao() }}</p>
+            </div>
+
             <h2 class="section-title">Sinopse</h2>
             <p class="book-description">{{ livro.titulo.descricao }}</p>
 

@@ -17,6 +17,7 @@ export class ListaEdicoes implements OnInit {
   public edicoes: BookModel[] = [];
   private allEdicoes: BookModel[] = [];
   public selectedEdicao: BookModel | null = null;
+  
   // filters
   public titleQuery: string = '';
   public publisherQuery: string = '';
@@ -24,6 +25,12 @@ export class ListaEdicoes implements OnInit {
   public statusFilter: string = '';
   public availableStatuses: string[] = [];
   public availablePublishers: string[] = [];
+
+  // Pagination state
+  public paginaAtual: number = 0;
+  public tamanhoPagina: number = 50;
+  public totalPaginas: number = 0;
+  public totalElementos: number = 0;
 
   constructor(private serv: GetServicos) {}
 
@@ -36,9 +43,11 @@ export class ListaEdicoes implements OnInit {
       return;
     }
 
-    this.serv.getApiUrlGetEdicoes(token, 0, 1000).subscribe({
+    this.serv.getApiUrlGetEdicoes(token, this.paginaAtual, this.tamanhoPagina).subscribe({
       next: (response: any) => {
         this.allEdicoes = response?.conteudo || [];
+        this.totalPaginas = response.totalPaginas || 0;
+        this.totalElementos = response.totalElementos || 0;
         this.availableStatuses = Array.from(new Set(this.allEdicoes.map(e => e.statusAtivo))).filter(s => !!s);
         this.applyFilters();
       },
@@ -117,6 +126,45 @@ export class ListaEdicoes implements OnInit {
 
   public clearDetails() {
     this.selectedEdicao = null;
+  }
+
+  // Pagination methods
+  public irParaPagina(pagina: number): void {
+    if (pagina >= 0 && pagina < this.totalPaginas) {
+      this.paginaAtual = pagina;
+      this.ngOnInit();
+    }
+  }
+
+  public paginaAnterior(): void {
+    if (this.paginaAtual > 0) {
+      this.paginaAtual--;
+      this.ngOnInit();
+    }
+  }
+
+  public proximaPagina(): void {
+    if (this.paginaAtual < this.totalPaginas - 1) {
+      this.paginaAtual++;
+      this.ngOnInit();
+    }
+  }
+
+  public getPaginasVisiveis(): number[] {
+    const maxPaginas = 5;
+    const metade = Math.floor(maxPaginas / 2);
+    let inicio = Math.max(0, this.paginaAtual - metade);
+    let fim = Math.min(this.totalPaginas, inicio + maxPaginas);
+    
+    if (fim - inicio < maxPaginas) {
+      inicio = Math.max(0, fim - maxPaginas);
+    }
+    
+    const paginas: number[] = [];
+    for (let i = inicio; i < fim; i++) {
+      paginas.push(i);
+    }
+    return paginas;
   }
 
 }

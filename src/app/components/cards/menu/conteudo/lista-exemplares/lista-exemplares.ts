@@ -139,8 +139,8 @@ export class ListaExemplares implements OnChanges {
       alert('Por favor, informe o motivo da exclusão.');
       return;
     }
-    if (this.motivoExclusao.trim().length < 8) {
-      alert('O motivo deve ter no mínimo 8 caracteres.');
+    if (this.motivoExclusao.trim().length < 10) {
+      alert('O motivo deve ter no mínimo 10 caracteres.');
       return;
     }
 

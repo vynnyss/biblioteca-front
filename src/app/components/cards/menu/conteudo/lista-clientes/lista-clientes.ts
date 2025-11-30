@@ -25,6 +25,12 @@ export class ListaClientes implements OnInit {
   public availableStatuses: string[] = [];
   public selectedCliente: PessoaModel | null = null;
 
+  // Pagination state
+  public paginaAtual: number = 0;
+  public tamanhoPagina: number = 50;
+  public totalPaginas: number = 0;
+  public totalElementos: number = 0;
+
   constructor(private svc: GetServicos) {}
 
   ngOnInit(): void {
@@ -43,9 +49,11 @@ export class ListaClientes implements OnInit {
       return;
     }
 
-    this.svc.getApiUrlGetClientes(token, 0, 1000).subscribe({
+    this.svc.getApiUrlGetClientes(token, this.paginaAtual, this.tamanhoPagina).subscribe({
       next: (response: any) => {
         this.allClientes = response?.conteudo || [];
+        this.totalPaginas = response.totalPaginas || 0;
+        this.totalElementos = response.totalElementos || 0;
         this.availableStatuses = ['INATIVA','REJEITADA','EM_ANALISE_APROVACAO','EM_ANALISE_EXCLUSAO','ATIVA'];
         this.applyFilters();
         this.loading = false;
@@ -91,5 +99,44 @@ export class ListaClientes implements OnInit {
 
   public clearDetails() {
     this.selectedCliente = null;
+  }
+
+  // Pagination methods
+  public irParaPagina(pagina: number): void {
+    if (pagina >= 0 && pagina < this.totalPaginas) {
+      this.paginaAtual = pagina;
+      this.loadClientes();
+    }
+  }
+
+  public paginaAnterior(): void {
+    if (this.paginaAtual > 0) {
+      this.paginaAtual--;
+      this.loadClientes();
+    }
+  }
+
+  public proximaPagina(): void {
+    if (this.paginaAtual < this.totalPaginas - 1) {
+      this.paginaAtual++;
+      this.loadClientes();
+    }
+  }
+
+  public getPaginasVisiveis(): number[] {
+    const maxPaginas = 5;
+    const metade = Math.floor(maxPaginas / 2);
+    let inicio = Math.max(0, this.paginaAtual - metade);
+    let fim = Math.min(this.totalPaginas, inicio + maxPaginas);
+    
+    if (fim - inicio < maxPaginas) {
+      inicio = Math.max(0, fim - maxPaginas);
+    }
+    
+    const paginas: number[] = [];
+    for (let i = inicio; i < fim; i++) {
+      paginas.push(i);
+    }
+    return paginas;
   }
 }

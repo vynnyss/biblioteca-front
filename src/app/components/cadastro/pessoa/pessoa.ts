@@ -87,6 +87,12 @@ export class Pessoa implements OnInit {
     input.setSelectionRange(novaPosicao, novaPosicao);
   }
 
+  mascaraTelefone(event: any): void {
+    const input = event.target as HTMLInputElement;
+    let valor = input.value.replace(/\D/g, '').slice(0, 11);
+    input.value = valor;
+  }
+
   mascaraCEP(event: any): void {
     const input = event.target as HTMLInputElement;
     let valor = input.value.replace(/\D/g, '').slice(0, 8);
@@ -110,7 +116,8 @@ export class Pessoa implements OnInit {
   }
 
   cancelar(): void {
-    console.log('Ação de cancelar executada');
+    // Navega de volta para a página anterior
+    this.router.navigate(['/home']);
   }
 
   onSubmit(form: NgForm): void {

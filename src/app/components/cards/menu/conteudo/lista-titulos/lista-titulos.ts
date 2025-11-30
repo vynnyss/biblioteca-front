@@ -30,6 +30,12 @@ export class ListaTitulos implements OnInit {
   public statusFilter: string = '';
   public availableStatuses: string[] = ['ATIVO', 'INATIVO'];
 
+  // Pagination state
+  public paginaAtual: number = 0;
+  public tamanhoPagina: number = 50;
+  public totalPaginas: number = 0;
+  public totalElementos: number = 0;
+
   // modal de edição
   public mostrarModalEdicao = false;
   public tituloEditando: Title | null = null;
@@ -75,14 +81,18 @@ export class ListaTitulos implements OnInit {
       return;
     }
 
-    this.svc.getApiUrlGetTitulos(token, 0, 50).subscribe({
+    this.svc.getApiUrlGetTitulos(token, this.paginaAtual, this.tamanhoPagina).subscribe({
       next: (response: any) => {
         // Se a resposta vier com paginação
         if (response.conteudo) {
           this.allTitulos = response.conteudo || [];
+          this.totalPaginas = response.totalPaginas || 0;
+          this.totalElementos = response.totalElementos || 0;
         } else {
           // Se vier como array direto (retrocompatibilidade)
           this.allTitulos = response || [];
+          this.totalPaginas = 1;
+          this.totalElementos = this.allTitulos.length;
         }
         this.applyFilters();
         this.loading = false;
@@ -137,6 +147,7 @@ export class ListaTitulos implements OnInit {
       next: (response: any) => {
         this.autores = response?.conteudo || [];
         this.autoresFiltrados = [...this.autores];
+        //console.log('Autores carregados:', this.autores);
       },
       error: (err) => {
         console.error('Erro ao carregar autores', err);
@@ -302,7 +313,7 @@ export class ListaTitulos implements OnInit {
       },
       error: (err) => {
         console.error('Erro ao excluir título:', err);
-        const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao excluir título.';
+        const msg = err?.error?.mensagem || err?.error?.message ||'Erro ao excluir título.';
         alert(msg);
       }
     });
@@ -317,5 +328,44 @@ export class ListaTitulos implements OnInit {
     } catch {
       return false;
     }
+  }
+
+  // Pagination methods
+  public irParaPagina(pagina: number): void {
+    if (pagina >= 0 && pagina < this.totalPaginas) {
+      this.paginaAtual = pagina;
+      this.loadTitulos();
+    }
+  }
+
+  public paginaAnterior(): void {
+    if (this.paginaAtual > 0) {
+      this.paginaAtual--;
+      this.loadTitulos();
+    }
+  }
+
+  public proximaPagina(): void {
+    if (this.paginaAtual < this.totalPaginas - 1) {
+      this.paginaAtual++;
+      this.loadTitulos();
+    }
+  }
+
+  public getPaginasVisiveis(): number[] {
+    const maxPaginas = 5;
+    const metade = Math.floor(maxPaginas / 2);
+    let inicio = Math.max(0, this.paginaAtual - metade);
+    let fim = Math.min(this.totalPaginas, inicio + maxPaginas);
+    
+    if (fim - inicio < maxPaginas) {
+      inicio = Math.max(0, fim - maxPaginas);
+    }
+    
+    const paginas: number[] = [];
+    for (let i = inicio; i < fim; i++) {
+      paginas.push(i);
+    }
+    return paginas;
   }
 }

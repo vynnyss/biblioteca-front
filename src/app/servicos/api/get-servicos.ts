@@ -64,7 +64,7 @@ export class GetServicos {
     const params = new HttpParams()
       .set('pagina', pagina.toString())
       .set('tamanho', tamanho.toString());
-    return this.http.get<any>(this.apiUrlGetEditoras, { headers, params });
+    return this.http.get<any>(this.apiUrlGetEditorasAtivas, { headers, params });
   }
 
   getApiUrlGetIdiomas(token: string): Observable<any[]> {

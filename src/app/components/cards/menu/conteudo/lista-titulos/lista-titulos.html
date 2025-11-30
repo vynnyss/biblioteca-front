@@ -27,6 +27,7 @@
 		<table class="titulos-table">
 			<thead>
 				<tr>
+					<th>ID</th>
 					<th>Nome</th>
 					<th>Descrição</th>
 					<th>Autores</th>
@@ -37,6 +38,7 @@
 			</thead>
 			<tbody>
 				<tr *ngFor="let t of titulos">
+					<td>{{ t.idTitulo }}</td>
 					<td>{{ t.nome }}</td>
 					<td>{{ t.descricao }}</td>
 					<td>{{ getAutoresNomes(t) }}</td>
@@ -58,6 +60,37 @@
 				</tr>
 			</tbody>
 		</table>
+
+		<!-- Pagination Controls -->
+		<div class="pagination-controls" *ngIf="totalPaginas > 1">
+			<button 
+				class="btn-pagination" 
+				(click)="paginaAnterior()" 
+				[disabled]="paginaAtual === 0"
+				title="Página anterior">
+				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<polyline points="15 18 9 12 15 6"></polyline>
+				</svg>
+			</button>
+
+			<button 
+				*ngFor="let pagina of getPaginasVisiveis()" 
+				class="btn-pagination" 
+				[class.active]="pagina === paginaAtual"
+				(click)="irParaPagina(pagina)">
+				{{ pagina + 1 }}
+			</button>
+
+			<button 
+				class="btn-pagination" 
+				(click)="proximaPagina()" 
+				[disabled]="paginaAtual === totalPaginas - 1"
+				title="Próxima página">
+				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<polyline points="9 18 15 12 9 6"></polyline>
+				</svg>
+			</button>
+		</div>
 	</section>
 
 	<ng-container *ngIf="!loading && (!titulos?.length)">

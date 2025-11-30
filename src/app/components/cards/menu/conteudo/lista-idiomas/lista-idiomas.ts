@@ -15,11 +15,18 @@ import { DeleteService } from '../../../../../servicos/api/delete-service';
 export class ListaIdiomas implements OnInit {
   public idiomas: any[] = [];
   private allIdiomas: any[] = [];
+  public userRole: string = '';
 
   // filters
   public nameQuery: string = '';
   public statusFilter: string = '';
   public availableStatuses: string[] = [];
+
+  // Pagination state
+  public paginaAtual: number = 0;
+  public tamanhoPagina: number = 10;
+  public totalPaginas: number = 0;
+  public totalElementos: number = 0;
 
   // edição
   public editandoId: number | null = null;
@@ -32,6 +39,7 @@ export class ListaIdiomas implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadUserRole();
     const token = sessionStorage.getItem('authToken');
     if (!token) {
       console.error('Token não encontrado');
@@ -43,6 +51,8 @@ export class ListaIdiomas implements OnInit {
     this.serv.getApiUrlGetIdiomas(token).subscribe({
       next: (list: any[]) => {
         this.allIdiomas = list || [];
+        this.totalElementos = this.allIdiomas.length;
+        this.totalPaginas = Math.ceil(this.totalElementos / this.tamanhoPagina);
         this.availableStatuses = Array.from(new Set(this.allIdiomas.map(i => i.statusAtivo))).filter(s => !!s);
         this.applyFilters();
       },
@@ -63,7 +73,12 @@ export class ListaIdiomas implements OnInit {
     if (nq) {
       items = items.filter(i => (i.nome || '').toLowerCase().indexOf(nq) !== -1);
     }
-    this.idiomas = items;
+    // Client-side pagination
+    const inicio = this.paginaAtual * this.tamanhoPagina;
+    const fim = inicio + this.tamanhoPagina;
+    this.idiomas = items.slice(inicio, fim);
+    this.totalElementos = items.length;
+    this.totalPaginas = Math.ceil(this.totalElementos / this.tamanhoPagina);
   }
 
   public clearFilters(): void {
@@ -145,5 +160,61 @@ export class ListaIdiomas implements OnInit {
         alert(msg);
       }
     });
+  }
+
+  private loadUserRole(): void {
+    try {
+      const raw = sessionStorage.getItem('decodedToken');
+      if (raw) {
+        const decoded = JSON.parse(raw) as { role?: string };
+        this.userRole = decoded?.role ?? '';
+      }
+    } catch (e) {
+      console.error('Erro ao ler decodedToken:', e);
+      this.userRole = '';
+    }
+  }
+
+  public isAdministrador(): boolean {
+    return this.userRole === 'ADMINISTRADOR';
+  }
+
+  // Pagination methods
+  public irParaPagina(pagina: number): void {
+    if (pagina >= 0 && pagina < this.totalPaginas) {
+      this.paginaAtual = pagina;
+      this.applyFilters();
+    }
+  }
+
+  public paginaAnterior(): void {
+    if (this.paginaAtual > 0) {
+      this.paginaAtual--;
+      this.applyFilters();
+    }
+  }
+
+  public proximaPagina(): void {
+    if (this.paginaAtual < this.totalPaginas - 1) {
+      this.paginaAtual++;
+      this.applyFilters();
+    }
+  }
+
+  public getPaginasVisiveis(): number[] {
+    const maxPaginas = 5;
+    const metade = Math.floor(maxPaginas / 2);
+    let inicio = Math.max(0, this.paginaAtual - metade);
+    let fim = Math.min(this.totalPaginas, inicio + maxPaginas);
+    
+    if (fim - inicio < maxPaginas) {
+      inicio = Math.max(0, fim - maxPaginas);
+    }
+    
+    const paginas: number[] = [];
+    for (let i = inicio; i < fim; i++) {
+      paginas.push(i);
+    }
+    return paginas;
   }
 }

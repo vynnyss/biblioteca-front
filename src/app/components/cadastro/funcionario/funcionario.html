@@ -52,7 +52,21 @@
     </span><br><br>
 
     <label for="telefone">Telefone:</label><br>
-    <input type="tel" id="telefone" name="telefone" [(ngModel)]="user.telefone" required><br><br>
+    <input 
+      type="tel" 
+      id="telefone" 
+      name="telefone" 
+      [(ngModel)]="user.telefone" 
+      (input)="mascaraTelefone($event)"
+      pattern="[0-9]*" 
+      minlength="10" 
+      maxlength="11" 
+      placeholder="(00) 00000-0000"
+      required
+      #telefoneInput="ngModel"><br>
+    <span *ngIf="telefoneInput.invalid && telefoneInput.touched" style="color: red; font-size: 0.85em;">
+      Telefone deve conter apenas números (10-11 dígitos)
+    </span><br><br>
 
     <label for="logradouro">Endereço</label><br>
     <input type="text" id="logradouro" name="logradouro" [(ngModel)]="user.endereco.nomeLogradouro" required><br><br>

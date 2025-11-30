@@ -24,6 +24,8 @@ export class DetalhesEdicao {
   private deleteService = inject(DeleteService);
   private http = inject(HttpClient);
   
+  public userRole: string = '';
+
   @Input() edicao: BookModel | null = null;
   @Output() close = new EventEmitter<void>();
 
@@ -34,6 +36,24 @@ export class DetalhesEdicao {
     qtdEstoque: 1,
     edicaoId: null as number | null
   };
+
+  ngOnInit() {
+    this.loadUserRole();
+  }
+
+  private loadUserRole() {
+    try {
+      const raw = sessionStorage.getItem('decodedToken');
+      if (raw) {
+        const decoded = JSON.parse(raw) as { role?: string };
+        this.userRole = decoded?.role ?? '';
+      }
+    } catch (e) {
+      console.error('Erro ao ler decodedToken:', e);
+      this.userRole = '';
+    }
+  }
+
 
   // Edit edition modal
   mostrarModalEdicao: boolean = false;
@@ -77,6 +97,32 @@ export class DetalhesEdicao {
 
   public getCategories(): string {
     return this.edicao?.titulo?.categorias?.map((c: any) => c.nome).join(', ') || '';
+  }
+
+  formatTipoCapa(): string {
+    const tipo = this.edicao?.tipoCapa?.toUpperCase();
+    if (tipo === 'DURA') return 'Capa Dura';
+    if (tipo === 'MOLE' || tipo === 'FLEXIVEL') return 'Capa Flexível';
+    return this.edicao?.tipoCapa || 'Não informado';
+  }
+
+  formatTamanho(): string {
+    const tamanho = this.edicao?.tamanho?.toUpperCase();
+    if (tamanho === 'PEQUENO') return 'Pequeno';
+    if (tamanho === 'MEDIO') return 'Médio';
+    if (tamanho === 'GRANDE') return 'Grande';
+    return this.edicao?.tamanho || 'Não informado';
+  }
+
+  formatClassificacao(): string {
+    const classificacao = this.edicao?.classificacao?.toUpperCase();
+    if (classificacao === 'L') return 'Livre';
+    if (classificacao === 'C10') return '10 anos';
+    if (classificacao === 'C12') return '12 anos';
+    if (classificacao === 'C14') return '14 anos';
+    if (classificacao === 'C16') return '16 anos';
+    if (classificacao === 'C18') return '18 anos';
+    return this.edicao?.classificacao || 'Não informado';
   }
 
   abrirModalNovoExemplar(): void {
@@ -130,8 +176,12 @@ export class DetalhesEdicao {
       },
       error: (err) => {
         console.error('[DetalhesEdicao] Erro ao cadastrar exemplar:', err);
-        const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao cadastrar exemplar. Tente novamente.';
-        alert(msg);
+          const backend = err.error;
+          let msg =
+            typeof backend === 'string'
+              ? backend
+              : backend?.mensagem || backend?.message || JSON.stringify(backend);
+          alert(msg);
       }
     });
   }
@@ -379,8 +429,12 @@ export class DetalhesEdicao {
       },
       error: (err) => {
         console.error('[DetalhesEdicao] Erro ao atualizar edição:', err);
-        const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao atualizar edição. Tente novamente.';
-        alert(msg);
+          const backend = err.error;
+          let msg =
+            typeof backend === 'string'
+              ? backend
+              : backend?.mensagem || backend?.message || JSON.stringify(backend);
+          alert(msg);
       }
     });
   }
@@ -409,8 +463,12 @@ export class DetalhesEdicao {
       },
       error: (err) => {
         console.error('[DetalhesEdicao] Erro ao inativar edição:', err);
-        const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao inativar edição. Tente novamente.';
-        alert(msg);
+          const backend = err.error;
+          let msg =
+            typeof backend === 'string'
+              ? backend
+              : backend?.mensagem || backend?.message || JSON.stringify(backend);
+          alert(msg);
       }
     });
   }

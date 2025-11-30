@@ -3,8 +3,8 @@
 		<h3>Edições</h3>
 		<a routerLink="/cadastro/livro" class="btn btn-primary">+ Cadastrar Edição</a>
 	</div>
-
-		<div class="filters">
+	<div *ngIf="!selectedEdicao">
+	<div class="filters">
 		<label>
 			Título
 			<input type="text" [(ngModel)]="titleQuery" (input)="applyFilters()" placeholder="Pesquisar por título" />
@@ -31,7 +31,7 @@
 		<button class="btn btn-outline" type="button" (click)="clearFilters()">Limpar</button>
 	</div>
 
-	<div *ngIf="!selectedEdicao">
+
 		<div *ngIf="edicoes?.length; else empty">
 			<table class="table-edicoes">
 			<thead>
@@ -55,6 +55,26 @@
 				</tr>
 			</tbody>
 		</table>
+
+			<!-- Pagination Controls -->
+			<div class="pagination-controls" *ngIf="totalPaginas > 1">
+				<button class="btn-pagination" (click)="paginaAnterior()" [disabled]="paginaAtual === 0">
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+						<path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>
+				</button>
+				<button *ngFor="let pagina of getPaginasVisiveis()" 
+						class="btn-pagination" 
+						[class.active]="pagina === paginaAtual"
+						(click)="irParaPagina(pagina)">
+					{{ pagina + 1 }}
+				</button>
+				<button class="btn-pagination" (click)="proximaPagina()" [disabled]="paginaAtual === totalPaginas - 1">
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+						<path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>
+				</button>
+			</div>
 		</div>
 	</div>
 
