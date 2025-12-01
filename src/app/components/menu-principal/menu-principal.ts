@@ -11,10 +11,11 @@ import { ListaEdicoes } from '../cards/menu/conteudo/lista-edicoes/lista-edicoes
 import { ListaEmprestimos } from '../cards/menu/conteudo/lista-emprestimos/lista-emprestimos';
 import { ListaTitulos } from '../cards/menu/conteudo/lista-titulos/lista-titulos';
 import { ListaIdiomas } from '../cards/menu/conteudo/lista-idiomas/lista-idiomas';
+import { ListaCategorias } from '../cards/menu/conteudo/lista-categorias/lista-categorias';
 
 @Component({
   selector: 'app-menu-principal',
-  imports: [MenuLateral, CommonModule, Perfil, ListaClientes, ListaFuncionarios, ListaAutores, ListaEditoras, ListaEdicoes, ListaEmprestimos, ListaTitulos, ListaIdiomas],
+  imports: [MenuLateral, CommonModule, Perfil, ListaClientes, ListaFuncionarios, ListaAutores, ListaEditoras, ListaEdicoes, ListaEmprestimos, ListaTitulos, ListaIdiomas, ListaCategorias],
   templateUrl: './menu-principal.html',
   styleUrl: './menu-principal.css'
 })
@@ -24,8 +25,8 @@ export class MenuPrincipal implements OnInit {
   public roleCards: string[] = [];
 
   public cardsCliente: string[] = ['Dados cadastrais', 'Emprestimos'];
-  public cardsFuncionario: string[] = ['Clientes', 'Emprestimos', 'Livros', 'Titulos', 'Autores', 'Editoras', 'Idiomas', 'Funcionários'];
-  public cardsAdministrador: string[] = ['Clientes', 'Emprestimos', 'Livros', 'Titulos', 'Autores', 'Editoras', 'Idiomas', 'Funcionários', 'Relatórios'];
+  public cardsFuncionario: string[] = ['Clientes', 'Emprestimos', 'Livros', 'Titulos', 'Autores', 'Editoras', 'Idiomas', 'Categorias', 'Funcionários'];
+  public cardsAdministrador: string[] = ['Clientes', 'Emprestimos', 'Livros', 'Titulos', 'Autores', 'Editoras', 'Idiomas', 'Categorias', 'Funcionários', 'Relatórios'];
 
   constructor(private router: Router) {}
 

@@ -65,4 +65,12 @@ export class DeleteService {
     });
     return this.http.delete(`${apiIdiomas}/${id}`, { headers });
   }
+
+  inativarCategoria(id: number, token: string): Observable<any> {
+    const apiCategorias = "http://localhost:8080/categorias";
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.delete(`${apiCategorias}/${id}`, { headers });
+  }
 }

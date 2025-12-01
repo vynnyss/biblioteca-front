@@ -1,4 +1,3 @@
-<!-- Reuse Book Details layout but show the edition passed in via `edicao` and remove add-to-cart -->
 <svg style="display: none;">
 	<symbol id="icon-book" viewBox="0 0 24 24">
 		<path d="M4 19h16v-1a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v1zm14.5-9L12 14.5 5.5 10a1 1 0 0 1-.5-.8V4a1 1 0 0 1 1-1h13a1 1 0 0 1 1 1v5.2a1 1 0 0 1-.5.8zM6 4v5.2l6 4 6-4V4H6z"/>
@@ -27,6 +26,17 @@
 
 			<!-- No add-to-cart button here (details view only) -->
 
+			<h2 class="section-title">Detalhes da Edição</h2>
+			<div class="edition-details">
+				<p><strong>Descrição da Edição:</strong> {{ edicao?.descricaoEdicao || 'Não informado' }}</p>
+				<p><strong>Editora:</strong> {{ edicao?.editora?.nome || 'Não informado' }}</p>
+				<p><strong>Idioma:</strong> {{ edicao?.idioma?.nome || 'Não informado' }}</p>
+				<p><strong>Quantidade de Páginas:</strong> {{ edicao?.qtdPaginas || 'Não informado' }}</p>
+				<p><strong>Tipo de Capa:</strong> {{ formatTipoCapa() }}</p>
+				<p><strong>Tamanho:</strong> {{ formatTamanho() }}</p>
+				<p><strong>Classificação Indicativa:</strong> {{ formatClassificacao() }}</p>
+			</div>
+
 			<h2 class="section-title">Sinopse / Notas</h2>
 			<p class="book-description">{{ edicao?.titulo?.descricao || 'Sem descrição disponível.' }}</p>
 
@@ -35,13 +45,13 @@
 
 	<section class="debug-json" *ngIf="edicao">
 			<!-- Lista de exemplares para esta edição -->
-			<app-lista-exemplares [edicaoId]="edicao?.idEdicao" [recarregar]="recarregarExemplares"></app-lista-exemplares>
+			<app-lista-exemplares [edicaoId]="edicao.idEdicao" [recarregar]="recarregarExemplares"></app-lista-exemplares>
 
 			<div style="margin-top:1rem; display: flex; gap: 1rem;">
 				<button class="btn btn-outline" type="button" (click)="onClose()">← Voltar</button>
 				<button class="btn btn-primary" type="button" (click)="abrirModalEdicao()">✏️ Editar Edição</button>
 				<button class="btn btn-primary" type="button" (click)="abrirModalNovoExemplar()">+ Adicionar Exemplares</button>
-				<button class="btn btn-danger" type="button" (click)="inativarEdicao()">🗑️ Inativar Edição</button>
+				<button *ngIf="userRole === 'ADMINISTRADOR'" class="btn btn-danger" type="button" (click)="inativarEdicao()">🗑️ Inativar Edição</button>
 			</div>
 		</section>
 
@@ -200,6 +210,8 @@
 					<option value="">Selecione o tipo de capa</option>
 					<option value="dura">Capa dura</option>
 					<option value="flexivel">Capa mole/flexível</option>
+					<option value="brochura">Brochura</option>
+					<option value="espiral">Espiral</option>
 				</select>
 			</div>
 

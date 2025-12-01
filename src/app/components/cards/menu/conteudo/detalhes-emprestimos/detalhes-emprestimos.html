@@ -75,8 +75,8 @@
 				<dt>ID do Exemplar</dt>
 				<dd>{{ emprestimo.exemplar.idExemplar || '—' }}</dd>
 
-				<dt>ID da Edição</dt>
-				<dd>{{ emprestimo.exemplar.edicao.idEdicao || '—' }}</dd>
+				<dt *ngIf="!isCliente()">ID da Edição</dt>
+				<dd *ngIf="!isCliente()">{{ emprestimo.exemplar.edicao.idEdicao || '—' }}</dd>
 
 				<dt>Status</dt>
 				<dd>{{ emprestimo.exemplar.status || '—' }}</dd>

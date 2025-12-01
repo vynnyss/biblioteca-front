@@ -30,6 +30,18 @@ export class ListaFuncionarios implements OnInit {
   public statusFilter: string = '';
   public availableStatuses: string[] = [];
 
+  // Pagination state for administradores
+  public paginaAtualAdmins: number = 0;
+  public tamanhoPaginaAdmins: number = 10;
+  public totalPaginasAdmins: number = 0;
+  public totalElementosAdmins: number = 0;
+
+  // Pagination state for funcionarios
+  public paginaAtualFuncs: number = 0;
+  public tamanhoPaginaFuncs: number = 10;
+  public totalPaginasFuncs: number = 0;
+  public totalElementosFuncs: number = 0;
+
   // Modal inativar
   public mostrarModalInativar: boolean = false;
   public funcionarioInativando: PessoaModel | null = null;
@@ -57,9 +69,11 @@ export class ListaFuncionarios implements OnInit {
       return;
     }
 
-    this.svc.getApiUrlGetAdministradores(token, 0, 1000).subscribe({
+    this.svc.getApiUrlGetAdministradores(token, this.paginaAtualAdmins, this.tamanhoPaginaAdmins).subscribe({
       next: (response: any) => {
         this.allAdministradores = response?.conteudo || [];
+        this.totalPaginasAdmins = response.totalPaginas || 0;
+        this.totalElementosAdmins = response.totalElementos || 0;
         this.updateAvailableStatuses();
         this.applyFilters();
         this.loadingAdmins = false;
@@ -83,9 +97,11 @@ export class ListaFuncionarios implements OnInit {
       return;
     }
 
-    this.svc.getApiUrlGetFuncionarios(token, 0, 1000).subscribe({
+    this.svc.getApiUrlGetFuncionarios(token, this.paginaAtualFuncs, this.tamanhoPaginaFuncs).subscribe({
       next: (response: any) => {
         this.allFuncionarios = response?.conteudo || [];
+        this.totalPaginasFuncs = response.totalPaginas || 0;
+        this.totalElementosFuncs = response.totalElementos || 0;
         this.updateAvailableStatuses();
         this.applyFilters();
         this.loadingFuncs = false;
@@ -190,5 +206,82 @@ export class ListaFuncionarios implements OnInit {
       }
     });
   }
-}
 
+  // Pagination methods for Administradores
+  public irParaPaginaAdmins(pagina: number): void {
+    if (pagina >= 0 && pagina < this.totalPaginasAdmins) {
+      this.paginaAtualAdmins = pagina;
+      this.loadAdministradores();
+    }
+  }
+
+  public paginaAnteriorAdmins(): void {
+    if (this.paginaAtualAdmins > 0) {
+      this.paginaAtualAdmins--;
+      this.loadAdministradores();
+    }
+  }
+
+  public proximaPaginaAdmins(): void {
+    if (this.paginaAtualAdmins < this.totalPaginasAdmins - 1) {
+      this.paginaAtualAdmins++;
+      this.loadAdministradores();
+    }
+  }
+
+  public getPaginasVisiveisAdmins(): number[] {
+    const maxPaginas = 5;
+    const metade = Math.floor(maxPaginas / 2);
+    let inicio = Math.max(0, this.paginaAtualAdmins - metade);
+    let fim = Math.min(this.totalPaginasAdmins, inicio + maxPaginas);
+    
+    if (fim - inicio < maxPaginas) {
+      inicio = Math.max(0, fim - maxPaginas);
+    }
+    
+    const paginas: number[] = [];
+    for (let i = inicio; i < fim; i++) {
+      paginas.push(i);
+    }
+    return paginas;
+  }
+
+  // Pagination methods for Funcionarios
+  public irParaPaginaFuncs(pagina: number): void {
+    if (pagina >= 0 && pagina < this.totalPaginasFuncs) {
+      this.paginaAtualFuncs = pagina;
+      this.loadFuncionarios();
+    }
+  }
+
+  public paginaAnteriorFuncs(): void {
+    if (this.paginaAtualFuncs > 0) {
+      this.paginaAtualFuncs--;
+      this.loadFuncionarios();
+    }
+  }
+
+  public proximaPaginaFuncs(): void {
+    if (this.paginaAtualFuncs < this.totalPaginasFuncs - 1) {
+      this.paginaAtualFuncs++;
+      this.loadFuncionarios();
+    }
+  }
+
+  public getPaginasVisiveisFuncs(): number[] {
+    const maxPaginas = 5;
+    const metade = Math.floor(maxPaginas / 2);
+    let inicio = Math.max(0, this.paginaAtualFuncs - metade);
+    let fim = Math.min(this.totalPaginasFuncs, inicio + maxPaginas);
+    
+    if (fim - inicio < maxPaginas) {
+      inicio = Math.max(0, fim - maxPaginas);
+    }
+    
+    const paginas: number[] = [];
+    for (let i = inicio; i < fim; i++) {
+      paginas.push(i);
+    }
+    return paginas;
+  }
+}

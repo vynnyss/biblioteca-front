@@ -36,14 +36,15 @@
         <small style="color: #666; font-size: 11px;">
           Selecionados: {{ autoresSelecionados.length }}
         </small>
-        <button 
-          type="button" 
-          class="btn-add-novo" 
-          (click)="onAutorChange('novo')"
-          [disabled]="tituloSelecionado && tituloSelecionado !== ''">
-          ➕ Cadastrar novo autor
-        </button>
       </div>
+      <button 
+        type="button" 
+        class="btn-add-novo" 
+        (click)="abrirModalNovoAutor()"
+        [disabled]="tituloSelecionado && tituloSelecionado !== ''"
+        style="margin-top: 8px; width: 100%;">
+        ➥ Cadastrar novo autor
+      </button>
       <span *ngIf="carregandoAutores" style="font-size: 12px; color: #666;">
         Carregando autores...
       </span>
@@ -83,14 +84,15 @@
         <small style="color: #666; font-size: 11px;">
           Selecionadas: {{ categoriasSelecionadas.length }}
         </small>
-        <button 
-          type="button" 
-          class="btn-add-novo" 
-          (click)="onCategoriaChange('novo')"
-          [disabled]="tituloSelecionado && tituloSelecionado !== ''">
-          ➕ Cadastrar nova categoria
-        </button>
       </div>
+      <button 
+        type="button" 
+        class="btn-add-novo" 
+        (click)="abrirModalNovaCategoria()"
+        [disabled]="tituloSelecionado && tituloSelecionado !== ''"
+        style="margin-top: 8px; width: 100%;">
+        ➥ Cadastrar nova categoria
+      </button>
       <span *ngIf="carregandoCategorias" style="font-size: 12px; color: #666;">
         Carregando categorias...
       </span>
@@ -98,6 +100,14 @@
 
     <div class="form-group">
       <label for="titulo">Título:</label>
+      <input 
+        type="text" 
+        placeholder="🔍 Buscar título..."
+        [(ngModel)]="termoBuscaTitulo"
+        (ngModelChange)="filtrarTitulos()"
+        name="buscaTitulo"
+        style="margin-bottom: 8px; width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+      />
       <select 
         id="titulo" 
         name="titulo" 
@@ -105,13 +115,17 @@
         (change)="onTituloChange($any($event.target).value)"
         required>
         <option value="">Selecione um título</option>
-        <option *ngFor="let titulo of titulos" [value]="titulo.idTitulo">
+        <option *ngFor="let titulo of titulosFiltrados" [value]="titulo.idTitulo">
           {{ titulo.nome }}
         </option>
-        <option value="novo" style="font-weight: bold; color: #f97316;">
-          ➕ Cadastrar novo título
-        </option>
       </select>
+      <button 
+        type="button" 
+        class="btn-add-novo" 
+        (click)="abrirModalNovoTitulo()"
+        style="margin-top: 8px; width: 100%;">
+        ➕ Cadastrar novo título
+      </button>
       <span *ngIf="carregandoTitulos" style="font-size: 12px; color: #666;">
         Carregando títulos...
       </span>
@@ -148,10 +162,14 @@
         <option *ngFor="let editora of editorasFiltradas" [value]="editora.idEditora || editora.id">
           {{ editora.nome }}
         </option>
-        <option value="novo" style="font-weight: bold; color: #8b5cf6;">
-          ➕ Cadastrar nova editora
-        </option>
       </select>
+      <button 
+        type="button" 
+        class="btn-add-novo" 
+        (click)="abrirModalNovaEditora()"
+        style="margin-top: 8px; width: 100%;">
+        ➕ Cadastrar nova editora
+      </button>
       <span *ngIf="carregandoEditoras" style="font-size: 12px; color: #666;">
         Carregando editoras...
       </span>
@@ -177,10 +195,14 @@
         <option *ngFor="let idioma of idiomasFiltrados" [value]="idioma.idIdioma || idioma.id">
           {{ idioma.nome }}
         </option>
-        <option value="novo" style="font-weight: bold; color: #dc2626;">
-          ➕ Cadastrar novo idioma
-        </option>
       </select>
+      <button 
+        type="button" 
+        class="btn-add-novo" 
+        (click)="abrirModalNovoIdioma()"
+        style="margin-top: 8px; width: 100%;">
+        ➕ Cadastrar novo idioma
+      </button>
       <span *ngIf="carregandoIdiomas" style="font-size: 12px; color: #666;">
         Carregando idiomas...
       </span>

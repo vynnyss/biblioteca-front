@@ -98,8 +98,8 @@ export class DetalhesCliente {
       return;
     }
     
-    if (this.motivoInativacao.trim().length < 8) {
-      alert('O motivo deve ter no mínimo 8 caracteres.');
+    if (this.motivoInativacao.trim().length < 10) {
+      alert('O motivo deve ter no mínimo 10 caracteres.');
       return;
     }
     

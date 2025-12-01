@@ -332,6 +332,12 @@ export class AtualizacaoPessoa implements OnInit {
     input.setSelectionRange(novaPosicao, novaPosicao);
   }
 
+  mascaraTelefone(event: any): void {
+    const input = event.target as HTMLInputElement;
+    let valor = input.value.replace(/\D/g, '').slice(0, 11);
+    input.value = valor;
+  }
+
   onSubmit(form: NgForm) {
     const payload = JSON.parse(JSON.stringify(this.user));
     const enderecoPadrao = {
@@ -463,7 +469,7 @@ export class AtualizacaoPessoa implements OnInit {
             alert('Usuário não encontrado.');
           } else if (err.status === 500) {
             const mensagemErro = err.error?.mensagem || err.error?.message || 'Erro interno do servidor';
-            alert(`Erro no servidor: ${mensagemErro}`);
+            alert(mensagemErro);
           } else {
             alert('Erro ao atualizar cadastro. Tente novamente.');
           }
@@ -477,6 +483,7 @@ export class AtualizacaoPessoa implements OnInit {
 
   cancelar() {
     this.ngOnInit();
+    this.router.navigate(['/menu-principal']);
   }
 
   voltar() {

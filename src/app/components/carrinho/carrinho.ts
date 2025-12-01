@@ -75,7 +75,7 @@ export class Carrinho implements OnInit {
           error: (err) => {
             console.error('Erro ao realizar empréstimo:', err);
             const errorMsg = err?.error?.mensagem || err?.message || 'Erro ao processar o empréstimo';
-            alert(`❌ Erro ao finalizar pedido: ${errorMsg}`);
+            alert(errorMsg);
           }
         });
       },

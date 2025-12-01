@@ -77,6 +77,12 @@ export class PutService {
     return this.http.put(`${apiIdiomas}/${id}`, { "nome": nome }, { headers });
   }
 
+  atualizarNomeCategoria(id: number, nome: string, token: string) {
+    const apiCategorias = "http://localhost:8080/categorias";
+    const headers = { 'Authorization': `Bearer ${token}` };
+    return this.http.put(`${apiCategorias}/${id}`, { "nome": nome }, { headers });
+  }
+
   atualizarTitulo(id: number, dados: any, token: string) {
     const apiTitulos = "http://localhost:8080/titulos";
     const headers = { 'Authorization': `Bearer ${token}` };

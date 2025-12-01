@@ -86,6 +86,32 @@ export class BookDetails implements OnInit {
     return this.livro?.titulo?.categorias?.map(c => c.nome).join(', ') || '';
   }
 
+  formatTipoCapa(): string {
+    const tipo = this.livro?.tipoCapa?.toUpperCase();
+    if (tipo === 'DURA') return 'Capa Dura';
+    if (tipo === 'MOLE' || tipo === 'FLEXIVEL') return 'Capa Flexível';
+    return this.livro?.tipoCapa || 'Não informado';
+  }
+
+  formatTamanho(): string {
+    const tamanho = this.livro?.tamanho?.toUpperCase();
+    if (tamanho === 'PEQUENO') return 'Pequeno';
+    if (tamanho === 'MEDIO') return 'Médio';
+    if (tamanho === 'GRANDE') return 'Grande';
+    return this.livro?.tamanho || 'Não informado';
+  }
+
+  formatClassificacao(): string {
+    const classificacao = this.livro?.classificacao?.toUpperCase();
+    if (classificacao === 'L') return 'Livre';
+    if (classificacao === 'C10') return '10 anos';
+    if (classificacao === 'C12') return '12 anos';
+    if (classificacao === 'C14') return '14 anos';
+    if (classificacao === 'C16') return '16 anos';
+    if (classificacao === 'C18') return '18 anos';
+    return this.livro?.classificacao || 'Não informado';
+  }
+
   closeAuthModal(): void {
     this.showAuthModal = false;
   }

@@ -6,6 +6,7 @@ import { GetServicos } from '../../../servicos/api/get-servicos';
 import { Estado } from '../../../models/estado';
 import { jwtDecode } from 'jwt-decode';
 import { DecodeToken } from '../../../models/decode-token';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-atualizacao-funcionario',
@@ -42,6 +43,7 @@ export class AtualizacaoFuncionario implements OnInit {
 
   private postService = inject(PostService);
   private getServicos = inject(GetServicos);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.carregarEstados();
@@ -229,6 +231,12 @@ export class AtualizacaoFuncionario implements OnInit {
     input.setSelectionRange(novaPosicao, novaPosicao);
   }
 
+  mascaraTelefone(event: any): void {
+    const input = event.target as HTMLInputElement;
+    let valor = input.value.replace(/\D/g, '').slice(0, 11);
+    input.value = valor;
+  }
+
   onSubmit(form: NgForm) {
     const payload = JSON.parse(JSON.stringify(this.user));
     const enderecoPadrao = {
@@ -294,5 +302,9 @@ export class AtualizacaoFuncionario implements OnInit {
     }
   }
 
-  cancelar() { this.ngOnInit(); }
+  cancelar() { 
+    this.ngOnInit();
+    this.router.navigate(['/menu-principal']);
+
+  }
 }

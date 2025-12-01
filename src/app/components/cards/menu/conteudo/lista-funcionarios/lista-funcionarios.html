@@ -67,6 +67,26 @@
 				</tr>
 			</tbody>
 		</table>
+
+		<!-- Pagination Controls for Administradores -->
+		<div class="pagination-controls" *ngIf="totalPaginasAdmins > 1">
+			<button class="btn-pagination" (click)="paginaAnteriorAdmins()" [disabled]="paginaAtualAdmins === 0">
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+					<path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg>
+			</button>
+			<button *ngFor="let pagina of getPaginasVisiveisAdmins()" 
+					class="btn-pagination" 
+					[class.active]="pagina === paginaAtualAdmins"
+					(click)="irParaPaginaAdmins(pagina)">
+				{{ pagina + 1 }}
+			</button>
+			<button class="btn-pagination" (click)="proximaPaginaAdmins()" [disabled]="paginaAtualAdmins === totalPaginasAdmins - 1">
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+					<path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg>
+			</button>
+		</div>
 	</section>
 
 	<section *ngIf="!loadingFuncs && funcionarios?.length" class="funcionarios-section">
@@ -103,6 +123,26 @@
 				</tr>
 			</tbody>
 		</table>
+
+		<!-- Pagination Controls for Funcionarios -->
+		<div class="pagination-controls" *ngIf="totalPaginasFuncs > 1">
+			<button class="btn-pagination" (click)="paginaAnteriorFuncs()" [disabled]="paginaAtualFuncs === 0">
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+					<path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg>
+			</button>
+			<button *ngFor="let pagina of getPaginasVisiveisFuncs()" 
+					class="btn-pagination" 
+					[class.active]="pagina === paginaAtualFuncs"
+					(click)="irParaPaginaFuncs(pagina)">
+				{{ pagina + 1 }}
+			</button>
+			<button class="btn-pagination" (click)="proximaPaginaFuncs()" [disabled]="paginaAtualFuncs === totalPaginasFuncs - 1">
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+					<path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg>
+			</button>
+		</div>
 	</section>
 
 	<ng-container *ngIf="!loadingAdmins && !loadingFuncs && (!administradores?.length && !funcionarios?.length)">
