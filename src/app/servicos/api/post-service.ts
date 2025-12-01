@@ -18,6 +18,7 @@ export class PostService {
   constructor(private http: HttpClient){}
 
   postLogin(email: string, senha: string): Observable<any> {
+    console.log('[PostService] postLogin chamado com email:', email);
     var payload = {
       "email": email,
       "senha": senha

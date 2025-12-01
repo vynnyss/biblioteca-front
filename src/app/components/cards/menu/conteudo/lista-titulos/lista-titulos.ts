@@ -274,11 +274,33 @@ export class ListaTitulos implements OnInit {
       return;
     }
 
+    // Filtrar apenas autores ativos
+    const idsAutoresAtivos = this.tituloEditado.idsAutores.filter(idAutor => {
+      const autor = this.autores.find(a => a.idAutor === idAutor);
+      return autor && autor.statusAtivo === 'ATIVO';
+    });
+
+    // Filtrar apenas categorias ativas
+    const idsCategoriasAtivas = this.tituloEditado.idsCategorias.filter(idCategoria => {
+      const categoria = this.categorias.find(c => c.idCategoria === idCategoria);
+      return categoria && categoria.statusAtivo === 'ATIVO';
+    });
+
+    // Verificar se restaram autores e categorias após a filtragem
+    if (idsAutoresAtivos.length === 0) {
+      alert('Nenhum autor ativo foi selecionado. Por favor, selecione pelo menos um autor ativo.');
+      return;
+    }
+    if (idsCategoriasAtivas.length === 0) {
+      alert('Nenhuma categoria ativa foi selecionada. Por favor, selecione pelo menos uma categoria ativa.');
+      return;
+    }
+
     const payload = {
       nome,
       descricao,
-      idsAutores: this.tituloEditado.idsAutores,
-      idsCategorias: this.tituloEditado.idsCategorias
+      idsAutores: idsAutoresAtivos,
+      idsCategorias: idsCategoriasAtivas
     };
 
     this.putService.atualizarTitulo(this.tituloEditando.idTitulo, payload, token).subscribe({
@@ -290,7 +312,11 @@ export class ListaTitulos implements OnInit {
       },
       error: (err) => {
         console.error('Erro ao atualizar título:', err);
-        const msg = err?.error?.mensagem || err?.error?.message || 'Erro ao atualizar título.';
+        const backend = err.error;
+        let msg =
+          typeof backend === 'string'
+            ? backend
+            : backend?.mensagem || backend?.message || JSON.stringify(backend);
         alert(msg);
       }
     });

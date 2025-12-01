@@ -84,6 +84,8 @@ export class DetalhesEdicao {
 
   public onClose() {
     this.close.emit();
+    // Força atualização da lista de edições no componente pai
+    window.location.reload();
   }
 
   // Presentation helpers (mirror those in BookDetails)
@@ -189,11 +191,6 @@ export class DetalhesEdicao {
   abrirModalEdicao(): void {
     if (!this.edicao) return;
     
-    // Load data for dropdowns
-    this.carregarTitulos();
-    this.carregarEditoras();
-    this.carregarIdiomas();
-    
     // Pre-fill form with current edition data
     this.edicaoEditada = {
       idTitulo: this.edicao.titulo?.idTitulo || null,
@@ -207,6 +204,11 @@ export class DetalhesEdicao {
       classificacao: this.edicao.classificacao || '',
       imagemFile: null
     };
+    
+    // Load data for dropdowns and validate after loading
+    this.carregarTitulos();
+    this.carregarEditoras();
+    this.carregarIdiomas();
     
     this.mostrarModalEdicao = true;
   }
@@ -268,10 +270,19 @@ export class DetalhesEdicao {
       return;
     }
     
-    this.getService.getApiUrlGetTitulos(token, 0, 1000).subscribe({
+    this.getService.getApiUrlGetTitulosAtivos(token, 0, 1000).subscribe({
       next: (response: any) => {
         this.titulos = response?.conteudo || [];
         this.titulosFiltrados = [...this.titulos];
+        
+        // Verificar se o título pré-selecionado está ativo
+        if (this.edicaoEditada.idTitulo) {
+          const tituloSelecionado = this.titulos.find(t => t.idTitulo === this.edicaoEditada.idTitulo);
+          if (!tituloSelecionado || tituloSelecionado.statusAtivo !== 'ATIVO') {
+            this.edicaoEditada.idTitulo = null;
+            alert('O título atual da edição está inativo. Por favor, selecione um título ativo.');
+          }
+        }
       },
       error: (err) => {
         console.error('[DetalhesEdicao] Erro ao carregar títulos:', err);
@@ -289,6 +300,15 @@ export class DetalhesEdicao {
       next: (response: any) => {
         this.editoras = response?.conteudo || [];
         this.editorasFiltradas = [...this.editoras];
+        
+        // Verificar se a editora pré-selecionada está ativa
+        if (this.edicaoEditada.idEditora) {
+          const editoraSelecionada = this.editoras.find(e => e.idEditora === this.edicaoEditada.idEditora);
+          if (!editoraSelecionada || editoraSelecionada.statusAtivo !== 'ATIVO') {
+            this.edicaoEditada.idEditora = null;
+            alert('A editora atual da edição está inativa. Por favor, selecione uma editora ativa.');
+          }
+        }
       },
       error: (err) => {
         console.error('[DetalhesEdicao] Erro ao carregar editoras:', err);
@@ -299,16 +319,30 @@ export class DetalhesEdicao {
 
   carregarIdiomas(): void {
     const token = sessionStorage.getItem('authToken');
-    this.http.get<any[]>('http://localhost:8080/idiomas', {
+    this.http.get<any[]>('http://localhost:8080/idiomas/ativos', {
       headers: token ? { 'Authorization': `Bearer ${token}` } : {}
     }).subscribe({
       next: (idiomas: any) => {
         this.idiomas = Array.isArray(idiomas) ? idiomas : [];
         this.idiomasFiltrados = [...this.idiomas];
+        
+        // Verificar se o idioma pré-selecionado está ativo
+        if (this.edicaoEditada.idIdioma) {
+          const idiomaSelecionado = this.idiomas.find(i => i.idIdioma === this.edicaoEditada.idIdioma);
+          if (!idiomaSelecionado || idiomaSelecionado.statusAtivo !== 'ATIVO') {
+            this.edicaoEditada.idIdioma = null;
+            alert('O idioma atual da edição está inativo. Por favor, selecione um idioma ativo.');
+          }
+        }
       },
       error: (err) => {
         console.error('[DetalhesEdicao] Erro ao carregar idiomas:', err);
-        alert('Erro ao carregar lista de idiomas.');
+        const backend = err.error;
+        let msg =
+          typeof backend === 'string'
+            ? backend
+            : backend?.mensagem || backend?.message || JSON.stringify(backend);
+        alert(msg);
       }
     });
   }
@@ -381,6 +415,8 @@ export class DetalhesEdicao {
     const mapTipoCapa: any = {
       'dura': 'DURA',
       'flexivel': 'MOLE',
+      'brochura': 'BROCHURA',
+      'espiral': 'ESPIRAL'
     };
     const tipoCapa = mapTipoCapa[this.edicaoEditada.tipoCapa] || this.edicaoEditada.tipoCapa.toUpperCase();
 

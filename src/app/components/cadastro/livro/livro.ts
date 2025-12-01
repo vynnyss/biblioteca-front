@@ -22,6 +22,8 @@ export class Livro implements OnInit {
   private location = inject(Location);
   
   titulos: Title[] = [];
+  titulosFiltrados: Title[] = [];
+  termoBuscaTitulo: string = '';
   tituloSelecionado: number | string = '';
   mostrarModalTitulo: boolean = false;
   carregandoTitulos: boolean = false;
@@ -120,6 +122,7 @@ export class Livro implements OnInit {
     this.getService.getApiUrlGetTitulosAtivos(token, 0, 1000).subscribe({
       next: (response: any) => {
         this.titulos = response?.conteudo || [];
+        this.titulosFiltrados = [...this.titulos];
         this.carregandoTitulos = false;
         console.log('[Livro] Títulos carregados:', this.titulos);
       },
@@ -241,35 +244,29 @@ export class Livro implements OnInit {
   }
 
   onTituloChange(value: string): void {
-    if (value === 'novo') {
-      this.mostrarModalTitulo = true;
-      this.tituloSelecionado = '';
-    } else {
-      this.tituloSelecionado = value;
-      this.livro.idTitulo = value ? Number(value) : null;
-      
-      // Se um título foi selecionado, preenche automaticamente autores e categorias
-      if (value) {
-        const tituloSelecionado = this.titulos.find(t => t.idTitulo === Number(value));
-        if (tituloSelecionado) {
-          // Preenche autores do título
-          this.autoresSelecionados = tituloSelecionado.autores.map((a: any) => a.idAutor);
-          
-          // Preenche categorias do título
-          this.categoriasSelecionadas = tituloSelecionado.categorias.map((c: any) => c.idCategoria);
-        }
-      } else {
-        // Se nenhum título está selecionado, limpa as seleções
-        this.autoresSelecionados = [];
-        this.categoriasSelecionadas = [];
+    this.tituloSelecionado = value;
+    this.livro.idTitulo = value ? Number(value) : null;
+    
+    // Se um título foi selecionado, preenche automaticamente autores e categorias
+    if (value) {
+      const tituloSelecionado = this.titulos.find(t => t.idTitulo === Number(value));
+      if (tituloSelecionado) {
+        // Preenche autores do título
+        this.autoresSelecionados = tituloSelecionado.autores.map((a: any) => a.idAutor);
+        
+        // Preenche categorias do título
+        this.categoriasSelecionadas = tituloSelecionado.categorias.map((c: any) => c.idCategoria);
       }
+    } else {
+      // Se nenhum título está selecionado, limpa as seleções
+      this.autoresSelecionados = [];
+      this.categoriasSelecionadas = [];
     }
   }
 
+  // onAutorChange não é mais necessário, mas mantido para compatibilidade
   onAutorChange(value: string): void {
-    if (value === 'novo') {
-      this.abrirModalNovoAutor();
-    }
+    // Método mantido para compatibilidade
   }
 
   toggleAutor(idAutor: number): void {
@@ -291,29 +288,18 @@ export class Livro implements OnInit {
   }
 
   onEditoraChange(value: string): void {
-    if (value === 'novo') {
-      this.abrirModalNovaEditora();
-      this.editoraSelecionada = '';
-    } else {
-      this.editoraSelecionada = value;
-      this.livro.idEditora = value ? Number(value) : null;
-    }
+    this.editoraSelecionada = value;
+    this.livro.idEditora = value ? Number(value) : null;
   }
 
   onIdiomaChange(value: string): void {
-    if (value === 'novo') {
-      this.abrirModalNovoIdioma();
-      this.idiomaSelecionado = '';
-    } else {
-      this.idiomaSelecionado = value;
-      this.livro.idIdioma = value ? Number(value) : null;
-    }
+    this.idiomaSelecionado = value;
+    this.livro.idIdioma = value ? Number(value) : null;
   }
 
+  // onCategoriaChange não é mais necessário, mas mantido para compatibilidade
   onCategoriaChange(value: string): void {
-    if (value === 'novo') {
-      this.abrirModalNovaCategoria();
-    }
+    // Método mantido para compatibilidade
   }
 
   toggleCategoria(idCategoria: number): void {
@@ -358,6 +344,17 @@ export class Livro implements OnInit {
     } else {
       this.livro.imagemFile = null;
     }
+  }
+
+  filtrarTitulos(): void {
+    const termo = this.termoBuscaTitulo.toLowerCase().trim();
+    if (!termo) {
+      this.titulosFiltrados = [...this.titulos];
+      return;
+    }
+    this.titulosFiltrados = this.titulos.filter(titulo =>
+      titulo.nome?.toLowerCase().includes(termo)
+    );
   }
 
   filtrarAutores(): void {
@@ -503,10 +500,6 @@ export class Livro implements OnInit {
         this.fecharModalTitulo();
         this.carregarTitulos(); 
         
-        if (tituloNovo?.idTitulo) {
-          this.tituloSelecionado = tituloNovo.idTitulo;
-          this.livro.idTitulo = tituloNovo.idTitulo;
-        }
       },
       error: (err) => {
         const backend = err?.error;

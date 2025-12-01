@@ -45,7 +45,7 @@
 
 	<section class="debug-json" *ngIf="edicao">
 			<!-- Lista de exemplares para esta edição -->
-			<app-lista-exemplares [edicaoId]="edicao?.idEdicao" [recarregar]="recarregarExemplares"></app-lista-exemplares>
+			<app-lista-exemplares [edicaoId]="edicao.idEdicao" [recarregar]="recarregarExemplares"></app-lista-exemplares>
 
 			<div style="margin-top:1rem; display: flex; gap: 1rem;">
 				<button class="btn btn-outline" type="button" (click)="onClose()">← Voltar</button>
@@ -210,6 +210,8 @@
 					<option value="">Selecione o tipo de capa</option>
 					<option value="dura">Capa dura</option>
 					<option value="flexivel">Capa mole/flexível</option>
+					<option value="brochura">Brochura</option>
+					<option value="espiral">Espiral</option>
 				</select>
 			</div>
 
