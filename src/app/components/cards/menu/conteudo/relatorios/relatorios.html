@@ -1,0 +1,20 @@
+<div class="relatorios-container">
+  <div class="relatorios-header">
+    <h2>Relatórios do Sistema</h2>
+    <button class="btn-grafana" (click)="abrirGrafana()">
+      <span>📊</span> Abrir Grafana Completo
+    </button>
+  </div>
+
+  <div class="dashboards-grid">
+    <div class="dashboard-card" *ngFor="let dashboard of dashboards">
+      <h3>{{ dashboard.titulo }}</h3>
+      <iframe 
+        [attr.title]="'Dashboard de ' + dashboard.titulo"
+        [src]="dashboard.url" 
+        frameborder="0" 
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
