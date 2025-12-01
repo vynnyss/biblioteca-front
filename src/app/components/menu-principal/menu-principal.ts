@@ -12,10 +12,11 @@ import { ListaEmprestimos } from '../cards/menu/conteudo/lista-emprestimos/lista
 import { ListaTitulos } from '../cards/menu/conteudo/lista-titulos/lista-titulos';
 import { ListaIdiomas } from '../cards/menu/conteudo/lista-idiomas/lista-idiomas';
 import { ListaCategorias } from '../cards/menu/conteudo/lista-categorias/lista-categorias';
+import { Relatorios } from '../cards/menu/conteudo/relatorios/relatorios';
 
 @Component({
   selector: 'app-menu-principal',
-  imports: [MenuLateral, CommonModule, Perfil, ListaClientes, ListaFuncionarios, ListaAutores, ListaEditoras, ListaEdicoes, ListaEmprestimos, ListaTitulos, ListaIdiomas, ListaCategorias],
+  imports: [MenuLateral, CommonModule, Perfil, ListaClientes, ListaFuncionarios, ListaAutores, ListaEditoras, ListaEdicoes, ListaEmprestimos, ListaTitulos, ListaIdiomas, ListaCategorias, Relatorios],
   templateUrl: './menu-principal.html',
   styleUrl: './menu-principal.css'
 })
@@ -95,6 +96,7 @@ export class MenuPrincipal implements OnInit {
 
   public selectCard(name: string, ev?: Event) {
     if (ev) ev.preventDefault?.();
+    
     this.selectedCard = name;
 
     if (name === 'Dados cadastrais') {
